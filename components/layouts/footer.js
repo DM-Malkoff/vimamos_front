@@ -6,7 +6,7 @@ const Footer = () => {
             <div className="site__footer__bottom">
                 <div className="footer__bottom__left">
                     <div className="footer__site__name">
-                        © 2018 - 2022 {siteName} - автомобильные шины, диски и аксессуары
+                        © 2010 - {new Date().getFullYear()} {siteName} Сайт - каталог Интернет-магазинов обуви.
                     </div>
                     <div className="site__counters">
 

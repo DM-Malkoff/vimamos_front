@@ -13,8 +13,9 @@ import Pagination from "../../components/pagination";
 import Towns from "../../utils/towns";
 import {quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {terms} from "../../constants/terms";
+import {getAttributes, getAttributesWithTerms} from "../../utils/attributes";
 
-const Slug = ({products, categories, currentCategoryId}) => {
+const Slug = ({products, categories, currentCategoryId, attributes}) => {
 
     const router = useRouter()
     const currentCategory = categories.find(item => item.id == currentCategoryId)
@@ -28,7 +29,9 @@ const Slug = ({products, categories, currentCategoryId}) => {
     if (Towns[currentPageNum]) {
         townCaption = `${currentCategory.name} в ${Towns[currentPageNum]}`
     }
-    const termsArray = terms
+    // const termsArray = terms
+    const termsArray = attributes
+    console.log('termsArray', termsArray)
 
     return (
         <>
@@ -98,7 +101,9 @@ export default Slug;
 export async function getServerSideProps(ctx) {
     const {data: categories} = await getCategories();
     const {data: products} = await getProductsData(ctx.query);
-    //const {data: attributes} = await getAttributes();
+    const {attributes} = await getAttributesWithTerms();
+
+    console.log('000', attributes);
 
     // const myArr = []
     // const optionsObject = filterOptions.find((item) => item.categoryId === ctx.query.id)
@@ -119,6 +124,7 @@ export async function getServerSideProps(ctx) {
             categories: categories ?? {},
             products: products ?? {},
             currentCategoryId: ctx.query.id ?? null,
+            attributes: attributes ?? []
             // attributes: attributes ?? {},
             // terms: myArr
         }

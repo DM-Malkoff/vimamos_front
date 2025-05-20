@@ -5,7 +5,7 @@ import GoToPartner from "./goToPartner";
 const ProductCard = ({productData}) => {
     const customFields = productData.meta_data
     const shopName = customFields.find(item => item.key === 'shop_name') ? customFields.find(item => item.key === 'shop_name').value : ''
-    const shopLink = customFields.find(item => item.key === 'wc_partner_url').value
+    const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value
 
     function mathDiscount(salePrice, regularPrice) {
         let percent = (regularPrice - salePrice) * 100 / regularPrice

@@ -6,7 +6,7 @@ const api = new WooCommerceRestApi( {
     consumerSecret: process.env.WC_CONSUMER_SECRET,
     version: 'wc/v3',
     axiosConfig: {
-        httpsAgent: new (require('https').Agent)({  
+        httpsAgent: new (require('http').Agent)({
             rejectUnauthorized: false
         })
     }

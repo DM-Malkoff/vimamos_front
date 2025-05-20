@@ -20,8 +20,8 @@ export default function ProductPage({product,categories, upsellProducts}) {
     const title = customFields.find(item => item.key === "wc_title")
     const description = customFields.find(item => item.key === "wc_description")
     const sku = product.sku
-    const shopName = customFields.find(item => item.key === 'shop_name').value
-    const shopLink = customFields.find(item => item.key === 'wc_partner_url').value
+    const shopName = customFields.find(item => item.key === 'shop_name')?.value
+    const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value
     const tabsItems = [
         {title: 'Характеристики', content: product.attributes},
         {title: 'Описание', content: product.description}
@@ -100,7 +100,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                                                 <div key={item.position}
                                                                      className="option_item odd type-select">
                                                                     <div className="option_title">{item.name}:</div>
-                                                                    <div className="option_body">{item.options[0]}</div>
+                                                                    <div className="option_body">{item.options.join(', ')}</div>
                                                                 </div>
                                                             )
                                                         }

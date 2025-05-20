@@ -43,8 +43,8 @@ const Header = ({categories}) => {
                                 </div>
                                 <div className='header__top__center'>
                                     <Link href='/'><a>
-                                        <Image src='/images/logo.jpg'
-                                               width='218'
+                                        <Image src='/images/logo.png'
+                                               width='121'
                                                height='30'
                                                alt={siteName}
                                         />
