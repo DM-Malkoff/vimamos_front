@@ -2,7 +2,8 @@ import Accordion from "./accordion";
 import {useContext, useEffect, useState} from "react";
 import {ShowFilterContext} from "../../context/context";
 
-export default function Filter({terms}) {
+export default function Filter({attributes}) {
+    /** Показывать ли фильтр в адаптиве */
     const [showFilter, setShowFilter] = useState(false)
     const [showFilterContext, setShowFilterContext] = useContext(ShowFilterContext)
 
@@ -14,114 +15,22 @@ export default function Filter({terms}) {
         }
     }, [showFilterContext])
 
+    /** Метод закрытия фильтра в адаптиве */
     const closeFilterButton = () => {
         setShowFilterContext(false)
         setShowFilter(false)
     }
-    // const filterContent = terms;
-    // const filterContent = [
-    //     {
-    //         id: 0,
-    //         title: 'Цена: (руб.)',
-    //         categories: 'all',
-    //         attribute: 'price',
-    //     },
-    //     {
-    //         id: 3,
-    //         title: 'Тип диска',
-    //         categories: [27],
-    //         attribute: 'pa_tip-diska',
-    //     },
-    //     {
-    //         id: 5,
-    //         title: 'Диаметр (D), в дюймах',
-    //         categories: [27],
-    //         attribute: 'pa_diametr-d',
-    //     },
-    //     {
-    //         id: 16,
-    //         title: 'Диаметр, в дюймах',
-    //         categories: [5033,4741],
-    //         attribute: 'pa_diametr',
-    //     },
-    //     {
-    //         id: 18,
-    //         title: 'Индекс нагрузки',
-    //         categories: [5033],
-    //         attribute: 'pa_indeks-nagruzki',
-    //     },
-    //     {
-    //         id: 14,
-    //         title: 'Ширина, в дюймах',
-    //         categories: [5033, 4741],
-    //         attribute: 'pa_shirina-diska',
-    //     },
-    //     {
-    //         id: 4,
-    //         title: 'Ширина обода, в дюймах',
-    //         categories: [27,5033],
-    //         attribute: 'pa_shirina-diska',
-    //     },
-    //     {
-    //         id: 15,
-    //         title: 'Профиль',
-    //         categories: [5033,4741],
-    //         attribute: 'pa_profil',
-    //     },
-    //     {
-    //         id: 7,
-    //         title: 'PCD (Сверловка), мм.',
-    //         categories: [27,5225,5226,5227],
-    //         attribute: 'pa_pcd',
-    //     },
-    //     {
-    //         id: 8,
-    //         title: 'Тип крепежа',
-    //         categories: [27,5225,5226,5227],
-    //         attribute: 'pa_tip-krepezha',
-    //     },
-    //     {
-    //         id: 6,
-    //         title: 'Вылет (ET)',
-    //         categories: [27],
-    //         attribute: 'pa_vylet-et',
-    //     },
-    //     {
-    //         id: 1,
-    //         title: 'Производитель',
-    //         categories: [27,956,4741],
-    //         attribute: 'pa_proizvoditel',
-    //     },
-    //     {
-    //         id: 2,
-    //         title: 'Модель',
-    //         categories: [27,956],
-    //         attribute: 'pa_model',
-    //     },
-    //     {
-    //         id: 30,
-    //         title: 'Flow Forming',
-    //         categories: [27],
-    //         attribute: 'pa_flow-forming',
-    //     },
-    //     {
-    //         id: 34,
-    //         title: 'Область применения',
-    //         categories: [4741],
-    //         attribute: 'pa_oblast-primeneniya',
-    //     },
-    //
-    // ]
 
-    const filterContent = [
+    /** Аттрибуты для фильтра */
+    const filterAttributes = [
         {
             id: 0,
             title: 'Цена: (руб.)',
             categories: 'all',
             attribute: 'price',
         },
-        ...terms
-    ]
+        ...attributes || []
+    ];
 
     return (
         <div className={`mode_folder_filter ${showFilter ? 'active' : ''}`}
@@ -138,7 +47,7 @@ export default function Filter({terms}) {
                     <div className="filter_block_title">Фильтр</div>
                     <form action="#" className="shop2-filter">
                         <div className="table-filter-param">
-                            <Accordion terms={filterContent} />
+                            <Accordion terms={filterAttributes} />
                         </div>
                     </form>
                 </div>

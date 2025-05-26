@@ -89,7 +89,7 @@ const AccordionItems = ({item, index, onPress}) => {
                                         const activeVal  = index === filterAttributeIndex ? "active-val":''
                                         return (
                                             <FilterOptions
-                                                key={`option-${attributeItem}`}
+                                                key={`option-${attributeItem.slug}`}
                                                 attributeItem={attributeItem}
                                                 activeVal = {activeVal}
                                                 onCLick = {() => {

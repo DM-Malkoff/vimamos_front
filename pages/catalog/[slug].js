@@ -65,7 +65,7 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
                             <BreadCrumbs namePage={currentCategory.name}/>
                             <Caption caption={townCaption}/>
                             <div className="mode_folder_wrapper">
-                                <Filter terms={attributes}/>
+                                <Filter attributes={attributes}/>
                                 <div className="mode_folder_body">
                                     <Sort totalQuantityProducts={currentCategory.count}
                                           quantityFilterProduct={products.length}/>
