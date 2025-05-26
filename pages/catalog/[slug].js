@@ -12,16 +12,16 @@ import Sort from "../../components/sort";
 import Pagination from "../../components/pagination";
 import Towns from "../../utils/towns";
 import {quantityProducts, siteName, siteUrl} from "../../constants/config";
-import {terms} from "../../constants/terms";
-import {getAttributes, getAttributesWithTerms} from "../../utils/attributes";
+import {getAttributes} from "../../utils/attributes";
 
 const Slug = ({products, categories, currentCategoryId, attributes}) => {
+    const router = useRouter();
+    const currentCategory = categories.find(item => item.id == currentCategoryId);
+    const availableSlug = currentCategory.slug;
+    const currentPage = router.query.page;
+    const currentSlug = router.query.slug;
 
-    const router = useRouter()
-    const currentCategory = categories.find(item => item.id == currentCategoryId)
-    const availableSlug = currentCategory.slug
-    const currentPage = router.query.page
-    const currentSlug = router.query.slug
+    // console.log('test', test)
 
     let currentPageNum = currentPage == undefined ? 0 : currentPage
 
@@ -29,9 +29,6 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
     if (Towns[currentPageNum]) {
         townCaption = `${currentCategory.name} в ${Towns[currentPageNum]}`
     }
-    // const termsArray = terms
-    const termsArray = attributes
-    console.log('termsArray', termsArray)
 
     return (
         <>
@@ -68,7 +65,7 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
                             <BreadCrumbs namePage={currentCategory.name}/>
                             <Caption caption={townCaption}/>
                             <div className="mode_folder_wrapper">
-                                <Filter terms={termsArray}/>
+                                <Filter terms={attributes}/>
                                 <div className="mode_folder_body">
                                     <Sort totalQuantityProducts={currentCategory.count}
                                           quantityFilterProduct={products.length}/>
@@ -101,32 +98,17 @@ export default Slug;
 export async function getServerSideProps(ctx) {
     const {data: categories} = await getCategories();
     const {data: products} = await getProductsData(ctx.query);
-    const {attributes} = await getAttributesWithTerms();
-
-    console.log('000', attributes);
-
-    // const myArr = []
-    // const optionsObject = filterOptions.find((item) => item.categoryId === ctx.query.id)
-    // if (optionsObject){
-    //     await Promise.all(optionsObject.attributeIds.map(async (item) => {
-    //         let {data: terms} = await getAttributeTerms(item)
-    //         myArr.push({id:item, attribute_terms:terms})
-    //     }))
-    // }else{
-    //     await Promise.all(attributes.map(async (item) => {  // можно использовать для формирования своего массива объектов опций
-    //         let {data: terms} = await getAttributeTerms(item.id)
-    //         myArr.push({id:item.id, attribute_terms:terms})
-    //     }))
-    // }
+    const attributes = await getAttributes(ctx.query.id ?? null);
+    // const test = await getFilteredProductsData(ctx.query.id);
+    // console.log('test112', test);
 
     return {
         props: {
             categories: categories ?? {},
             products: products ?? {},
             currentCategoryId: ctx.query.id ?? null,
-            attributes: attributes ?? []
-            // attributes: attributes ?? {},
-            // terms: myArr
+            attributes: attributes ?? [],
+            // test: test ?? null,
         }
     }
 }

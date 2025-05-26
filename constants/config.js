@@ -1,5 +1,6 @@
 export const siteName = 'Vimamos.ru'
-export const siteUrl = 'http://cms.moscow-shiny.ru/'
+const protocol = 'http';
+export const siteUrl = `${protocol}://cms.moscow-shiny.ru/`;
 
 export const quantityProducts = 21 // количество товаров на странице категории
 export const quantityProductsMainSlider = 10 // количество товаров в сладере на главной странице

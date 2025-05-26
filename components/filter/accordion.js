@@ -3,12 +3,11 @@ import {useContext} from "react";
 import {useRouter} from "next/router";
 import {FilterDataContext, ShowFilterContext} from "../../context/context";
 
-const Accordion = ({terms, filterContent}) => {
+const Accordion = ({terms}) => {
     const router = useRouter()
     const {slug: _, ...routerQueries} = router.query
     const [filterContext, setFilterContext] = useContext(FilterDataContext)
     const [showFilterContext, setShowFilterContext] = useContext(ShowFilterContext)
-    let attributesData = {}
 
     const filterSearchHandler = () => {
         setShowFilterContext(false)
@@ -27,34 +26,48 @@ const Accordion = ({terms, filterContent}) => {
             }
         })
     }
-    const renderedFilterContent = filterContent.map((item,index) => {
-        const attributeTerms = terms.find((termItem) => termItem.id === item.id)
-        if (attributeTerms || index == 0){
-            attributesData = {...item, ...attributeTerms}
-        }else{
-            attributesData = item
-        }
+    // const renderedFilterContent = filterContent.map((item,index) => {
+    //     const attributeTerms = terms.find((termItem) => termItem.id === item.id)
+    //     if (attributeTerms){
+    //         attributesData = {...item, ...attributeTerms}
+    //     }else{
+    //         attributesData = item
+    //     }
+    //
+    //     return (
+    //         <div key={item.id}>
+    //             <AccordionItems
+    //                 terms={terms}
+    //                 item = {attributesData}
+    //                 index = {index}
+    //                 onPress = {()=>{
+    //                     filterSearchHandler()
+    //                 }}
+    //             />
+    //         </div>
+    //     )
+    // })
 
-        return (
-            <div key={item.id}>
-                <AccordionItems
-                    terms={terms}
-                    item = {attributesData}
-                    index = {index}
-                    onPress = {()=>{
-                        filterSearchHandler()
-                    }}
-                />
-            </div>
-        )
-    })
     return (
         <>
-            {renderedFilterContent}
+            {terms?.map((item, index) => (
+                <div key={`accordion-${item.id}`}>
+                    <AccordionItems
+                        item={item}
+                        index={index}
+                        onPress={filterSearchHandler}
+                    />
+                </div>
+            )) ?? null}
+
             <div className="filter_buttons_wrap">
                 <div className="filter_buttons">
-                    <span className="shop_btn shop2-filter-go" onClick={filterSearchHandler}>Показать</span>
-                    <span className="shop_btn reset" onClick={filterClearFilter}>Очистить</span>
+                <span className="shop_btn shop2-filter-go" onClick={filterSearchHandler}>
+                    Показать
+                </span>
+                    <span className="shop_btn reset" onClick={filterClearFilter}>
+                    Очистить
+                </span>
                 </div>
             </div>
         </>

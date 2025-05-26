@@ -41,11 +41,9 @@ const AccordionItems = ({item, index, onPress}) => {
     const filterOptionsHandler = () =>{
         setFilterOptions(...filterOptions,)
     }
-    const isDiametrD = item.attribute === 'pa_diametr-d' ? true : false
 
     return (
         <>
-        {item.categories?.includes(+router.query.id) || item.categories === 'all' ?
             <div className={`shop_filter_field ${isShow ? 'active' : ''}`} onClick={itemClick}>
                 <div className="filter_field_title">{item.title}</div>
                 <div className={`filter_field_body ${index === 0 ? 'range' : ''}`} onClick={(e)=>e.stopPropagation()}>
@@ -86,14 +84,12 @@ const AccordionItems = ({item, index, onPress}) => {
                             </>
                             :
                             <>
-                                {item.attribute_terms ?
-                                    item.attribute_terms.map((attributeItem,index) => {
+                                {item.options ?
+                                    item.options.map((attributeItem, index) => {
                                         const activeVal  = index === filterAttributeIndex ? "active-val":''
                                         return (
                                             <FilterOptions
-                                                key ={attributeItem.id}
-                                                isDiametrD={isDiametrD}
-                                                attributeName = {item.attribute}
+                                                key={`option-${attributeItem}`}
                                                 attributeItem={attributeItem}
                                                 activeVal = {activeVal}
                                                 onCLick = {() => {
@@ -110,9 +106,6 @@ const AccordionItems = ({item, index, onPress}) => {
                     </div>
                 </div>
            </div>
-            :
-            false
-        }
         </>
     );
 };
