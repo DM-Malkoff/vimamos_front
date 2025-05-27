@@ -14,12 +14,9 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
     const [filterOptions, setFilterOptions] = useState({});
 
     /** Флаг отображения группы атрибутов в фильтре */
-    const [isShow, setIsShow] = useState(index == 0 ? true : false);
+    const [isShow, setIsShow] = useState(index === 0);
 
-    /** Индекс атрибута в фильтре */
-    const [filterAttributeIndex, setFilterAttributeIndex] = useState(null);
-
-    function itemClick() {
+    function attributeGroupClick() {
         setIsShow(!isShow);
     }
 
@@ -27,26 +24,17 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
         setFilterContext(filterOptions);
     }, [filterOptions])
 
-    useEffect(()=>{
-        if (!router.query.attribute){
-            setFilterAttributeIndex(null);
-        }
-    },[router])
-
     function handlerMinPrice(event) {
-        setFilterOptions({...filterOptions, min_price: event.target.value});
+        setFilterOptions({...filterContext, min_price: event.target.value});
     }
 
     function handlerMaxPrice(event) {
-        setFilterOptions({...filterOptions, max_price: event.target.value});
-    }
-    const filterOptionsHandler = () =>{
-        setFilterOptions(...filterOptions);
+        setFilterOptions({...filterContext, max_price: event.target.value});
     }
 
     return (
         <>
-            <div className={`shop_filter_field ${isShow ? 'active' : ''}`} onClick={itemClick}>
+            <div className={`shop_filter_field ${isShow ? 'active' : ''}`} onClick={attributeGroupClick}>
                 <div className="filter_field_title">{item.title}</div>
                 <div className={`filter_field_body ${index === 0 ? 'range' : ''}`} onClick={(e)=>e.stopPropagation()}>
                     <div className="filter_field_content">
@@ -87,15 +75,13 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
                             :
                             <>
                                 {item.options ?
-                                    item.options.map((attributeItem, index) => {
+                                    item.options.map((attributeOption, index) => {
                                         return (
                                             <FilterOptions
-                                                key={`option-${attributeItem.slug}`}
+                                                key={`option-${attributeOption.slug}`}
                                                 isReset={isReset}
-                                                attributeItem={attributeItem}
-                                                onCLick = {() => {
-                                                    setFilterAttributeIndex(index);
-                                                }}
+                                                attributeGroup={item}
+                                                attributeOption={attributeOption}
                                             />
                                         )
                                     })

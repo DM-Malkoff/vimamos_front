@@ -13,9 +13,11 @@ import Pagination from "../../components/pagination";
 import Towns from "../../utils/towns";
 import {quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {getAttributes} from "../../utils/attributes";
+import { useState } from "react";
 
-const Slug = ({products, categories, currentCategoryId, attributes}) => {
+const Slug = ({products: initialProducts, categories, currentCategoryId, attributes}) => {
     const router = useRouter();
+    const [products, setProducts] = useState(initialProducts);
     const currentCategory = categories.find(item => item.id == currentCategoryId);
     const availableSlug = currentCategory.slug;
     const currentPage = router.query.page;
@@ -27,6 +29,11 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
     if (Towns[currentPageNum]) {
         townCaption = `${currentCategory.name} в ${Towns[currentPageNum]}`
     }
+
+    // Функция обновления списка товаров
+    const handleProductsUpdate = (newProducts) => {
+        setProducts(newProducts);
+    };
 
     return (
         <>
@@ -63,7 +70,7 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
                             <BreadCrumbs namePage={currentCategory.name}/>
                             <Caption caption={townCaption}/>
                             <div className="mode_folder_wrapper">
-                                <Filter attributes={attributes}/>
+                                <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate} />
                                 <div className="mode_folder_body">
                                     <Sort totalQuantityProducts={currentCategory.count}
                                           quantityFilterProduct={products.length}/>

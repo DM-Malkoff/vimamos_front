@@ -4,12 +4,13 @@ import {useRouter} from "next/router";
 import {FilterDataContext, ShowFilterContext} from "../../context/context";
 import {siteUrl} from "../../constants/config";
 
-const Accordion = ({terms}) => {
+const Accordion = ({terms, onProductsUpdate}) => {
     const router = useRouter();
     const {slug: _, ...routerQueries} = router.query;
 
     /** Обертка - объект параметров фильтра */
     const [filterContext, setFilterContext] = useContext(FilterDataContext);
+    console.log('!!', filterContext)
 
     /** Обертка - состояние отображения фильтра */
     const [showFilterContext, setShowFilterContext] = useContext(ShowFilterContext);
@@ -21,6 +22,28 @@ const Accordion = ({terms}) => {
     const filterSearchHandler = async () => {
         setShowFilterContext(false);
 
+        // Подготавливаем атрибуты из filterContext
+        const preparedAttributes = {};
+        const queryParams = { ...routerQueries };
+
+        if (filterContext && Object.entries(filterContext).length) {
+            // Обрабатываем все атрибуты из filterContext
+            Object.entries(filterContext).forEach(([key, value]) => {
+                if (key === 'min_price' || key === 'max_price') {
+                    if (value) {
+                        queryParams[key] = value;
+                    }
+                } else {
+                    // Проверяем, что value это массив и содержит объекты с slug
+                    if (Array.isArray(value) && value.length > 0 && value[0].slug) {
+                        // Извлекаем только slug из каждого объекта в массиве
+                        preparedAttributes[key] = value.map(item => item.slug);
+                        queryParams[key] = value.map(item => item.slug).join(',');
+                    }
+                }
+            });
+        }
+
         // Формируем тело запроса
         const requestBody = {
             filters: {
@@ -28,14 +51,11 @@ const Accordion = ({terms}) => {
                 min_price: filterContext.min_price ? parseInt(filterContext.min_price) : null,
                 max_price: filterContext.max_price ? parseInt(filterContext.max_price) : null,
             },
-            attributes: {
-                // Пример: предполагаем, что filterContext содержит данные атрибутов
-                color: filterContext.color || [],
-                sizes: filterContext.sizes || [],
-            },
+            attributes: preparedAttributes
         };
 
         try {
+            console.log('requestBody', requestBody)
             const response = await fetch(`${siteUrl}/wp-json/custom/v1/search-products`, {
                 method: 'POST',
                 headers: {
@@ -49,13 +69,17 @@ const Accordion = ({terms}) => {
             }
 
             const data = await response.json();
-
+            
+            // Обновляем URL с параметрами фильтрации
             router.push({
                 pathname: router.query.slug,
-                query: {
-                    ...routerQueries,
-                },
-            });
+                query: queryParams,
+            }, undefined, { shallow: true });
+
+            // Обновляем список товаров на странице
+            if (onProductsUpdate) {
+                onProductsUpdate(data);
+            }
 
         } catch (error) {
             console.error('Ошибка:', error);
@@ -65,6 +89,7 @@ const Accordion = ({terms}) => {
     const onClearFilter = () => {
         setShowFilterContext(false);
         setIsReset(true);
+        setFilterContext({}); // Очищаем контекст фильтра
         router.push({
             pathname: router.query.slug,
             query: {

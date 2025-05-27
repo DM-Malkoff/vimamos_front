@@ -2,7 +2,7 @@ import Accordion from "./accordion";
 import {useContext, useEffect, useState} from "react";
 import {ShowFilterContext} from "../../context/context";
 
-export default function Filter({attributes}) {
+export default function Filter({attributes, onProductsUpdate}) {
     /** Показывать ли фильтр в адаптиве */
     const [showFilter, setShowFilter] = useState(false)
     const [showFilterContext, setShowFilterContext] = useContext(ShowFilterContext)
@@ -47,7 +47,7 @@ export default function Filter({attributes}) {
                     <div className="filter_block_title">Фильтр</div>
                     <form action="#" className="shop2-filter">
                         <div className="table-filter-param">
-                            <Accordion terms={filterAttributes} />
+                            <Accordion terms={filterAttributes} onProductsUpdate={onProductsUpdate} />
                         </div>
                     </form>
                 </div>
