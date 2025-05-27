@@ -5,7 +5,7 @@ const ProductImages = ({images}) => {
         <>
             <Image itemProp="image"
                 src={images.length ? images[0].src : '/images/no_image.png'}
-                alt={images[0].name}
+                alt={images[0]?.name}
                 title=''
                 layout="fill"
                 priority={true}

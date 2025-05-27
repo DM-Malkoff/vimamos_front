@@ -434,11 +434,29 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                       transition: all 0.3s;
                       box-shadow: inset 0 0 0 1px #dfdfdf;
                       cursor: pointer;
+                      &:before {
+                        position: absolute;
+                        content: '';
+                        right: 15px;
+                        top: 50%;
+                        width: 9px;
+                        height: 9px;
+                        margin-top: -4px;
+                        opacity: 0;
+                        visibility: hidden;
+                        -webkit-transition: all 0.3s;
+                        -moz-transition: all 0.3s;
+                        -o-transition: all 0.3s;
+                        -ms-transition: all 0.3s;
+                        transition: all 0.3s;
+                        background: url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20baseProfile%3D%22full%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xmlns%3Aev%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2Fxml-events%22%20xml%3Aspace%3D%22preserve%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%229px%22%20height%3D%229px%22%20%20viewBox%3D%220%200%209%209%22%20preserveAspectRatio%3D%22none%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M9.001%2C7.626%20L7.626%2C9.000%20L4.500%2C5.875%20L1.375%2C9.000%20L-0.001%2C7.626%20L3.125%2C4.500%20L-0.001%2C1.375%20L1.375%2C-0.001%20L4.500%2C3.125%20L7.626%2C-0.001%20L9.001%2C1.375%20L5.875%2C4.500%20L9.001%2C7.626%20Z%22%2F%3E%3C%2Fsvg%3E) 0 0 no-repeat;
+                      }
                     }
                     .active-val {
                       color: #fff;
                       background: #fd9844;
                       box-shadow: none;
+                      padding: 7px 40px 8px 18px;
                       &:before {
                         opacity: 1;
                         visibility: visible;

@@ -21,8 +21,6 @@ const Slug = ({products, categories, currentCategoryId, attributes}) => {
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
 
-    // console.log('test', test)
-
     let currentPageNum = currentPage == undefined ? 0 : currentPage
 
     let townCaption = currentCategory.name
@@ -99,8 +97,6 @@ export async function getServerSideProps(ctx) {
     const {data: categories} = await getCategories();
     const {data: products} = await getProductsData(ctx.query);
     const attributes = await getAttributes(ctx.query.id ?? null);
-    // const test = await getFilteredProductsData(ctx.query.id);
-    // console.log('test112', test);
 
     return {
         props: {
@@ -108,7 +104,6 @@ export async function getServerSideProps(ctx) {
             products: products ?? {},
             currentCategoryId: ctx.query.id ?? null,
             attributes: attributes ?? [],
-            // test: test ?? null,
         }
     }
 }

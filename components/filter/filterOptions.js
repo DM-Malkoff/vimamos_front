@@ -1,24 +1,34 @@
 import {useContext, useEffect, useState} from "react";
 import {FilterDataContext} from "../../context/context";
 
-const FilterOptions = ({attributeItem, activeVal, onCLick}) => {
+const FilterOptions = ({isReset, attributeItem, onCLick}) => {
+    const [activeVal, setActiveVal] = useState(false);
     const [filterContext, setFilterContext] = useContext(FilterDataContext)
     const [filterOptions, setFilterOptions] = useState({})
 
+    /** Если нажали кнопку "Сбросить" деактивируем параметры */
+    useEffect(() => {
+        if (isReset) {
+            setActiveVal(false);
+            setFilterOptions({}); // Очищаем параметры фильтра
+            setFilterContext({}); // Очищаем контекст фильтра
+        }
+    }, [isReset, setFilterContext])
+
     useEffect(()=>{
-        console.log('filterOptions', filterOptions)
         setFilterContext(filterOptions)
-    }, [filterOptions])
+    }, [filterOptions, setFilterContext])
 
     /** Выбор атрибута в фильтре */
-    const filterOptionHandler = () =>{
-        setFilterOptions({...filterOptions, attribute: attributeItem.slug, attribute_term: attributeItem.name})
-        onCLick()
+    const filterOptionHandler = () => {
+        setActiveVal(!activeVal);
+        setFilterOptions({...filterOptions, attribute: attributeItem.slug, attribute_term: attributeItem.name});
+        onCLick();
     }
 
     return (
         <>
-            <div className={`param_val ${activeVal}`} onClick={()=>filterOptionHandler()}>{attributeItem.name}</div>
+            <div className={`param_val ${activeVal ? 'active-val' : ''}`} onClick={()=>filterOptionHandler()}>{attributeItem.name}</div>
         </>
     );
 };

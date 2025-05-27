@@ -3,43 +3,45 @@ import {FilterDataContext} from "../../context/context";
 import {useRouter} from "next/router";
 import FilterOptions from "./filterOptions";
 
-const AccordionItems = ({item, index, onPress}) => {
-    const router = useRouter()
-    const minPriceValue = router.query.min_price ? router.query.min_price: 'от'
-    const maxPriceValue = router.query.max_price ? router.query.max_price: 'до'
+const AccordionItems = ({item, index, isReset, onPress}) => {
+    const router = useRouter();
+    const minPriceValue = router.query.min_price ? router.query.min_price: 'от';
+    const maxPriceValue = router.query.max_price ? router.query.max_price: 'до';
 
 
-    const [filterContext, setFilterContext] = useContext(FilterDataContext)
+    const [filterContext, setFilterContext] = useContext(FilterDataContext);
 
-    const [filterOptions, setFilterOptions] = useState({})
+    const [filterOptions, setFilterOptions] = useState({});
 
-    const [isShow, setIsShow] = useState(index == 0 ? true : false)
+    /** Флаг отображения группы атрибутов в фильтре */
+    const [isShow, setIsShow] = useState(index == 0 ? true : false);
 
-    const [filterAttributeIndex, setFilterAttributeIndex] = useState(null)
+    /** Индекс атрибута в фильтре */
+    const [filterAttributeIndex, setFilterAttributeIndex] = useState(null);
 
     function itemClick() {
-        setIsShow(!isShow)
+        setIsShow(!isShow);
     }
 
     useEffect(() => {
-        setFilterContext(filterOptions)
+        setFilterContext(filterOptions);
     }, [filterOptions])
 
     useEffect(()=>{
         if (!router.query.attribute){
-            setFilterAttributeIndex(null)
+            setFilterAttributeIndex(null);
         }
     },[router])
 
     function handlerMinPrice(event) {
-        setFilterOptions({...filterOptions, min_price: event.target.value})
+        setFilterOptions({...filterOptions, min_price: event.target.value});
     }
 
     function handlerMaxPrice(event) {
-        setFilterOptions({...filterOptions, max_price: event.target.value})
+        setFilterOptions({...filterOptions, max_price: event.target.value});
     }
     const filterOptionsHandler = () =>{
-        setFilterOptions(...filterOptions,)
+        setFilterOptions(...filterOptions);
     }
 
     return (
@@ -86,14 +88,13 @@ const AccordionItems = ({item, index, onPress}) => {
                             <>
                                 {item.options ?
                                     item.options.map((attributeItem, index) => {
-                                        const activeVal  = index === filterAttributeIndex ? "active-val":''
                                         return (
                                             <FilterOptions
                                                 key={`option-${attributeItem.slug}`}
+                                                isReset={isReset}
                                                 attributeItem={attributeItem}
-                                                activeVal = {activeVal}
                                                 onCLick = {() => {
-                                                    setFilterAttributeIndex(index)
+                                                    setFilterAttributeIndex(index);
                                                 }}
                                             />
                                         )
