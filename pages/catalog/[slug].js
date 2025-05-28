@@ -30,7 +30,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         townCaption = `${currentCategory.name} в ${Towns[currentPageNum]}`
     }
 
-    // Функция обновления списка товаров
+    /** Функция обновления списка товаров */
     const handleProductsUpdate = (newProducts) => {
         setProducts(newProducts);
     };

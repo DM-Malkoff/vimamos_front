@@ -37,9 +37,8 @@ function Home({productsLacoste, categories}) {
 export default Home;
 
 export async function getServerSideProps() {
-    const {data: productsLacoste} = await getSliderProducts(26);
+    const {data: productsLacoste} = await getSliderProducts(28);
     // const {data: productsDiscs} = await getSliderProducts(27);
-    console.log('???', productsLacoste)
     const {data: categories} = await getCategories();
     return {
         props: {

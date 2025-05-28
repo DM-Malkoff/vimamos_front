@@ -1,11 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import GoToPartner from "./goToPartner";
+import {salePriceCoefficient} from "../constants/config";
 
 const ProductCard = ({productData}) => {
-    const customFields = productData.meta_data
-    const shopName = customFields?.find(item => item.key === 'shop_name') ? customFields.find(item => item.key === 'shop_name').value : ''
-    const shopLink = customFields?.find(item => item.key === 'wc_partner_url')?.value
+    const customFields = productData.meta_data;
+
+    const shopNameCustomField = customFields ? customFields.find(item => item.key === 'shop_name') : null;
+    const shopName = shopNameCustomField ? shopNameCustomField.value : null;
+
+    const wcPartnerUrl = customFields ? customFields?.find(item => item.key === 'wc_partner_url'): null;
+    const shopLink = wcPartnerUrl ? wcPartnerUrl.value : null;
 
     function mathDiscount(salePrice, regularPrice) {
         let percent = (regularPrice - salePrice) * 100 / regularPrice
@@ -67,18 +72,18 @@ const ProductCard = ({productData}) => {
                     </div>
 
                     <div className="product-bot">
-                        {productData.sale_price ?
+                        {productData.regular_price ?
                             <>
                                 <div className="product-price">
                                     {productData.regular_price > 0 ?
                                         <div className="price-old question">
-                                            <span><strong>{productData.regular_price}</strong> ₽</span>
+                                            <span><strong>{productData.sale_price ? productData.regular_price : productData.regular_price*salePriceCoefficient}</strong> ₽</span>
                                         </div>
                                         :
                                         false
                                     }
                                     <div className="price-current">
-                                        <strong>{productData.sale_price}</strong> ₽
+                                        <strong>{productData.regular_price}</strong> ₽
                                     </div>
                                 </div>
                                 <GoToPartner url={shopLink} shopName={shopName}/>

@@ -1,9 +1,16 @@
 import {useContext, useEffect, useState} from "react";
 import {FilterDataContext} from "../../context/context";
+import {colors} from "../../constants/config";
 
 const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
     const [activeVal, setActiveVal] = useState(false);
     const [filterContext, setFilterContext] = useContext(FilterDataContext);
+
+    /** Находим цвет по slug */
+    const getColorBySlug = (slug) => {
+        const colorItem = colors.find(color => color.slug === slug);
+        return colorItem ? colorItem.code : null;
+    }
 
     /** Если нажали кнопку "Сбросить" деактивируем параметры */
     useEffect(() => {
@@ -19,7 +26,6 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
         
         // Если атрибут уже существует в контексте
         if (newFilterContext[attributeGroup.name]) {
-            console.log('1')
             if (activeVal) {
                 // Если значение уже выбрано, удаляем его
                 newFilterContext[attributeGroup.name] = newFilterContext[attributeGroup.name]
@@ -31,14 +37,11 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
                 }
             } else {
                 // Добавляем новое значение в массив
-                console.log('attributeOption', attributeOption)
                 newFilterContext[attributeGroup.name].push(attributeOption);
             }
         } else {
-            console.log('2', newFilterContext)
             // Создаем новый массив для атрибута
             newFilterContext[attributeGroup.name] = [attributeOption];
-            console.log('2-1', newFilterContext)
         }
         setFilterContext(newFilterContext);
     }
@@ -49,6 +52,14 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
                 className={`param_val ${activeVal ? 'active-val' : ''}`} 
                 onClick={filterOptionHandler}
             >
+                {attributeGroup.slug === 'pa_color' && (
+                    <span 
+                        className="color-circle" 
+                        style={{
+                            backgroundColor: getColorBySlug(attributeOption.slug)
+                        }}
+                    />
+                )}
                 {attributeOption.name}
             </div>
         </>

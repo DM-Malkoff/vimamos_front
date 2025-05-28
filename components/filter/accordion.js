@@ -10,7 +10,6 @@ const Accordion = ({terms, onProductsUpdate}) => {
 
     /** Обертка - объект параметров фильтра */
     const [filterContext, setFilterContext] = useContext(FilterDataContext);
-    console.log('!!', filterContext)
 
     /** Обертка - состояние отображения фильтра */
     const [showFilterContext, setShowFilterContext] = useContext(ShowFilterContext);
@@ -24,7 +23,10 @@ const Accordion = ({terms, onProductsUpdate}) => {
 
         // Подготавливаем атрибуты из filterContext
         const preparedAttributes = {};
-        const queryParams = { ...routerQueries };
+        const queryParams = { 
+            id: router.query.id, // Сохраняем только ID категории
+            // slug: router.query.slug // И slug категории
+        };
 
         if (filterContext && Object.entries(filterContext).length) {
             // Обрабатываем все атрибуты из filterContext
@@ -55,7 +57,6 @@ const Accordion = ({terms, onProductsUpdate}) => {
         };
 
         try {
-            console.log('requestBody', requestBody)
             const response = await fetch(`${siteUrl}/wp-json/custom/v1/search-products`, {
                 method: 'POST',
                 headers: {
