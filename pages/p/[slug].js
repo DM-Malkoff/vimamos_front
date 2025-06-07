@@ -15,28 +15,51 @@ import {getCategories} from "../../utils/categories";
 
 export default function ProductPage({product,categories, upsellProducts}) {
     console.log('product', product)
-    const pathLocation = useRouter().pathname
-    const customFields = product.meta_data
-    const vendor = customFields.find(item => item.key === "Производитель")
-    const title = customFields.find(item => item.key === "wc_title")
-    const description = customFields.find(item => item.key === "wc_description")
-    const sku = product.sku
-    const shopName = customFields.find(item => item.key === 'shop_name')?.value
-    const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value
+    const pathLocation = useRouter().pathname;
+    const customFields = product.meta_data;
+    const description = customFields.find(item => item.key === "wc_description");
+    const sku = product.sku;
+    const shopName = customFields.find(item => item.key === 'shop_name')?.value;
+    const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value;
     const tabsItems = [
         {title: 'Характеристики', content: product.attributes},
         {title: 'Описание', content: product.description}
     ]
+
+    /** Провека на магазин Thomas Munz для кастомизации заголовков и метатегов */
+    let shopIsThomasMuenz = shopName === 'Thomas Munz';
 
     function mathDiscount(salePrice, regularPrice) {
         let percent = (regularPrice - salePrice) * 100 / regularPrice
         return percent.toFixed(0)
     }
 
+    /** Метод формирования H1 */
+    function getCaption() {
+        if (product) {
+            if (shopIsThomasMuenz) {
+                return `${product.name} ${product.brands[0].name} ${product.sku}`;
+            }
+            return product.name;
+        }
+        return 'Заголовок';
+    }
+
+    /** Метод формирования Title */
+    function getTitle() {
+        if (product) {
+            if (shopIsThomasMuenz) {
+                return `${sku} ${product.brands[0].name} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
+            }
+            return `${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
+        }
+        return '';
+    }
+
     return (
         <>
             <Head>
-                <title>{`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`}</title>
+                <title>{getTitle()}</title>
                 <meta name="description"
                       content={description ? description.value : `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku} `}/>
                 <meta property="og:title"
@@ -86,7 +109,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                                 </label>
                                             </div>
                                             <div className="product_name" itemProp="name">
-                                                <Caption caption={product.name}/>
+                                                <Caption caption={getCaption()} />
                                             </div>
                                             <div className="vendor_option">
                                                 Артикул {sku}

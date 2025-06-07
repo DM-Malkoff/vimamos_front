@@ -16,7 +16,7 @@ const CatalogLayout = ({categories,children, caption, lastNode}) => {
                     <main role="main" className="site__main folder">
                         <div className="site__main__in">
                             <BreadCrumbs path={pathLocation} namePage={lastNode ? lastNode : caption} />
-                            <Caption caption={caption}/>
+                            <Caption caption={caption} />
                             <div className="mode_folder_wrapper">
                                 <div className="mode_folder_body">
                                     {children}
