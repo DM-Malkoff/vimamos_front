@@ -89,6 +89,12 @@
   font-display: swap;
 }
 
+:root {
+  --main-bg-color: rgb(91, 194, 56);
+  --main-bg-color-hover: rgb(82, 174, 50);
+  --bg-color-additional: #65ba9b;
+}
+
 html,
 body {
   padding: 0;
@@ -633,7 +639,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                     border-radius: 3px;
                   }
                   .product_label_item.product_sale {
-                    background: #fba739;
+                    background: var(--bg-color-additional);
                   }
                 }
                 .product__gallery__image-container {
@@ -805,7 +811,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                       padding: 15px 25px 15px;
                       color: #fff;
                       font-weight: 500;
-                      background: #fd9844;
+                      background: var(--main-bg-color);
                       box-shadow: none;
                       position: relative;
                       cursor: pointer;
@@ -815,7 +821,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                       transition: all 0.3s;
                       &:hover {
                         box-shadow: none;
-                        background: #fda256;
+                        background: var(--main-bg-color-hover);
                       }
                     }
                   }
@@ -899,7 +905,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
               }
               li.active-tab span {
                 color: #fff;
-                background: #fd9844;
+                background: var(--main-bg-color);
                 box-shadow: none;
               }
             }
@@ -1520,7 +1526,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
     font-size: 0;
     pointer-events: none;
     .product_label_item.product-sale {
-      background: #fba739;
+      background: var(--bg-color-additional);
       display: inline-block;
       vertical-align: top;
       margin: 0 10px 5px 0;
@@ -1805,7 +1811,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
 }
 .shop_product_button {
   flex: 0 1 auto;
-  background: #fd9844;
+  background: var(--main-bg-color);
   position: relative;
   color: #bebebe;
   font: 16px 'Montserrat', Arial, Helvetica, sans-serif;
@@ -1821,8 +1827,8 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  &hover{
-    background: #fd9844;
+  &:hover{
+    background: var(--main-bg-color-hover);
   }
   &:before {
     background: url("data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20baseProfile%3D%22full%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xmlns%3Aev%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2Fxml-events%22%20xml%3Aspace%3D%22preserve%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2225px%22%20height%3D%2224px%22%20%20viewBox%3D%220%200%2025%2024%22%20preserveAspectRatio%3D%22none%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M24.743%2C5.588%20L22.703%2C17.013%20C22.578%2C17.443%2022.181%2C17.738%2021.729%2C17.738%20L9.053%2C17.738%20C9.052%2C17.738%209.050%2C17.739%209.049%2C17.739%20C8.923%2C17.739%208.803%2C17.710%208.689%2C17.666%20C8.651%2C17.652%208.619%2C17.631%208.584%2C17.612%20C8.512%2C17.575%208.446%2C17.532%208.385%2C17.479%20C8.351%2C17.450%208.322%2C17.419%208.293%2C17.386%20C8.242%2C17.328%208.201%2C17.266%208.164%2C17.196%20C8.143%2C17.156%208.121%2C17.118%208.105%2C17.075%20C8.097%2C17.052%208.082%2C17.036%208.075%2C17.013%20L4.975%2C2.120%20L1.872%2C2.120%20C1.311%2C2.120%200.858%2C1.671%200.858%2C1.116%20C0.858%2C0.561%201.311%2C0.111%201.872%2C0.111%20L5.787%2C0.111%20C5.808%2C0.111%205.826%2C0.122%205.847%2C0.123%20C5.919%2C0.127%205.985%2C0.145%206.053%2C0.164%20C6.112%2C0.180%206.171%2C0.193%206.226%2C0.219%20C6.286%2C0.248%206.336%2C0.289%206.389%2C0.328%20C6.440%2C0.367%206.490%2C0.401%206.533%2C0.448%20C6.575%2C0.494%206.604%2C0.549%206.638%2C0.603%20C6.674%2C0.661%206.709%2C0.717%206.733%2C0.783%20C6.740%2C0.803%206.755%2C0.816%206.761%2C0.836%20L9.861%2C15.729%20L20.968%2C15.729%20L22.422%2C6.313%20L11.738%2C6.313%20C11.178%2C6.313%2010.725%2C5.864%2010.725%2C5.309%20C10.725%2C4.753%2011.178%2C4.304%2011.738%2C4.304%20L23.770%2C4.304%20C24.088%2C4.304%2024.388%2C4.453%2024.579%2C4.705%20C24.771%2C4.957%2024.832%2C5.284%2024.743%2C5.588%20ZM12.000%2C20.000%20C13.105%2C20.000%2014.000%2C20.895%2014.000%2C22.000%20C14.000%2C23.105%2013.105%2C24.000%2012.000%2C24.000%20C10.896%2C24.000%2010.000%2C23.105%2010.000%2C22.000%20C10.000%2C20.895%2010.896%2C20.000%2012.000%2C20.000%20ZM19.000%2C20.000%20C20.104%2C20.000%2021.000%2C20.895%2021.000%2C22.000%20C21.000%2C23.105%2020.104%2C24.000%2019.000%2C24.000%20C17.895%2C24.000%2017.000%2C23.105%2017.000%2C22.000%20C17.000%2C20.895%2017.895%2C20.000%2019.000%2C20.000%20Z%22%2F%3E%3C%2Fsvg%3E") 46% 50% no-repeat;

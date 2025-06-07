@@ -51,18 +51,18 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                 {
                     currentPage > 3 ? <li className="page-num"><span>...</span></li> : false
                 }
-                {pageNumbers.map((number,index) => {
+                {pageNumbers.map((number) => { // Убрали `index`, он не нужен
                     if (currentPage == undefined && number < 5 && number > 1) {
                         return (
-                            <li key={index} className="page-num">
+                            <li key={number} className="page-num"> {/* Используем number вместо index */}
                                 <Link href={{
                                     pathname: `/catalog/${currentSlug}`,
                                     query: {
                                         ...routerQueries,
                                         page: number
                                     }
-                                }}
-                                ><a>{number}</a>
+                                }}>
+                                    <a>{number}</a>
                                 </Link>
                             </li>
                         )
@@ -70,24 +70,27 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                     if (number > 1 && (number == currentPage || number == currentPage - 1 || number == currentPage + 1)) {
                         if (number == currentPage) {
                             return (
-                                <li key={index} className="page-num active-num"><span>{number}</span></li>
+                                <li key={number} className="page-num active-num"> {/* Ключ = number */}
+                                    <span>{number}</span>
+                                </li>
                             )
                         } else {
                             return (
-                                <li key={number} className="page-num">
+                                <li key={number} className="page-num"> {/* Ключ = number */}
                                     <Link href={{
                                         pathname: `/catalog/${currentSlug}`,
                                         query: {
                                             ...routerQueries,
                                             page: number
                                         }
-                                    }}
-                                    ><a>{number}</a>
+                                    }}>
+                                        <a>{number}</a>
                                     </Link>
                                 </li>
                             )
                         }
                     }
+                    return null; // Важно: возвращаем null для пропущенных элементов
                 })}
                 {
                     (currentPage < pageNumbers.length - 2 || currentPage == undefined) ?

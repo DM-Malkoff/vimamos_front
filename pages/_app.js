@@ -7,7 +7,7 @@ import NProgress from "nprogress";
 NProgress.configure({ showSpinner: false });
 
 function MyApp({ Component, pageProps }) {
-  const [filterDataContext, setFilterDataContext] = useState('Empty Filter Data context')
+  const [filterDataContext, setFilterDataContext] = useState({})
   const [showFilterContext,setShowFilterContext] =   useState('Empty Show Filter context')
   Router.events.on('routeChangeStart',(url)=>{
       NProgress.start();

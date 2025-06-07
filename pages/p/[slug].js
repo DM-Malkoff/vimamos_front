@@ -14,6 +14,7 @@ import {siteName, siteUrl} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
 
 export default function ProductPage({product,categories, upsellProducts}) {
+    console.log('product', product)
     const pathLocation = useRouter().pathname
     const customFields = product.meta_data
     const vendor = customFields.find(item => item.key === "Производитель")
@@ -35,9 +36,9 @@ export default function ProductPage({product,categories, upsellProducts}) {
     return (
         <>
             <Head>
-                <title>{`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}</title>
+                <title>{`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`}</title>
                 <meta name="description"
-                      content={description ? description.value : `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Производитель ${vendor.value}. Артикул ${sku} `}/>
+                      content={description ? description.value : `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku} `}/>
                 <meta property="og:title"
                       content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
                 {product.images.map(item =>
@@ -169,7 +170,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                 <h2 className="shop_collection_header">
                                     Рекомендуемые товары
                                 </h2>
-                                <RelatedProductsSlider relatedProducts={upsellProducts}/>
+                                {/*<RelatedProductsSlider relatedProducts={upsellProducts}/>*/}
                             </div>
                         </div>
                     </main>
@@ -183,34 +184,34 @@ export default function ProductPage({product,categories, upsellProducts}) {
 export async function getServerSideProps(ctx) {
     const {data: product} = await getProductData(ctx.query.id)
     const {data: categories} = await getCategories();
-    const crossSellProductsIds = []
-    const crossSellIds = []
+    // const crossSellProductsIds = []
+    // const crossSellIds = []
 
-    if (Array.isArray(product.cross_sell_ids)){
-        product.cross_sell_ids.map((item, index) => {
-            if (index < 4) {
-                crossSellProductsIds.push(item)
-            }
-        })
-    }else{
-        product.upsell_ids.map((item, index) => {
-            if (index < 4) {
-                crossSellProductsIds.push(item)
-            }
-        })
-    }
+    // if (Array.isArray(product.cross_sell_ids)){
+    //     product.cross_sell_ids.map((item, index) => {
+    //         if (index < 4) {
+    //             crossSellProductsIds.push(item)
+    //         }
+    //     })
+    // }else{
+    //     product.upsell_ids.map((item, index) => {
+    //         if (index < 4) {
+    //             crossSellProductsIds.push(item)
+    //         }
+    //     })
+    // }
 
 
-    await Promise.all(crossSellProductsIds.map(async (item) => {
-        let {data: crossSellProduct} = await getProductData(item)
-        crossSellIds.push(crossSellProduct)
-    }))
+    // await Promise.all(crossSellProductsIds.map(async (item) => {
+    //     let {data: crossSellProduct} = await getProductData(item)
+    //     crossSellIds.push(crossSellProduct)
+    // }))
 
     return {
         props: {
             product: product ?? {},
             categories: categories ?? {},
-            upsellProducts: crossSellIds ?? []
+            // upsellProducts: crossSellIds ?? []
         }
     }
 }

@@ -3,26 +3,20 @@ import {quantityProducts} from "../constants/config";
 
 export const getProductsData = async (queries) => {
     console.log('queries', queries);
-    const {slug: _, ...apiQueries} = queries
+    const {slug: _, ...apiQueries} = queries;
 
-    let apiString = `products?per_page=${quantityProducts}&`;
-    let counter = 1;
-    let myKey = '';
-    for (const key in apiQueries){
-        myKey = key;
-        if (myKey == 'id'){
-            myKey = 'category';
-        }
-        counter++;
+    const baseUrl = `products?per_page=${quantityProducts}`;
+    
+    const params = new URLSearchParams();
+    
+    Object.entries(apiQueries).forEach(([key, value]) => {
+        const paramKey = key === 'id' ? 'category' : key;
+        params.append(paramKey, value);
+    });
 
-        if (counter != queries.length){
-            apiString = apiString+myKey+'='+queries[key]+'&';
-        } else {
-            apiString = apiString+myKey+'='+queries[key];
-        }
-    }
-
-    return await api.get(`${apiString}`);
+    const apiUrl = `${baseUrl}&${params.toString()}`;
+    
+    return await api.get(apiUrl);
 };
 
 // export const getFilteredProductsData = async (categoryId) => {

@@ -5,13 +5,17 @@ import FilterOptions from "./filterOptions";
 
 const AccordionItems = ({item, index, isReset, onPress}) => {
     const router = useRouter();
-    const minPriceValue = router.query.min_price ? router.query.min_price: 'от';
-    const maxPriceValue = router.query.max_price ? router.query.max_price: 'до';
-
+    
+    // Используем пустую строку вместо 'от' и 'до' если есть значения в URL
+    const minPriceValue = router.query.min_price || '';
+    const maxPriceValue = router.query.max_price || '';
 
     const [filterContext, setFilterContext] = useContext(FilterDataContext);
 
-    const [filterOptions, setFilterOptions] = useState({});
+    const [filterOptions, setFilterOptions] = useState({
+        min_price: minPriceValue,
+        max_price: maxPriceValue
+    });
 
     /** Флаг отображения группы атрибутов в фильтре */
     const [isShow, setIsShow] = useState(index === 0);
@@ -21,15 +25,19 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
     }
 
     useEffect(() => {
-        setFilterContext(filterOptions);
-    }, [filterOptions])
+        if (filterOptions.min_price !== undefined || filterOptions.max_price !== undefined) {
+            setFilterContext(filterOptions);
+        }
+    }, [filterOptions]);
 
     function handlerMinPrice(event) {
-        setFilterOptions({...filterContext, min_price: event.target.value});
+        const value = event.target.value;
+        setFilterOptions(prev => ({...prev, min_price: value === '' ? '' : value}));
     }
 
     function handlerMaxPrice(event) {
-        setFilterOptions({...filterContext, max_price: event.target.value});
+        const value = event.target.value;
+        setFilterOptions(prev => ({...prev, max_price: value === '' ? '' : value}));
     }
 
     return (
@@ -42,9 +50,9 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
                             <>
                                 <div className="input_from">
                                     <input
-                                        placeholder={minPriceValue}
-
+                                        placeholder="от"
                                         type="number"
+                                        value={filterOptions.min_price}
                                         onChange={handlerMinPrice}
                                         onClick={(event) => {
                                             event.stopPropagation()
@@ -54,12 +62,14 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
                                                 onPress()
                                             }
                                         }}
+                                        min={0}
                                     />
                                 </div>
                                 <div className="input_to">
                                     <input
-                                        placeholder={maxPriceValue}
+                                        placeholder="до"
                                         type="number"
+                                        value={filterOptions.max_price}
                                         onChange={handlerMaxPrice}
                                         onClick={(event) => {
                                             event.stopPropagation()
@@ -69,6 +79,7 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
                                                 onPress()
                                             }
                                         }}
+                                        min={0}
                                     />
                                 </div>
                             </>

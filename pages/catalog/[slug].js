@@ -13,35 +13,45 @@ import Pagination from "../../components/pagination";
 import Towns from "../../utils/towns";
 import {quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {getAttributes} from "../../utils/attributes";
-import { useState } from "react";
+import {useState, useEffect} from "react";
 
 const Slug = ({products: initialProducts, categories, currentCategoryId, attributes}) => {
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     const currentCategory = categories.find(item => item.id == currentCategoryId);
-    const availableSlug = currentCategory.slug;
+    const availableSlug = currentCategory?.slug || '';
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
 
-    let currentPageNum = currentPage == undefined ? 0 : currentPage
-
-    let townCaption = currentCategory.name
+    let currentPageNum = currentPage == undefined ? 0 : currentPage;
+    let townCaption = currentCategory?.name || '';
+    
     if (Towns[currentPageNum]) {
-        townCaption = `${currentCategory.name} в ${Towns[currentPageNum]}`
+        townCaption = `${currentCategory?.name || ''} в ${Towns[currentPageNum]}`;
     }
+
+    // Эффект для обновления товаров при смене категории
+    useEffect(() => {
+        if (initialProducts) {
+            setProducts(initialProducts);
+        }
+    }, [currentCategoryId, initialProducts]);
 
     /** Функция обновления списка товаров */
     const handleProductsUpdate = (newProducts) => {
         setProducts(newProducts);
     };
 
+    // Формируем заголовок страницы
+    const pageTitle = `${currentCategory?.name || ''} - купить в ${Towns[currentPageNum] || ''} в Интернет-магазине недорого | Vimamos.ru`;
+
     return (
         <>
             <Head>
-                <title>Купить {currentCategory.name} в {Towns[currentPageNum]} в Интернет-магазине недорого</title>
+                <title>{pageTitle}</title>
                 <meta name="description"
-                      content={`${currentCategory.name} - большой ассортимент в нашем каталоге. Доставка в ${Towns[currentPageNum]}. Онлайн оформление заказа. Гарантия от магазина и выгодные цены.`}/>
-                {Towns[currentPageNum] ? true : <meta name="robots" content="none"/>}
+                      content={`${currentCategory?.name || ''} - большой ассортимент в нашем каталоге. Доставка в ${Towns[currentPageNum] || ''}. Онлайн оформление заказа. Гарантия от магазина и выгодные цены.`}/>
+                {Towns[currentPageNum] ? <meta name="robots" content="all"/> : <meta name="robots" content="none"/>}
                 {
                     router.query.orderby ||
                     router.query.min_price ||
@@ -55,10 +65,9 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                         false
                 }
 
-                <meta property="og:title"
-                      content={`Купить ${currentCategory.name} в ${Towns[currentPageNum]} в Интернет-магазине недорого`}/>
+                <meta property="og:title" content={pageTitle}/>
                 <meta property="og:image" content="/images/logo.jpg"/>
-                <meta property="og:url" content={siteUrl + useRouter().asPath}/>
+                <meta property="og:url" content={siteUrl + router.asPath}/>
                 <meta property="og:site_name" content={siteName}/>
                 <meta property="og:type" content="website"/>
             </Head>
@@ -67,22 +76,22 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                 <div className='site__main__wrap folder'>
                     <main role="main" className="site__main folder">
                         <div className="site__main__in">
-                            <BreadCrumbs namePage={currentCategory.name}/>
+                            <BreadCrumbs namePage={currentCategory?.name || ''}/>
                             <Caption caption={townCaption}/>
                             <div className="mode_folder_wrapper">
                                 <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate} />
                                 <div className="mode_folder_body">
-                                    <Sort totalQuantityProducts={currentCategory.count}
-                                          quantityFilterProduct={products.length}/>
-                                    {products.length == 0 ?
+                                    <Sort totalQuantityProducts={currentCategory?.count || 0}
+                                          quantityFilterProduct={products?.length || 0}/>
+                                    {!products?.length ?
                                         <p className="products_error">Не найдено товаров по заданным параметрам,
                                             попробуйте изменить условия поиска.</p> :
                                         <ProductList products={products}/>
                                     }
-                                    {products.length >= quantityProducts || router.query.page ?
+                                    {(products?.length >= quantityProducts || router.query.page) ?
                                         <Pagination
-                                            totalQuantityProducts={currentCategory.count}
-                                            productsLength={products.length}
+                                            totalQuantityProducts={currentCategory?.count || 0}
+                                            productsLength={products?.length || 0}
                                         />
                                         :
                                         false
@@ -101,16 +110,28 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
 export default Slug;
 
 export async function getServerSideProps(ctx) {
-    const {data: categories} = await getCategories();
-    const {data: products} = await getProductsData(ctx.query);
-    const attributes = await getAttributes(ctx.query.id ?? null);
+    try {
+        const {data: categories} = await getCategories();
+        const {data: products} = await getProductsData(ctx.query);
+        const attributes = await getAttributes(ctx.query.id ?? null);
 
-    return {
-        props: {
-            categories: categories ?? {},
-            products: products ?? {},
-            currentCategoryId: ctx.query.id ?? null,
-            attributes: attributes ?? [],
-        }
+        return {
+            props: {
+                categories: categories ?? {},
+                products: products ?? {},
+                currentCategoryId: ctx.query.id ?? null,
+                attributes: attributes ?? [],
+            }
+        };
+    } catch (error) {
+        console.error('Error in getServerSideProps:', error);
+        return {
+            props: {
+                categories: {},
+                products: {},
+                currentCategoryId: null,
+                attributes: [],
+            }
+        };
     }
-}
+};

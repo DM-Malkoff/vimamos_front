@@ -52,9 +52,9 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
                 className={`param_val ${activeVal ? 'active-val' : ''}`} 
                 onClick={filterOptionHandler}
             >
-                {attributeGroup.slug === 'pa_color' && (
+                {attributeGroup.slug === 'pa_cvet' && (
                     <span 
-                        className="color-circle" 
+                        className={attributeOption.slug === 'belyj' ? '' : 'color-circle'}
                         style={{
                             backgroundColor: getColorBySlug(attributeOption.slug)
                         }}

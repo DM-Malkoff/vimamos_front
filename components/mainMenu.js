@@ -5,9 +5,9 @@ import {useRouter} from "next/router";
 
 
 const MainMenu = ({showMenu, categories, handler}) => {
-    const router = useRouter()
-    const [showSubMenu, setShowSubMenu] = useState(false)
-    const [indexMenuItem, setIndexMenuItem] = useState(null)
+    const router = useRouter();
+    const [showSubMenu, setShowSubMenu] = useState(false);
+    const [indexMenuItem, setIndexMenuItem] = useState(null);
 
     const subMenuClickHandler = () => {
         handler()
