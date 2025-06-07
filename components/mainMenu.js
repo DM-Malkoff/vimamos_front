@@ -20,9 +20,15 @@ const MainMenu = ({showMenu, categories, handler}) => {
     useEffect(() => {
         setMenuBlockHeight(ref.current.scrollHeight)
     },[])
-    useEffect(()=>{
-        setIndexMenuItem(null)
-    },[router])
+
+    // Сброс состояния подменю при изменении маршрута
+    useEffect(() => {
+        setShowSubMenu(false);
+        setIndexMenuItem(null);
+        if (showMenu) {
+            handler(); // Закрываем меню при переходе
+        }
+    }, [router.asPath]);
 
     return (
         <div className={`burger__block__wrapper ${showMenu ? 'active' : ''}`} onClick={handler}>
@@ -57,7 +63,6 @@ const MainMenu = ({showMenu, categories, handler}) => {
                                                     }}
                                                     onCLick={()=>{
                                                         setIndexMenuItem(catIndex)
-
                                                     }}
                                                     subMenuClickHandler={subMenuClickHandler}
                                                 />

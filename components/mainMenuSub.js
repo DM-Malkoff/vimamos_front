@@ -12,22 +12,21 @@ const MainMenuSub = ({cSMenu, onCLick, onClickBack, subLevel, item, handler, act
 
     const handleCategoryClick = async (e, slug, id) => {
         e.preventDefault();
-        // Закрываем меню
+        
+        // Закрываем меню при переходе
         if (handler) {
             handler();
         }
         
-        // Переходим на страницу категории с полной перезагрузкой
         try {
             await router.push({
                 pathname: `/catalog/${slug}`,
                 query: {
                     id: id
                 }
-            }, undefined, { shallow: false });
+            });
         } catch (error) {
             console.error('Ошибка при навигации:', error);
-            // В случае ошибки делаем полную перезагрузку страницы
             window.location.href = `/catalog/${slug}?id=${id}`;
         }
     };
