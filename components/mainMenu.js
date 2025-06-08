@@ -8,11 +8,14 @@ const MainMenu = ({showMenu, categories, handler}) => {
     console.log('categories', categories)
     const router = useRouter();
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [showThirdLevel, setShowThirdLevel] = useState(false);
     const [indexMenuItem, setIndexMenuItem] = useState(null);
+    const [indexSubMenuItem, setIndexSubMenuItem] = useState(null);
 
     const subMenuClickHandler = () => {
         handler()
         setShowSubMenu(false)
+        setShowThirdLevel(false)
     }
 
     const [menuBlockHeight, setMenuBlockHeight] = useState(0)
@@ -25,7 +28,9 @@ const MainMenu = ({showMenu, categories, handler}) => {
     // Сброс состояния подменю при изменении маршрута
     useEffect(() => {
         setShowSubMenu(false);
+        setShowThirdLevel(false);
         setIndexMenuItem(null);
+        setIndexSubMenuItem(null);
         if (showMenu) {
             handler(); // Закрываем меню при переходе
         }
@@ -51,20 +56,34 @@ const MainMenu = ({showMenu, categories, handler}) => {
                                                 <MainMenuSub
                                                     key={item.id}
                                                     activeSubMenu={activeSubMenu}
+                                                    showThirdLevel={showThirdLevel}
                                                     cSMenu={()=> {
                                                         setShowSubMenu(true)
                                                     }}
+                                                    cThirdLevel={(show) => {
+                                                        setShowThirdLevel(show)
+                                                    }}
                                                     subLevel={subLevel}
+                                                    categories={categories}
                                                     item={item}
                                                     handler={handler}
                                                     menuBlockHeight={menuBlockHeight}
                                                     onClickBack={()=>{
-                                                        setShowSubMenu(false)
-                                                        setIndexMenuItem(null)
+                                                        if (showThirdLevel) {
+                                                            setShowThirdLevel(false)
+                                                            setIndexSubMenuItem(null)
+                                                        } else {
+                                                            setShowSubMenu(false)
+                                                            setIndexMenuItem(null)
+                                                        }
                                                     }}
                                                     onCLick={()=>{
                                                         setIndexMenuItem(catIndex)
                                                     }}
+                                                    onSubItemClick={(index)=>{
+                                                        setIndexSubMenuItem(index)
+                                                    }}
+                                                    activeSubItem={indexSubMenuItem}
                                                     subMenuClickHandler={subMenuClickHandler}
                                                 />
                                             )
@@ -78,7 +97,7 @@ const MainMenu = ({showMenu, categories, handler}) => {
             </div>
             <style jsx>{`
                 .waSlideMenu-wrapper{
-                    transform: ${showSubMenu ? 'translateX(-100%);' : 'translateX(0);'};
+                    transform: ${showThirdLevel ? 'translateX(-200%)' : showSubMenu ? 'translateX(-100%)' : 'translateX(0)'};
                     transition: 0.3s;
                 }
                 .folders__block__wrap{
