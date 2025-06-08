@@ -4,25 +4,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import dynamic from 'next/dynamic';
 
 const ProductImages = ({ images }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalImg, setModalImg] = useState(null);
-    const [isMobile, setIsMobile] = useState(false);
-    const hasImages = images && images.length > 0;
-
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 600);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+    const hasImages = Array.isArray(images) && images.length > 0;
 
     const openModal = (img) => {
         setModalImg(img);
         setModalOpen(true);
     };
+    
     const closeModal = () => {
         setModalOpen(false);
         setModalImg(null);
@@ -32,15 +26,18 @@ const ProductImages = ({ images }) => {
         <div className="product__gallery__images">
             <Swiper
                 modules={[Navigation, Pagination]}
-                navigation={!isMobile && hasImages && images.length > 1}
-                pagination={{ clickable: true, el: '.product__gallery__custom-pagination' }}
+                navigation={hasImages && images.length > 1}
+                pagination={{ 
+                    clickable: true, 
+                    el: '.product__gallery__custom-pagination'
+                }}
                 spaceBetween={10}
                 slidesPerView={1}
                 loop={hasImages && images.length > 1}
             >
                 {hasImages ? (
                     images.map((img) => (
-                        <SwiperSlide key={img.id}>
+                        <SwiperSlide key={img.id || img.src}>
                             <div className="product__gallery__image-container" onClick={() => openModal(img)}>
                                 <Image
                                     itemProp="image"
@@ -56,7 +53,7 @@ const ProductImages = ({ images }) => {
                     ))
                 ) : (
                     <SwiperSlide>
-                        <div className="product__gallery__image-container" onClick={() => openModal({src: '/images/no_image.png', alt: 'Нет изображения', name: ''})}>
+                        <div className="product__gallery__image-container">
                             <Image
                                 itemProp="image"
                                 src="/images/no_image.png"
@@ -75,7 +72,7 @@ const ProductImages = ({ images }) => {
                 <div className="product-modal" onClick={closeModal}>
                     <div className="product-modal__content" onClick={e => e.stopPropagation()}>
                         <Image
-                            src={modalImg?.src}
+                            src={modalImg?.src || '/images/no_image.png'}
                             alt={modalImg?.alt || ''}
                             title={modalImg?.name || ''}
                             layout="fill"

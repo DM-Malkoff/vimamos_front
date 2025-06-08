@@ -64,7 +64,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                       content={description ? description.value : `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku} `}/>
                 <meta property="og:title"
                       content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
-                {product.images.map(item =>
+                {product?.images.map(item =>
                     <meta key={item.id} property="og:image" content={item.src}/>
                 )}
                 <meta property="og:url" content={siteUrl + useRouter().asPath}/>
@@ -97,7 +97,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                             false
                                         }
                                         <div className="product_image product__gallery__images">
-                                            <ProductImages images={product.images}/>
+                                            <ProductImages images={product?.images}/>
                                         </div>
                                     </div>
                                     <div className="product_side_r">
@@ -193,7 +193,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                 <h2 className="shop_collection_header">
                                     Рекомендуемые товары
                                 </h2>
-                                {/*<RelatedProductsSlider relatedProducts={upsellProducts}/>*/}
+                                <RelatedProductsSlider relatedProducts={product.similar_products}/>
                             </div>
                         </div>
                     </main>
