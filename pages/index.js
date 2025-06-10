@@ -26,59 +26,68 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
             <Header categories={categories}/>
             <div className="page-wrapper">
                 <main className='site__container'>
-                    <MainBanner />
-                    
-                    <section className="popular-categories">
-                        <h2 className="section-title">Популярные категории</h2>
-                        <PopularCategories categories={categories} />
-                    </section>
+                    <div className="site__main__wrap">
+                        <div role="main" className="site__main">
+                            <MainBanner/>
 
-                    <section className="brands-section">
-                        <div className="brands-section-header">
-                            <h2 className="section-title brands-title">Популярные бренды</h2>
-                            <p className="brands-subtitle">Откройте для себя лучшие предложения от ведущих мировых брендов</p>
+                            <section className="popular-categories">
+                                <div className="popular-categories-header">
+                                    <h2 className="section-title popular-categories-title">Популярные категории</h2>
+                                    <p className="popular-categories-subtitle">Найдите то, что ищете в наших основных
+                                        категориях</p>
+                                </div>
+                                <PopularCategories categories={categories}/>
+                            </section>
+
+                            <section className="brands-section">
+                                <div className="brands-section-header">
+                                    <h2 className="section-title brands-title">Популярные бренды</h2>
+                                    <p className="brands-subtitle">Откройте для себя лучшие предложения от ведущих мировых
+                                        брендов</p>
+                                </div>
+                                <div className="brands-sliders">
+                                    <MainSlider
+                                        data={productsLacoste}
+                                        caption="Lacoste"
+                                        categories={[
+                                            {id: 349, name: "Для женщин"},
+                                            {id: 45, name: "Для мужчин"},
+                                            {id: 445, name: "Для детей"}
+                                        ]}
+                                    />
+                                    <MainSlider
+                                        data={productsEcco}
+                                        caption="Ecco"
+                                        categories={[
+                                            {id: 1016, name: "Женская обувь"},
+                                            {id: 1201, name: "Мужская обувь"},
+                                            {id: 1218, name: "Детская обувь"}
+                                        ]}
+                                    />
+                                    <MainSlider
+                                        data={productsRieker}
+                                        caption="Rieker"
+                                        categories={[
+                                            {id: 854, name: "Женская обувь"},
+                                            {id: 981, name: "Мужская обувь"}
+                                        ]}
+                                    />
+                                    <MainSlider
+                                        data={productsSalamander}
+                                        caption="Salamander"
+                                        categories={[
+                                            {id: 726, name: "Женская обувь"},
+                                            {id: 962, name: "Мужская обувь"}
+                                        ]}
+                                    />
+                                </div>
+                            </section>
                         </div>
-                        <div className="brands-sliders">
-                            <MainSlider
-                                data={productsLacoste}
-                                caption="Lacoste"
-                                categories={[
-                                    { id: 349, name: "Для женщин" },
-                                    { id: 45, name: "Для мужчин" },
-                                    { id: 445, name: "Для детей" }
-                                ]}
-                            />
-                            <MainSlider 
-                                data={productsRieker} 
-                                caption="Rieker"
-                                categories={[
-                                    { id: 854, name: "Женская обувь" },
-                                    { id: 981, name: "Мужская обувь" }
-                                ]}
-                            />
-                            <MainSlider 
-                                data={productsEcco} 
-                                caption="Ecco"
-                                categories={[
-                                    { id: 1016, name: "Женская обувь" },
-                                    { id: 1201, name: "Мужская обувь" },
-                                    { id: 1218, name: "Детская обувь" }
-                                ]}
-                            />
-                            <MainSlider 
-                                data={productsSalamander} 
-                                caption="Salamander"
-                                categories={[
-                                    { id: 726, name: "Женская обувь" },
-                                    { id: 962, name: "Мужская обувь" }
-                                ]}
-                            />
-                        </div>
-                    </section>
+                    </div>
                 </main>
             </div>
             <Footer/>
-            
+
             <style jsx>{`
                 .swiper{
                     padding-bottom: 20px;
@@ -175,6 +184,56 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
                         right: -20px;
                         border-radius: 20px;
                     }
+                }
+
+                .popular-categories {
+                    margin: 50px 0;
+                }
+
+                .popular-categories-header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                    position: relative;
+                }
+
+                .popular-categories-header::before {
+                    content: '';
+                    position: absolute;
+                    top: -18px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 50px;
+                    height: 3px;
+                    background: linear-gradient(90deg, #3B82F6, #EC4899, #10B981);
+                    border-radius: 1.5px;
+                    animation: shimmer 2s ease-in-out infinite;
+                }
+
+                @keyframes shimmer {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                }
+
+                .popular-categories-title {
+                    font-size: 32px;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #1F2937, #3B82F6, #EC4899);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin-bottom: 12px;
+                    letter-spacing: -0.03em;
+                    position: relative;
+                }
+
+                .popular-categories-subtitle {
+                    font-size: 17px;
+                    color: #6B7280;
+                    margin: 0;
+                    font-weight: 400;
+                    max-width: 450px;
+                    margin: 0 auto;
+                    line-height: 1.5;
                 }
             `}</style>
         </>
