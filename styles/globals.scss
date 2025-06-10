@@ -297,7 +297,6 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
 }
 .site__container {
   flex: 1 0 auto;
-  background: #f8f8f8;
   .site__main__wrap {
     padding: 0 40px;
     background: #f8f8f8;
@@ -1242,17 +1241,17 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
   }
   .popular__block__wrapper {
     background: #fff;
-    padding: 25px 40px 56px;
+    //padding: 25px 40px 56px;
     .popular__block__wrap {
       padding: 0 50px;
       margin: 0 auto;
-      max-width: 1320px;
+      max-width: 1200px;
       box-sizing: border-box;
       .block__title {
         color: #22202a;
         font-size: 43px;
         font-weight: 800;
-        padding: 0 0 65px;
+        padding: 0;
         text-align: center;
       }
 
@@ -1373,13 +1372,13 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
         content: '';
         height: 1px;
         z-index: 1;
-        background: #efeff0;
+        //background: #efeff0;
 
       }
     }
     .product__image {
       position: relative;
-      height: 243px;
+      height: 145px;
       margin: 0 0 23px;
       padding-top: 20px;
       a {
@@ -1396,12 +1395,13 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
       font-weight: 500;
       padding: 0 0 20px;
       margin: 0 19px;
-      border-bottom: 1px solid #efeff0;
+      //border-bottom: 1px solid #efeff0;
     }
     .product__price {
-      padding: 25px 19px 0;
+      //padding: 25px 19px 0;
+      justify-content: space-between;
       display: flex;
-      flex-direction: column;
+      //flex-direction: column;
       align-items: center;
     }
     .price-old {
@@ -1411,6 +1411,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
       vertical-align: top;
       display: inline-block;
       margin: 0 0 3px;
+      white-space: nowrap;
       &:before {
         position: absolute;
         content: '';
@@ -1429,6 +1430,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
       color: #22202a;
       font-size: 18px;
       margin-top: auto;
+      white-space: nowrap;
       strong {
         font-weight: 700;
         font-family: 'Montserrat', Arial, Helvetica, sans-serif;
@@ -2875,4 +2877,176 @@ a {
 .product__gallery__images .swiper-button-prev {
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* Home page styles */
+.page-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+}
+
+.site__container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 40px 0 20px;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.brands-section {
+    margin: 50px 0;
+    position: relative;
+}
+
+.brands-sliders {
+    display: grid;
+    gap: 30px;
+}
+
+.popular-categories {
+    margin: 50px 0;
+}
+
+// Стили для кнопок навигации слайдера
+.swiper {
+  position: relative;
+  padding: 0 50px;  // Добавляем отступы по бокам для стрелок
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 44px;
+    height: 44px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    
+    &:after {
+      font-size: 20px;
+      color: #22202a;
+    }
+    
+    &:hover {
+      background-color: var(--main-bg-color);
+      
+      &:after {
+        color: #fff;
+      }
+    }
+  }
+  
+  .swiper-button-prev {
+    left: -5px;
+  }
+  
+  .swiper-button-next {
+    right: -5px;
+  }
+}
+
+// Стили для кнопок навигации слайдера
+.popular__block__wrapper {
+  .block__slider {
+    overflow: visible;  // Разрешаем контенту выходить за границы
+    
+    .prod_list_wrap {
+      overflow: visible;  // Убираем обрезание у внутреннего контейнера
+      
+      .slick-list {
+        overflow: hidden;  // Оставляем обрезание только для самого слайдера
+      }
+    }
+  }
+}
+
+.swiper {
+  position: relative;
+  padding: 0 50px;
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 44px;
+    height: 44px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10;  // Увеличиваем z-index чтобы стрелки были поверх всего
+    
+    &:after {
+      font-size: 20px;
+      color: #22202a;
+    }
+    
+    &:hover {
+      background-color: var(--main-bg-color);
+      
+      &:after {
+        color: #fff;
+      }
+    }
+  }
+  
+  .swiper-button-prev {
+    left: -5px;
+  }
+  
+  .swiper-button-next {
+    right: -5px;
+  }
+}
+
+/* Стили для кастомной навигации слайдера */
+.popular__block__wrapper {
+  position: relative;
+}
+
+.custom-navigation {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.custom-navigation .custom-nav-prev,
+.custom-navigation .custom-nav-next {
+  position: absolute;
+  top: -22px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.custom-navigation .custom-nav-prev:hover,
+.custom-navigation .custom-nav-next:hover {
+  background-color: var(--main-bg-color);
+  color: #fff;
+}
+
+.custom-navigation .custom-nav-prev {
+  left: 8px;
+}
+
+.custom-navigation .custom-nav-next {
+  right: 8px;
+}
+
+.custom-navigation svg {
+  display: block;
+  margin: 0 auto;
 }

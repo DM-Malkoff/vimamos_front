@@ -1,0 +1,35 @@
+.page_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+}
+
+.site_container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.section_title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 40px 0 20px;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.brands_section {
+    margin: 50px 0;
+    position: relative;
+}
+
+.brands_sliders {
+    display: grid;
+    gap: 30px;
+}
+
+.popular_categories {
+    margin: 50px 0;
+} 
