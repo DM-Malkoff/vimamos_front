@@ -24,11 +24,32 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
 
+    /** Название текущей категории */
+    let currentCategoryName = '';
+
+    if (currentCategory) {
+        if (currentCategory.name) {
+            const brandName = currentCategory.acf?.cat_brand;
+
+            if (brandName) {
+                currentCategoryName = currentCategory.name.includes(brandName)
+                    ? currentCategory.name
+                    : `${currentCategory.name} ${brandName}`;
+            } else {
+                currentCategoryName = currentCategory.name;
+            }
+        }
+    }
+
     let currentPageNum = currentPage == undefined ? 0 : currentPage;
-    let townCaption = currentCategory?.name || '';
+    let townCaption = currentCategoryName;
     
     if (Towns[currentPageNum]) {
-        townCaption = `${currentCategory?.name || ''} в ${Towns[currentPageNum]}`;
+        townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
+    }
+
+    if (currentCategory.acf.gender){
+        townCaption = `${currentCategory.acf.gender}  ${townCaption[0].toLowerCase() + townCaption.slice(1)}`;
     }
 
     // Эффект для обновления товаров при смене категории
@@ -44,7 +65,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     };
 
     // Формируем заголовок страницы
-    const pageTitle = `${currentCategory?.name || ''} - купить в ${Towns[currentPageNum] || ''} в Интернет-магазине недорого | Vimamos.ru`;
+    let pageTitle = `${currentCategory?.name || ''} - купить в ${Towns[currentPageNum] || ''} в Интернет-магазине недорого | Vimamos.ru`;
 
     return (
         <>
@@ -80,7 +101,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                             <BreadCrumbs namePage={currentCategory?.name || ''}/>
                             <Caption caption={townCaption}/>
                             <div className="mode_folder_wrapper">
-                                <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate} />
+                                <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate}/>
                                 <div className="mode_folder_body">
                                     <Sort totalQuantityProducts={currentCategory?.count || 0}
                                           quantityFilterProduct={products?.length || 0}/>
@@ -99,6 +120,9 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                                     }
                                 </div>
                             </div>
+                            {!router.query.page && (
+                                <div dangerouslySetInnerHTML={{__html: currentCategory.acf.cat_description}}/>
+                            )}
                         </div>
                     </main>
                 </div>

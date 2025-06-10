@@ -26,8 +26,9 @@ function Home({productsLacoste, categories}) {
             <Header categories={categories}/>
             <div className='site__container'>
                 <MainSlider data={productsLacoste} caption={'Обувь Lacoste'}/>
-                <MainSlider data={productsLacoste} caption={'Обувь Rieker'}/>
-                <MainSlider data={productsLacoste} caption={'Обувь ECCO'}/>
+                <MainSlider data={productsRieker} caption={'Обувь Rieker'}/>
+                <MainSlider data={productsEcco} caption={'Обувь ECCO'}/>
+                <MainSlider data={productsSalamander} caption={'Обувь Salamander'}/>
             </div>
             <Footer/>
         </>
