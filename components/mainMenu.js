@@ -1,11 +1,9 @@
-import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
 import MainMenuSub from "./mainMenuSub";
 import {useRouter} from "next/router";
 
 
 const MainMenu = ({showMenu, categories, handler}) => {
-    console.log('categories', categories)
     const router = useRouter();
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [showThirdLevel, setShowThirdLevel] = useState(false);

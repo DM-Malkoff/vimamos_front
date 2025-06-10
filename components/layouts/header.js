@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Image from "next/image";
 import {siteName} from "../../constants/config";
 import MainMenu from "../mainMenu";

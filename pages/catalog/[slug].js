@@ -19,7 +19,6 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     const currentCategory = categories.find(item => item.id == currentCategoryId);
-    console.log('currentCategory',currentCategory)
     const availableSlug = currentCategory?.slug || '';
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
