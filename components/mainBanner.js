@@ -9,7 +9,7 @@ const MainBanner = () => {
         e.preventDefault();
         if (searchQuery.trim()) {
             // Перенаправляем на страницу поиска с параметром
-            window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+            window.location.href = `/search/search?id=${encodeURIComponent(searchQuery)}`;
         }
     };
 
