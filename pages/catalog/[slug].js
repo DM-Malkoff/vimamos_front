@@ -41,14 +41,24 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     }
 
     let currentPageNum = currentPage == undefined ? 0 : currentPage;
+
+    /** Формируем H1 */
     let townCaption = currentCategoryName;
+
+    /** Формируем заголовок страницы */
+    let pageTitle = `${currentCategoryName} - купить в ${Towns[currentPageNum] || ''} в Интернет-магазине недорого | Vimamos.ru`;
+
+    /** Формируем метатег description страницы */
+    let description = `${currentCategoryName} - большой ассортимент в нашем каталоге. Доставка в ${Towns[currentPageNum] || ''}. Онлайн оформление заказа. Гарантия от магазина и выгодные цены.`
     
     if (Towns[currentPageNum]) {
         townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
     }
 
     if (currentCategory.acf.gender){
-        townCaption = `${currentCategory.acf.gender}  ${townCaption[0].toLowerCase() + townCaption.slice(1)}`;
+        townCaption = `${currentCategory.acf.gender} ${townCaption[0].toLowerCase() + townCaption.slice(1)}`;
+        pageTitle = `${currentCategory.acf.gender} ${pageTitle[0].toLowerCase() + pageTitle.slice(1)}`
+        description = `${currentCategory.acf.gender} ${description[0].toLowerCase() + description.slice(1)}`;
     }
 
     // Эффект для обновления товаров при смене категории
@@ -63,15 +73,11 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         setProducts(newProducts);
     };
 
-    // Формируем заголовок страницы
-    let pageTitle = `${currentCategory?.name || ''} - купить в ${Towns[currentPageNum] || ''} в Интернет-магазине недорого | Vimamos.ru`;
-
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
-                <meta name="description"
-                      content={`${currentCategory?.name || ''} - большой ассортимент в нашем каталоге. Доставка в ${Towns[currentPageNum] || ''}. Онлайн оформление заказа. Гарантия от магазина и выгодные цены.`}/>
+                <meta name="description" content={description} />
                 {Towns[currentPageNum] ? <meta name="robots" content="all"/> : <meta name="robots" content="none"/>}
                 {
                     router.query.orderby ||

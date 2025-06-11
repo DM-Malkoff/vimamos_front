@@ -13,11 +13,11 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
     return (
         <>
             <Head>
-                <title>Агрегатор обуви в Москве | Vimamos.ru</title>
-                <meta name="description" content="Агрегатор обуви от ведущих интернет-магазинов. Сравнивайте цены, выбирайте лучшие предложения. Более 50000 моделей в каталоге - мужские, женские и детские. Найдите свою идеальную пару!"/>
-                <meta name="yandex-verification" content="7f8011489a539e5f"/>
+                <title>Купить обувь в Москве в Интернет-магазине | Vimamos.ru</title>
+                <meta name="description" content="Каталог товаров обуви и аксессуаров известных брендов. Коллекции фирменной обуви. Высочайшее качество. Более 50000 моделей в каталоге - мужские, женские и детские. Заходите, выбирайте, покупайте!"/>
+                <meta name="yandex-verification" content="5a15ea1d3d2fa580"/>
 
-                <meta property="og:title" content="Агрегатор обуви в Москве | Vimamos.ru"/>
+                <meta property="og:title" content="Купить обувь в Москве в Интернет-магазине | Vimamos.ru"/>
                 <meta property="og:image" content="/images/logo.png"/>
                 <meta property="og:url" content={siteUrl}/>
                 <meta property="og:site_name" content={siteName}/>

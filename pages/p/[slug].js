@@ -17,7 +17,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
     console.log('product', product)
     const pathLocation = useRouter().pathname;
     const customFields = product.meta_data;
-    const description = customFields.find(item => item.key === "wc_description");
+    // const description = customFields.find(item => item.key === "wc_description");
     const sku = product.sku;
     const shopName = customFields.find(item => item.key === 'shop_name')?.value;
     const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value;
@@ -56,12 +56,21 @@ export default function ProductPage({product,categories, upsellProducts}) {
         return '';
     }
 
+    function getDescription() {
+        if (product) {
+            if (shopIsThomasMuenz) {
+                return `${sku} ${product.brands[0].name} ${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Гарантия от магазина! Выгодная цена!`;
+            }
+            return `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku}`;
+        }
+        return '';
+    }
+
     return (
         <>
             <Head>
                 <title>{getTitle()}</title>
-                <meta name="description"
-                      content={description ? description.value : `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku} `}/>
+                <meta name="description" content={getDescription()} />
                 <meta property="og:title"
                       content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
                 {product?.images.map(item =>
