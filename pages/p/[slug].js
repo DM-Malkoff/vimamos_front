@@ -37,10 +37,14 @@ export default function ProductPage({product,categories, upsellProducts}) {
     /** Метод формирования H1 */
     function getCaption() {
         if (product) {
+            let caption = product.name;
             if (shopIsThomasMuenz) {
-                return `${product.name} ${product.brands[0].name} ${product.sku}`;
+                caption = `${product.name} ${product.brands[0].name} ${product.sku}`;
             }
-            return product.name;
+            if (!caption.includes(product.sku)) {
+                caption = `${caption} ${product.sku}`;
+            }
+            return caption;
         }
         return 'Заголовок';
     }
@@ -71,8 +75,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
             <Head>
                 <title>{getTitle()}</title>
                 <meta name="description" content={getDescription()} />
-                <meta property="og:title"
-                      content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
+                <meta property="og:title" content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
                 {product?.images.map(item =>
                     <meta key={item.id} property="og:image" content={item.src}/>
                 )}
@@ -216,34 +219,11 @@ export default function ProductPage({product,categories, upsellProducts}) {
 export async function getServerSideProps(ctx) {
     const {data: product} = await getProductData(ctx.query.id)
     const {data: categories} = await getCategories();
-    // const crossSellProductsIds = []
-    // const crossSellIds = []
-
-    // if (Array.isArray(product.cross_sell_ids)){
-    //     product.cross_sell_ids.map((item, index) => {
-    //         if (index < 4) {
-    //             crossSellProductsIds.push(item)
-    //         }
-    //     })
-    // }else{
-    //     product.upsell_ids.map((item, index) => {
-    //         if (index < 4) {
-    //             crossSellProductsIds.push(item)
-    //         }
-    //     })
-    // }
-
-
-    // await Promise.all(crossSellProductsIds.map(async (item) => {
-    //     let {data: crossSellProduct} = await getProductData(item)
-    //     crossSellIds.push(crossSellProduct)
-    // }))
 
     return {
         props: {
             product: product ?? {},
-            categories: categories ?? {},
-            // upsellProducts: crossSellIds ?? []
+            categories: categories ?? {}
         }
     }
 }
