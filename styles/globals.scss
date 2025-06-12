@@ -1058,7 +1058,8 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
           .shop2_product_item{
             display: inline-block;
             //width: 290px;
-            width: auto;
+            //width: auto;
+            width: 100%;
             //margin: 0 15px;
           }
         }
