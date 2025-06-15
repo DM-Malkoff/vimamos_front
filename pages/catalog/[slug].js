@@ -141,9 +141,21 @@ export default Slug;
 
 export async function getServerSideProps(ctx) {
     try {
+        const { slug, id } = ctx.query;
+        
         const {data: categories} = await getCategories();
         const {data: products} = await getProductsData(ctx.query);
         const attributes = await getAttributes(ctx.query.id ?? null);
+
+        // Находим текущую категорию по id
+        const currentCategory = categories.find(item => item.id == id);
+        
+        // Проверяем совпадение slug
+        if (!currentCategory || currentCategory.slug !== slug) {
+            return {
+                notFound: true
+            };
+        }
 
         return {
             props: {
@@ -156,12 +168,7 @@ export async function getServerSideProps(ctx) {
     } catch (error) {
         console.error('Error in getServerSideProps:', error);
         return {
-            props: {
-                categories: {},
-                products: {},
-                currentCategoryId: null,
-                attributes: [],
-            }
+            notFound: true
         };
     }
 };

@@ -1446,16 +1446,14 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
   .site__footer__bottom {
     padding: 42px 50px 35px;
     margin: 0 auto;
-    font-size: 0;
     max-width: 1320px;
     box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
     .footer__bottom__left {
       display: inline-block;
       vertical-align: middle;
-      .footer__site__name {
-        color: #fff;
-        font-size: 15px;
-      }
     }
   }
 }

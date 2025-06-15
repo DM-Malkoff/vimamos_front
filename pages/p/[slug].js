@@ -217,13 +217,30 @@ export default function ProductPage({product,categories, upsellProducts}) {
 }
 
 export async function getServerSideProps(ctx) {
-    const {data: product} = await getProductData(ctx.query.id)
-    const {data: categories} = await getCategories();
-
-    return {
-        props: {
-            product: product ?? {},
-            categories: categories ?? {}
+    try {
+        const { slug, id } = ctx.query;
+        
+        // Получаем данные товара по id
+        const {data: product} = await getProductData(id);
+        const {data: categories} = await getCategories();
+        
+        // Проверяем совпадение slug
+        if (!product || product.slug !== slug) {
+            return {
+                notFound: true
+            };
         }
+
+        return {
+            props: {
+                product: product ?? {},
+                categories: categories ?? {}
+            }
+        };
+    } catch (error) {
+        console.error('Error fetching product data:', error);
+        return {
+            notFound: true
+        };
     }
 }

@@ -50,36 +50,36 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
                                         data={productsLacoste}
                                         caption="Lacoste"
                                         categories={[
-                                            {id: 349, name: "Для женщин"},
-                                            {id: 45, name: "Для мужчин"},
-                                            {id: 445, name: "Для детей"}
+                                            {id: 377, name: "Для женщин"},
+                                            {id: 224, name: "Для мужчин"},
+                                            {id: 361, name: "Для детей"}
                                         ]}
                                     />
                                     <MainSlider
                                         data={productsEcco}
                                         caption="Ecco"
                                         categories={[
-                                            {id: 1016, name: "Женская обувь"},
-                                            {id: 1201, name: "Мужская обувь"},
-                                            {id: 1218, name: "Детская обувь"}
+                                            {id: 135, name: "Женская обувь"},
+                                            {id: 215, name: "Мужская обувь"},
+                                            {id: 195, name: "Детская обувь"}
                                         ]}
                                     />
-                                    <MainSlider
-                                        data={productsRieker}
-                                        caption="Rieker"
-                                        categories={[
-                                            {id: 854, name: "Женская обувь"},
-                                            {id: 981, name: "Мужская обувь"}
-                                        ]}
-                                    />
-                                    <MainSlider
-                                        data={productsSalamander}
-                                        caption="Salamander"
-                                        categories={[
-                                            {id: 726, name: "Женская обувь"},
-                                            {id: 962, name: "Мужская обувь"}
-                                        ]}
-                                    />
+                                    {/*<MainSlider*/}
+                                    {/*    data={productsRieker}*/}
+                                    {/*    caption="Rieker"*/}
+                                    {/*    categories={[*/}
+                                    {/*        {id: 854, name: "Женская обувь"},*/}
+                                    {/*        {id: 981, name: "Мужская обувь"}*/}
+                                    {/*    ]}*/}
+                                    {/*/>*/}
+                                    {/*<MainSlider*/}
+                                    {/*    data={productsSalamander}*/}
+                                    {/*    caption="Salamander"*/}
+                                    {/*    categories={[*/}
+                                    {/*        {id: 726, name: "Женская обувь"},*/}
+                                    {/*        {id: 962, name: "Мужская обувь"}*/}
+                                    {/*    ]}*/}
+                                    {/*/>*/}
                                 </div>
                             </section>
                         </div>
@@ -243,18 +243,18 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
 export default Home;
 
 export async function getServerSideProps() {
-    const {data: productsLacoste} = await getSliderProducts(349);
-    const {data: productsRieker} = await getSliderProducts(854);
-    const {data: productsEcco} = await getSliderProducts(1016);
-    const {data: productsSalamander} = await getSliderProducts(726);
+    const {data: productsLacoste} = await getSliderProducts(377);
+    const {data: productsEcco} = await getSliderProducts(135);
+    // const {data: productsRieker} = await getSliderProducts(854);
+    // const {data: productsSalamander} = await getSliderProducts(726);
     const {data: categories} = await getCategories();
     
     return {
         props: {
             productsLacoste: productsLacoste ?? {},
-            productsRieker: productsRieker ?? {},
             productsEcco: productsEcco ?? {},
-            productsSalamander: productsSalamander ?? {},
+            // productsRieker: productsRieker ?? {},
+            // productsSalamander: productsSalamander ?? {},
             categories: categories ?? {}
         }
     }
