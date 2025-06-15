@@ -23,6 +23,36 @@ const MainMenu = ({showMenu, categories, handler}) => {
         setMenuBlockHeight(ref.current.scrollHeight)
     },[])
 
+    // Пересчет высоты при изменении состояния меню
+    useEffect(() => {
+        if (ref.current) {
+            // Небольшая задержка для завершения CSS-анимации
+            setTimeout(() => {
+                if (ref.current) {
+                    // Находим активное меню в зависимости от уровня
+                    let activeMenu;
+                    if (showThirdLevel) {
+                        // Ищем активное меню третьего уровня
+                        activeMenu = ref.current.querySelector('.waSlideMenu-third-active');
+                    } else if (showSubMenu) {
+                        // Ищем активное меню второго уровня
+                        activeMenu = ref.current.querySelector('.waSlideMenu-menu-visible');
+                    } else {
+                        // Используем основное меню первого уровня
+                        activeMenu = ref.current.querySelector('.top__folders');
+                    }
+                    
+                    if (activeMenu) {
+                        setMenuBlockHeight(activeMenu.scrollHeight);
+                    } else {
+                        // Fallback к полной высоте
+                        setMenuBlockHeight(ref.current.scrollHeight);
+                    }
+                }
+            }, 0) // 350ms - немного больше чем transition: 0.3s
+        }
+    }, [showSubMenu, showThirdLevel, indexMenuItem, indexSubMenuItem])
+
     // Сброс состояния подменю при изменении маршрута
     useEffect(() => {
         setShowSubMenu(false);

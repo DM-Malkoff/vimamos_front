@@ -97,7 +97,7 @@ const MainMenuSub = ({
                                 </Link>
                                 
                                 {thirdLevel.length > 0 && (
-                                    <ul className={`waSlideMenu-menu waSlideMenu-i_menu ${showThirdLevel && activeSubItem === index ? 'waSlideMenu-menu-visible' : ''}`}>
+                                    <ul className={`waSlideMenu-menu waSlideMenu-i_menu waSlideMenu-third-level ${showThirdLevel && activeSubItem === index && activeSubMenu ? 'waSlideMenu-menu-visible waSlideMenu-third-active' : ''}`}>
                                         <li className="waSlideMenu-back">
                                             <span onClick={onClickBack}>Назад</span>
                                         </li>
@@ -136,6 +136,13 @@ const MainMenuSub = ({
                 {`
                 .waSlideMenu-menu-visible {
                     visibility: visible!important;
+                }
+                .waSlideMenu-third-level {
+                    display: none !important;
+                }
+                .waSlideMenu-third-level.waSlideMenu-third-active {
+                    display: block !important;
+                    visibility: visible !important;
                 }
                 `}
             </style>
