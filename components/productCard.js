@@ -3,7 +3,7 @@ import Image from "next/image";
 import GoToPartner from "./goToPartner";
 import {salePriceCoefficient} from "../constants/config";
 
-const ProductCard = ({productData}) => {
+const ProductCard = ({productData, isFirst = false}) => {
     const customFields = productData.meta_data;
 
     const shopNameCustomField = customFields ? customFields.find(item => item.key === 'shop_name') : null;
@@ -35,7 +35,7 @@ const ProductCard = ({productData}) => {
                                     }
                                 }
                             }>
-                                <a>{productData.name}</a>
+                                {productData.name}
                             </Link>
                         </div>
                         <div className="product-compare">
@@ -55,13 +55,14 @@ const ProductCard = ({productData}) => {
                                     }
                                 }
                             }>
-                                <a>
-                                    <Image
-                                        src={productData.images?.length ? productData.images[0].src : '/images/no_image.png'}
-                                        alt={productData.name}
-                                        layout="fill"
-                                    />
-                                </a>
+                                <Image
+                                    src={productData.images?.length ? productData.images[0].src : '/images/no_image.png'}
+                                    alt={productData.name}
+                                    fill={true}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    style={{ objectFit: 'contain' }}
+                                    priority={isFirst}
+                                />
                             </Link>
                         </div>
                         {/* Вывод скидки в % в блоке фото */}
@@ -94,7 +95,7 @@ const ProductCard = ({productData}) => {
                                 <GoToPartner url={shopLink} shopName={shopName}/>
                             </>
                             :
-                            <span className="not_available">Нет в наличии</span>
+                            <span className="not_available">Возможно в наличии</span>
                         }
                     </div>
 

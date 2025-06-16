@@ -44,8 +44,9 @@ const ProductImages = ({ images }) => {
                                     src={img.src}
                                     alt={img.alt || img.name || ''}
                                     title={img.name || ''}
-                                    layout="fill"
-                                    objectFit="contain"
+                                    fill={true}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    style={{ objectFit: 'contain' }}
                                     priority={true}
                                 />
                             </div>
@@ -59,8 +60,9 @@ const ProductImages = ({ images }) => {
                                 src="/images/no_image.png"
                                 alt="Нет изображения"
                                 title=""
-                                layout="fill"
-                                objectFit="contain"
+                                fill={true}
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                style={{ objectFit: 'contain' }}
                                 priority={true}
                             />
                         </div>
@@ -75,8 +77,9 @@ const ProductImages = ({ images }) => {
                             src={modalImg?.src || '/images/no_image.png'}
                             alt={modalImg?.alt || ''}
                             title={modalImg?.name || ''}
-                            layout="fill"
-                            objectFit="contain"
+                            fill={true}
+                            sizes="100vw"
+                            style={{ objectFit: 'contain' }}
                             priority={true}
                         />
                         <button onClick={closeModal} className="product-modal__close">&times;</button>

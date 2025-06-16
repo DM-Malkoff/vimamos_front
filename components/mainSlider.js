@@ -111,7 +111,7 @@ const MainSlider = ({
                                     }
                                 }}
                             >
-                                {validData.map(product =>
+                                {validData.map((product, index) =>
                                     <SwiperSlide key={product.id}>
                                         <div className="product-card">
                                             <form className="shop2-product-item">
@@ -124,15 +124,14 @@ const MainSlider = ({
                                                             }
                                                         }
                                                     }>
-                                                        <a>
-                                                            <Image
-                                                                src={product.images && product.images.length ? product.images[0].src : '/images/no_image.png'}
-                                                                alt={product.name || 'Product'}
-                                                                width={200}
-                                                                height={200}
-                                                                style={{ objectFit: 'contain' }}
-                                                            />
-                                                        </a>
+                                                        <Image
+                                                            src={product.images && product.images.length ? product.images[0].src : '/images/no_image.png'}
+                                                            alt={product.name || 'Product'}
+                                                            width={200}
+                                                            height={200}
+                                                            style={{ objectFit: 'contain' }}
+                                                            priority={index === 0}
+                                                        />
                                                     </Link>
                                                 </div>
                                                 <div className="product__info">
@@ -145,7 +144,7 @@ const MainSlider = ({
                                                                 }
                                                             }
                                                         }>
-                                                            <a>{product.name}</a>
+                                                            {product.name}
                                                         </Link>
                                                     </div>
                                                     <div className="product__price">

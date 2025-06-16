@@ -163,7 +163,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                                 <link
                                                     itemProp="availability"
                                                     href="http://schema.org/InStock"
-                                                    content={`${product.price ? 'В наличии' : 'Нет в наличии'}`}/>
+                                                    content={`${product.price ? 'В наличии' : 'Возможно в наличии'}`}/>
                                             </div>
                                             <div className="product_buttons">
                                                 <div className="product_buttons_in">
@@ -185,7 +185,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                                             query: {id: item.id}
 
                                                         }}>
-                                                            <a>{item.name}</a>
+                                                            {item.name}
                                                         </Link>
                                                     )
                                                 })}

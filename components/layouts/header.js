@@ -42,13 +42,12 @@ const Header = ({categories}) => {
                                     </span>
                                 </div>
                                 <div className='header__top__center'>
-                                    <Link href='/'><a>
+                                    <Link href='/'>
                                         <Image src='/images/logo.png'
                                                width='121'
                                                height='30'
                                                alt={siteName}
                                         />
-                                    </a>
                                     </Link>
                                 </div>
                                 <div className='header__top__right'>

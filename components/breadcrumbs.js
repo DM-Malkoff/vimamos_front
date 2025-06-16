@@ -7,35 +7,28 @@ export default function BreadCrumbs({path, parentCategoryName, parentCategoryUrl
         <div className="site-path" itemScope itemType="https://schema.org/BreadcrumbList">
             <ul>
                 <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                    <Link href="/">
-                        <a itemProp="item">
-                            <span itemProp="name">Главная</span>
-                            <meta itemProp="position" content="1"/>
-                        </a>
-
+                    <Link href="/" itemProp="item">
+                        <span itemProp="name">Главная</span>
                     </Link>
+                    <meta itemProp="position" content="1"/>
                 </li>
                 <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                    {parentCategoryName && <Link href={`/catalog/${parentCategoryUrl}`}>
-                        <a itemProp="item">
-                            <span itemProp="name">{parentCategoryName}</span>
-                            <meta itemProp="position" content="2"/>
-                        </a>
+                    {parentCategoryName && <Link href={`/catalog/${parentCategoryUrl}`} itemProp="item">
+                        <span itemProp="name">{parentCategoryName}</span>
                     </Link> }
+                    {parentCategoryName && <meta itemProp="position" content="2"/>}
                 </li>
                 <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                    {isProduct && <span>{namePage}</span>}
+                    {isProduct && <span itemProp="name">{namePage}</span>}
                     {!isProduct && <Link href={{
                         pathname: `/catalog/${router.query.slug}`,
                         query:{
                             id:router.query.id
                         }
-                    }}>
-                        <a itemProp="item">
-                            <span  itemProp="name">{namePage}</span>
-                            <meta itemProp="position" content="3"/>
-                        </a>
+                    }} itemProp="item">
+                        <span itemProp="name">{namePage}</span>
                     </Link>}
+                    {!isProduct && <meta itemProp="position" content="3"/>}
                 </li>
             </ul>
         </div>

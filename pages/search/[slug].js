@@ -27,7 +27,7 @@ const SearchProducts = ({searchResults,categories}) => {
                     {searchResults.length ?
                         <ProductList products={searchResults}/> :
                         <div className="g-notice g-notice--indents">
-                            Ничего не найдено. Вы можете вернуться на <Link href="/"><a>главную</a></Link> страницу
+                            Ничего не найдено. Вы можете вернуться на <Link href="/">главную</Link> страницу
                             сайта или изменить свой запрос и повторить поиск.
                         </div>
                     }

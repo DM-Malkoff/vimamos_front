@@ -17,16 +17,3 @@ export const getProductsData = async (queries) => {
     
     return await api.get(apiUrl);
 };
-
-// export const getFilteredProductsData = async (categoryId) => {
-//     // return await api.get(
-//     //     // `products?attribute=pa_brand&attribute_term=Lacoste&attribute=pa_cvet&attribute_term=blue,khaki`
-//     // );
-//     try {
-//         const response = await fetch(`${siteUrl}/wp-json/custom/v1/filtered-products/${categoryId}`, {});
-//         await response.json();
-//     } catch (error) {
-//         console.error('Ошибка при получении товаров после фильтрации:', error);
-//         throw error;
-//     }
-// }

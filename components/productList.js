@@ -9,9 +9,14 @@ const ProductList = ({products}) => {
         <>
             <div className="prod_list_wrap">
                 <div className='product-list product_list product-list-thumbs'>
-                    {products.length && products.map(res => {
+                    {products.length && products.map((res, index) => {
                         return (
-                            <ProductCard key={res.id} productData={res} relatedProducts={res.related_ids}/>
+                            <ProductCard 
+                                key={res.id} 
+                                productData={res} 
+                                relatedProducts={res.related_ids}
+                                isFirst={index === 0}
+                            />
                         )
                     })}
                 </div>

@@ -36,7 +36,6 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                 page: currentPage - 1
                             }
                         }}>
-                            <a></a>
                         </Link>
                     )}
                 </li>
@@ -52,7 +51,7 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                             pathname: `/catalog/${currentSlug}`,
                             query: routerQueriesWithoutPage
                         }}>
-                            <a>1</a>
+                            1
                         </Link>
                     </li>
                 )}
@@ -86,7 +85,7 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                             page: number
                                         }
                                     }}>
-                                        <a>{number}</a>
+                                        {number}
                                     </Link>
                                 </li>
                             )
@@ -117,7 +116,7 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                     page: totalPages
                                 }
                             }}>
-                                <a>{totalPages}</a>
+                                {totalPages}
                             </Link>
                         </li>
                     )
@@ -133,7 +132,7 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                 page: currentPage + 1
                             }
                         }}>
-                            <a>&nbsp;</a>
+                            &nbsp;
                         </Link>
                     )}
                 </li>
@@ -150,7 +149,6 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                 page: currentPage - 1
                             }
                         }}>
-                            <a></a>
                         </Link>
                     )}
                 </li>
@@ -164,7 +162,7 @@ const Pagination = ({totalQuantityProducts, productsLength}) => {
                                 page: currentPage + 1
                             }
                         }}>
-                            <a>&nbsp;</a>
+                            &nbsp;
                         </Link>
                     )}
                 </li>
