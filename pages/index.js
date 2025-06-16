@@ -15,7 +15,7 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
             <Head>
                 <title>Купить обувь в Москве в Интернет-магазине | Vimamos.ru</title>
                 <meta name="description" content="Каталог товаров обуви и аксессуаров известных брендов. Коллекции фирменной обуви. Высочайшее качество. Более 50000 моделей в каталоге - мужские, женские и детские. Заходите, выбирайте, покупайте!"/>
-                <meta name="yandex-verification" content="5a15ea1d3d2fa580"/>
+                <meta name="yandex-verification" content="e5de60cb974247ac"/>
 
                 <meta property="og:title" content="Купить обувь в Москве в Интернет-магазине | Vimamos.ru"/>
                 <meta property="og:image" content="/images/logo.png"/>
