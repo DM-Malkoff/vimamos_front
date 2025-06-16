@@ -53,16 +53,18 @@ const MainMenuSub = ({
 
     return (
         <li key={item.id} className="subLevel">
-            <Link href={{
-                pathname: `/catalog/${item.slug}`,
-                query: {
-                    id: item.id
-                }
-            }}>
-                <a className="has_sublayer" onClick={(e) => subLevel.length ? clickSubMenu(e) : handleCategoryClick(e, item.slug, item.id)}>
-                    {item.name}
-                    {subLevel.length ? <span>&nbsp;</span> : false}
-                </a>
+            <Link 
+                href={{
+                    pathname: `/catalog/${item.slug}`,
+                    query: {
+                        id: item.id
+                    }
+                }}
+                className="has_sublayer" 
+                onClick={(e) => subLevel.length ? clickSubMenu(e) : handleCategoryClick(e, item.slug, item.id)}
+            >
+                {item.name}
+                {subLevel.length ? <span>&nbsp;</span> : false}
             </Link>
 
             {subLevel.length ?
@@ -71,29 +73,33 @@ const MainMenuSub = ({
                         <span onClick={onClickBack}>Назад</span>
                     </li>
                     <li className="parent-item">
-                        <Link href={{
-                            pathname: `/catalog/${item.slug}`,
-                            query: {
-                                id: item.id
-                            }
-                        }}>
-                            <a onClick={(e) => handleCategoryClick(e, item.slug, item.id)}>{item.name}</a>
+                        <Link 
+                            href={{
+                                pathname: `/catalog/${item.slug}`,
+                                query: {
+                                    id: item.id
+                                }
+                            }}
+                            onClick={(e) => handleCategoryClick(e, item.slug, item.id)}
+                        >
+                            {item.name}
                         </Link>
                     </li>
                     {subLevel.map((subItem, index) => {
                         const thirdLevel = categories.filter((thirdItem) => thirdItem.parent === subItem.id);
                         return (
                             <li key={subItem.id}>
-                                <Link href={{
-                                    pathname: `/catalog/${subItem.slug}`,
-                                    query: {
-                                        id: subItem.id
-                                    }
-                                }}>
-                                    <a onClick={(e) => thirdLevel.length ? clickThirdLevel(e, index) : handleCategoryClick(e, subItem.slug, subItem.id)}>
-                                        {subItem.name}
-                                        {thirdLevel.length ? <span>&nbsp;</span> : false}
-                                    </a>
+                                <Link 
+                                    href={{
+                                        pathname: `/catalog/${subItem.slug}`,
+                                        query: {
+                                            id: subItem.id
+                                        }
+                                    }}
+                                    onClick={(e) => thirdLevel.length ? clickThirdLevel(e, index) : handleCategoryClick(e, subItem.slug, subItem.id)}
+                                >
+                                    {subItem.name}
+                                    {thirdLevel.length ? <span>&nbsp;</span> : false}
                                 </Link>
                                 
                                 {thirdLevel.length > 0 && (
@@ -102,24 +108,30 @@ const MainMenuSub = ({
                                             <span onClick={onClickBack}>Назад</span>
                                         </li>
                                         <li className="parent-item">
-                                            <Link href={{
-                                                pathname: `/catalog/${subItem.slug}`,
-                                                query: {
-                                                    id: subItem.id
-                                                }
-                                            }}>
-                                                <a onClick={(e) => handleCategoryClick(e, subItem.slug, subItem.id)}>{subItem.name}</a>
+                                            <Link 
+                                                href={{
+                                                    pathname: `/catalog/${subItem.slug}`,
+                                                    query: {
+                                                        id: subItem.id
+                                                    }
+                                                }}
+                                                onClick={(e) => handleCategoryClick(e, subItem.slug, subItem.id)}
+                                            >
+                                                {subItem.name}
                                             </Link>
                                         </li>
                                         {thirdLevel.map((thirdItem) => (
                                             <li key={thirdItem.id}>
-                                                <Link href={{
-                                                    pathname: `/catalog/${thirdItem.slug}`,
-                                                    query: {
-                                                        id: thirdItem.id
-                                                    }
-                                                }}>
-                                                    <a onClick={(e) => handleCategoryClick(e, thirdItem.slug, thirdItem.id)}>{thirdItem.name}</a>
+                                                <Link 
+                                                    href={{
+                                                        pathname: `/catalog/${thirdItem.slug}`,
+                                                        query: {
+                                                            id: thirdItem.id
+                                                        }
+                                                    }}
+                                                    onClick={(e) => handleCategoryClick(e, thirdItem.slug, thirdItem.id)}
+                                                >
+                                                    {thirdItem.name}
                                                 </Link>
                                             </li>
                                         ))}
