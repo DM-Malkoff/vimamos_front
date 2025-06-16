@@ -1,7 +1,7 @@
 const siteName = 'Vimamos.ru'
 const protocol = 'http://';
-const hostName = 'cms.shoesgo.ru/'
-const siteUrl = `${protocol}${hostName}}/`;
+const hostName = 'cms.shoesgo.ru'
+const siteUrl = `${protocol}${hostName}`;
 
 const quantityProducts = 21 // количество товаров на странице категории
 const quantityProductsMainSlider = 10 // количество товаров в сладере на главной странице

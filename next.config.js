@@ -4,7 +4,7 @@ const { siteUrl, hostName } = require("./constants/config");
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [siteUrl],
+    domains: [hostName],
     remotePatterns: [
       {
         protocol: 'http',
