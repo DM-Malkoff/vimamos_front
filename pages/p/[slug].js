@@ -14,7 +14,6 @@ import {siteName, siteUrl} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
 
 export default function ProductPage({product,categories, upsellProducts}) {
-    console.log('product', product)
     const pathLocation = useRouter().pathname;
     const customFields = product.meta_data;
     // const description = customFields.find(item => item.key === "wc_description");

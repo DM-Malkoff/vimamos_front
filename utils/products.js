@@ -2,7 +2,6 @@ import api from "../api";
 import {quantityProducts} from "../constants/config";
 
 export const getProductsData = async (queries) => {
-    console.log('queries', queries);
     const {slug: _, ...apiQueries} = queries;
 
     const baseUrl = `products?per_page=${quantityProducts}`;

@@ -54,9 +54,7 @@ const MainSlider = ({
                                         className={`${styles.category_link} ${activeCategory === category.id ? styles.active : ''}`}
                                         onClick={async () => {
                                             try {
-                                                console.log('Loading products for category:', category.id);
                                                 const response = await getSliderProducts(category.id);
-                                                console.log('API response:', response);
                                                 
                                                 // WooCommerce API может возвращать данные в разных форматах
                                                 let newData = [];
@@ -65,8 +63,7 @@ const MainSlider = ({
                                                 } else if (Array.isArray(response)) {
                                                     newData = response;
                                                 }
-                                                
-                                                console.log('Setting new data:', newData);
+
                                                 setData(newData);
                                                 setActiveCategory(category.id);
                                             } catch (error) {
