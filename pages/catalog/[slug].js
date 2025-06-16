@@ -55,7 +55,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
     }
 
-    if (currentCategory.acf.gender){
+    if (currentCategory.acf && currentCategory.acf.gender){
         townCaption = `${currentCategory.acf.gender} ${townCaption[0].toLowerCase() + townCaption.slice(1)}`;
         pageTitle = `${currentCategory.acf.gender} ${pageTitle[0].toLowerCase() + pageTitle.slice(1)}`
         description = `${currentCategory.acf.gender} ${description[0].toLowerCase() + description.slice(1)}`;
@@ -126,7 +126,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                                 </div>
                             </div>
                             {!router.query.page && (
-                                <div dangerouslySetInnerHTML={{__html: currentCategory.acf.cat_description}}/>
+                                <div dangerouslySetInnerHTML={{__html: currentCategory.acf?.cat_description}}/>
                             )}
                         </div>
                     </main>

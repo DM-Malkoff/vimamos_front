@@ -60,7 +60,7 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
                         }}
                     />
                 )}
-                {attributeOption.name}
+                {attributeOption.name.toLowerCase()}
             </div>
         </>
     );

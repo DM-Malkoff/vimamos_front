@@ -20,17 +20,6 @@ const MainSlider = ({
     const [activeCategory, setActiveCategory] = useState(categories[0]?.id || 'all');
     const [data, setData] = useState(initialData || []);
 
-    console.log('MainSlider - initialData:', initialData);
-    console.log('MainSlider - data state:', data);
-    console.log('MainSlider - categories:', categories);
-
-    // Используем useEffect для отладки
-    useEffect(() => {
-        console.log('MainSlider useEffect - data changed:', data);
-        console.log('MainSlider useEffect - data is array:', Array.isArray(data));
-        console.log('MainSlider useEffect - data length:', data?.length);
-    }, [data]);
-
     // Проверяем, что данные существуют и это массив
     const validData = Array.isArray(data) ? data : [];
 

@@ -9,7 +9,7 @@ const PopularCategories = ({ categories }) => {
             title: 'Женская обувь',
             subtitle: 'Элегантность и стиль',
             image: '/images/categories/womens.jpg',
-            url: '/catalog/zhenskaya-obuv?id=1237',
+            url: '/catalog/zhenskaya-obuv?id=134',
             gradient: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
             accentColor: '#1e293b',
             textColor: '#475569',
@@ -20,7 +20,7 @@ const PopularCategories = ({ categories }) => {
             title: 'Мужская обувь',
             subtitle: 'Сила и уверенность',
             image: '/images/categories/mens.jpg',
-            url: '/catalog/muzhskaya-obuv?id=16',
+            url: '/catalog/muzhskaya-obuv?id=216',
             gradient: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
             accentColor: '#0f172a',
             textColor: '#334155',
@@ -31,23 +31,23 @@ const PopularCategories = ({ categories }) => {
             title: 'Детская обувь',
             subtitle: 'Комфорт для малышей',
             image: '/images/categories/kids.jpg',
-            url: '/catalog/detskaya-obuv?id=1007',
+            url: '/catalog/detskaya-obuv?id=194',
             gradient: 'linear-gradient(135deg, #fefce8 0%, #fef3c7 100%)',
             accentColor: '#1c1917',
             textColor: '#44403c',
             icon: '👟'
         },
-        {
-            id: 'sport',
-            title: 'Спортивная обувь',
-            subtitle: 'Активность и движение',
-            image: '/images/categories/sport.jpg',
-            url: '/catalog/sport',
-            gradient: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
-            accentColor: '#14532d',
-            textColor: '#365314',
-            icon: '⚡'
-        }
+            // {
+            //     id: 'sport',
+            //     title: 'Спортивная обувь',
+            //     subtitle: 'Активность и движение',
+            //     image: '/images/categories/sport.jpg',
+            //     url: '/catalog/sport',
+            //     gradient: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+            //     accentColor: '#14532d',
+            //     textColor: '#365314',
+            //     icon: '⚡'
+            // }
     ];
 
     return (
