@@ -1,4 +1,5 @@
-const {siteUrl} = require("./constants/config");
+const { siteUrl, hostName } = require("./constants/config");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -7,7 +8,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: siteUrl,
+        hostname: hostName,
         port: '',
         pathname: '/wp-content/uploads/**',
       },
@@ -15,4 +16,4 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
