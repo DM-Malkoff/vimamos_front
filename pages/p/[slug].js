@@ -91,7 +91,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                 isProduct={true}
                                 path={pathLocation}
                                 namePage={product.name}
-                                parentCategoryName={product.categories[0].name}
+                                parentCategoryName={product.categories[0].name !== 'Misc' && product.categories[0].name}
                                 parentCategoryUrl={`${product.categories[0].slug}` + '?id=' + `${product.categories[0].id}`}
 
                             />
@@ -180,6 +180,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                             <div className="links">
                                                 {product.categories.map((item) => {
                                                     return (
+                                                        item.name !== 'Misc' &&
                                                         <Link key={item.id} href={{
                                                             pathname: `/catalog/${item.slug}`,
                                                             query: {id: item.id}
