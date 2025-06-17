@@ -1,4 +1,4 @@
-const TabContent = ({title, content, tabIndex}) => {
+const TabContent = ({content, tabIndex}) => {
     return (
         <div className="shop_product_desc">
             <div className={`desc-area desc-area${tabIndex}`}>
@@ -7,7 +7,7 @@ const TabContent = ({title, content, tabIndex}) => {
                         return (
                             <div key={item.position} className="param_item">
                                 <div className="param_title">{item.name}</div>
-                                <div className="param_body">{item.options[0]}</div>
+                                <div className="param_body">{item.options.join(', ')}</div>
                             </div>
                         )
                     })}
