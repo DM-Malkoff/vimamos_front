@@ -55,10 +55,42 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
     }
 
-    if (currentCategory.acf && currentCategory.acf.gender){
-        townCaption = `${currentCategory.acf.gender} ${townCaption[0].toLowerCase() + townCaption.slice(1)}`;
-        pageTitle = `${currentCategory.acf.gender} ${pageTitle[0].toLowerCase() + pageTitle.slice(1)}`
-        description = `${currentCategory.acf.gender} ${description[0].toLowerCase() + description.slice(1)}`;
+    /** Формеирование Title */
+    function getPageTitle() {
+        if (currentCategory.acf && currentCategory.acf.custom_seo_title) {
+            return currentCategory.acf.custom_seo_title;
+        }
+
+        if (currentCategory.acf && currentCategory.acf.gender) {
+            return pageTitle = `${currentCategory.acf.gender} ${pageTitle[0].toLowerCase() + pageTitle.slice(1)}`;
+        }
+
+        return pageTitle;
+    }
+
+    function getSeoDescription(){
+        if (currentCategory.acf && currentCategory.acf.custom_seo_description) {
+            return currentCategory.acf.custom_seo_description;
+        }
+
+        if (currentCategory.acf && currentCategory.acf.gender){
+            return `${currentCategory.acf.gender} ${description[0].toLowerCase() + description.slice(1)}`;
+        }
+
+        return description
+    }
+
+    /** Формирование H1 */
+    function getH1() {
+        if (currentCategory.acf && currentCategory.acf.custom_h1) {
+            return currentCategory.acf.custom_h1;
+        }
+
+        if (currentCategory.acf && currentCategory.acf.gender){
+            return `${currentCategory.acf.gender} ${townCaption[0].toLowerCase() + townCaption.slice(1)}`
+        }
+
+        return townCaption;
     }
 
     // Эффект для обновления товаров при смене категории
@@ -76,8 +108,8 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
-                <meta name="description" content={description} />
+                <title>{getPageTitle()}</title>
+                <meta name="description" content={getSeoDescription()} />
                 {Towns[currentPageNum] ? <meta name="robots" content="all"/> : <meta name="robots" content="none"/>}
                 {
                     router.query.orderby ||
@@ -104,7 +136,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                     <main role="main" className="site__main folder">
                         <div className="site__main__in">
                             <BreadCrumbs namePage={currentCategory?.name || ''}/>
-                            <Caption caption={townCaption}/>
+                            <Caption caption={getH1()}/>
                             <div className="mode_folder_wrapper">
                                 <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate}/>
                                 <div className="mode_folder_body">

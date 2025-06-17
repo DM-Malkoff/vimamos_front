@@ -9,10 +9,10 @@ const quantityProductsMainSlider = 10 // количество товаров в 
 const salePriceCoefficient = 1.3 // коэфициент наценки
 
 const partnerLinks = [
-    {shopName: 'Колёса Даром', shopLink: 'https://ad.admitad.com/g/phemb8m2uc0d7044f8f7ccd85565ce/?ulp='},
     {shopName: 'Lacoste', shopLink: 'https://dhwnh.com/g/f446ccbb457d8def2aa9d5f2d2f9d4/?erid=5jtCeReLm1S3Xx3LfcL1t9f&ulp='},
-    {shopName: 'Thomas Munz', shopLink: 'https://tplto.com/go/5f0d10f7e21a426bd1c3e4242aaa9b3e365b64d1eb0a0b0b/?dpl='},
     {shopName: 'ECCO', shopLink: 'https://kdbov.com/g/avmsvi2rfc7d8def2aa92cb26b7aaa/?erid=25H8d7vbP8SRTvFaD2wbvp&ulp='},
+    {shopName: 'Thomas Munz', shopLink: 'https://tplto.com/go/5f0d10f7e21a426bd1c3e4242aaa9b3e365b64d1eb0a0b0b/?dpl='},
+    {shopName: 'Brandshop', shopLink: 'https://tplto.com/go/5f0d10f72f1f426baed7e4242aaa9b3e365b64d1eb0a0b0b/?dpl='},
 ]
 
 const sortSettings = [
