@@ -9,7 +9,7 @@ import {getSliderProducts} from "../utils/sliderProducts";
 import MainBanner from "../components/mainBanner";
 import PopularCategories from "../components/popularCategories";
 
-function Home({productsLacoste, productsRieker, productsEcco, productsSalamander, categories}) {
+function Home({productsLacoste, productsReebok, productsEcco, categories}) {
     return (
         <>
             <Head>
@@ -64,6 +64,14 @@ function Home({productsLacoste, productsRieker, productsEcco, productsSalamander
                                             {id: 195, name: "Детская обувь"}
                                         ]}
                                     />
+                                    <MainSlider
+                                        data={productsReebok}
+                                        caption="Reebok"
+                                        categories={[
+                                            {id: 704, name: "Женская обувь"},
+                                            {id: 703, name: "Мужская обувь"}
+                                        ]}
+                                    />
                                     {/*<MainSlider*/}
                                     {/*    data={productsRieker}*/}
                                     {/*    caption="Rieker"*/}
@@ -96,6 +104,7 @@ export default Home;
 export async function getServerSideProps() {
     const {data: productsLacoste} = await getSliderProducts(377);
     const {data: productsEcco} = await getSliderProducts(135);
+    const {data: productsReebok} = await getSliderProducts(704);
     // const {data: productsRieker} = await getSliderProducts(854);
     // const {data: productsSalamander} = await getSliderProducts(726);
     const {data: categories} = await getCategories();
@@ -104,6 +113,7 @@ export async function getServerSideProps() {
         props: {
             productsLacoste: productsLacoste ?? {},
             productsEcco: productsEcco ?? {},
+            productsReebok: productsReebok ?? {},
             // productsRieker: productsRieker ?? {},
             // productsSalamander: productsSalamander ?? {},
             categories: categories ?? {}
