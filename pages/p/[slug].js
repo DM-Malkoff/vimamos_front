@@ -12,10 +12,13 @@ import RelatedProductsSlider from "../../components/relatedProductsSlider";
 import ProductImages from "../../components/productImages";
 import {siteName, siteUrl} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
+import { useState } from "react";
 
 export default function ProductPage({product,categories, upsellProducts}) {
     const pathLocation = useRouter().pathname;
     const customFields = product.meta_data;
+    const [selectedSize, setSelectedSize] = useState(null);
+    
     // const description = customFields.find(item => item.key === "wc_description");
     const sku = product.sku;
     const shopName = customFields.find(item => item.key === 'shop_name')?.value;
@@ -134,17 +137,54 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                         <div className="product_bot_block">
                                             <div className="shop2_product_options_wr">
                                                 <div className="shop2_product_options">
-                                                    {product.attributes.map((item, index) => {
-                                                        if (index < 4) {
+                                                    {(() => {
+                                                        console.log('product.attributes', product.attributes)
+                                                        // Разделяем атрибуты: сначала все кроме pa_razmer, потом pa_razmer
+                                                        const sizeAttribute = product.attributes.find(item => item.slug === 'pa_razmer');
+                                                        const otherAttributes = product.attributes.filter(item => item.slug !== 'pa_razmer');
+                                                        
+                                                        // Берем первые 3 обычных атрибута и добавляем размер в конец
+                                                        const attributesToShow = [
+                                                            ...otherAttributes.slice(0, 3),
+                                                            ...(sizeAttribute ? [sizeAttribute] : [])
+                                                        ].slice(0, 4);
+
+                                                        return attributesToShow.map((item, index) => {
+                                                            // Если это атрибут размера, делаем его интерактивным
+                                                            if (item.slug === 'pa_razmer') {
+                                                                return (
+                                                                    <div key={item.position || index}
+                                                                         className="option_item odd type-select size-selector">
+                                                                        <div className="option_title">{item.name}:</div>
+                                                                        <div className="option_body size-options">
+                                                                            {item.options.map((size, sizeIndex) => (
+                                                                                <button
+                                                                                    key={sizeIndex}
+                                                                                    type="button"
+                                                                                    className={`size-option ${selectedSize === size ? 'selected' : ''}`}
+                                                                                    onClick={(e) => {
+                                                                                        e.preventDefault();
+                                                                                        setSelectedSize(selectedSize === size ? null : size);
+                                                                                    }}
+                                                                                >
+                                                                                    {size}
+                                                                                </button>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                            
+                                                            // Для остальных атрибутов оставляем как было
                                                             return (
-                                                                <div key={item.position}
+                                                                <div key={item.position || index}
                                                                      className="option_item odd type-select">
                                                                     <div className="option_title">{item.name}:</div>
                                                                     <div className="option_body">{item.options.join(', ')}</div>
                                                                 </div>
-                                                            )
-                                                        }
-                                                    })}
+                                                            );
+                                                        });
+                                                    })()}
                                                 </div>
                                             </div>
                                             <div className="product-price" itemProp="offers" itemScope
