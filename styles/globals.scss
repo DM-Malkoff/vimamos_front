@@ -875,11 +875,15 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                   margin-bottom: 15px;
                 }
                 .links{
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 5px;
                   a{
+                    white-space: nowrap;
                     background-color: aliceblue;
                     padding: 5px 10px;
                     border-radius: 3px;
-                    margin: 0 5px 0 0;
+                    margin: 0;
                     transition: all 0.2s;
                     color: #000;
                     text-decoration: none;
