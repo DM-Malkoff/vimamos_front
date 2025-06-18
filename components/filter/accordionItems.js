@@ -3,7 +3,7 @@ import {FilterDataContext} from "../../context/context";
 import {useRouter} from "next/router";
 import FilterOptions from "./filterOptions";
 
-const AccordionItems = ({item, index, isReset, onPress}) => {
+const AccordionItems = ({item, index, isReset, onPress, isLast}) => {
     const router = useRouter();
     
     // Используем пустую строку вместо 'от' и 'до' если есть значения в URL
@@ -42,10 +42,14 @@ const AccordionItems = ({item, index, isReset, onPress}) => {
 
     return (
         <>
-            <div className={`shop_filter_field ${isShow ? 'active' : ''}`} onClick={attributeGroupClick}>
+            <div 
+                className={`shop_filter_field ${isShow ? 'active' : ''}`} 
+                onClick={attributeGroupClick}
+                style={isLast && !isShow ? { paddingBottom: '20px' } : {}}
+            >
                 <div className="filter_field_title">{item.title}</div>
                 <div className={`filter_field_body ${index === 0 ? 'range' : ''}`} onClick={(e)=>e.stopPropagation()}>
-                    <div className="filter_field_content">
+                    <div className="filter_field_content" style={{ paddingBottom: isLast ? '30px' : '10px' }}>
                         {item.attribute == 'price' ?
                             <>
                                 <div className="input_from">

@@ -108,6 +108,7 @@ const Accordion = ({terms, onProductsUpdate}) => {
                         index={index}
                         isReset={isReset}
                         onPress={filterSearchHandler}
+                        isLast={index === terms.length - 1}
                     />
                 </div>
             )) ?? null}
