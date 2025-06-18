@@ -37,12 +37,15 @@ export default function ProductPage({product,categories, upsellProducts}) {
     function getCaption() {
         if (product) {
             let caption = product.name;
-            if (shopIsThomasMuenz) {
-                caption = `${product.name} ${product.brands[0].name} ${product.sku}`;
+
+            if (!caption.includes(product.brands[0].name)) {
+                caption = `${caption} ${product.brands[0].name}`;
             }
+
             if (!caption.includes(product.sku)) {
                 caption = `${caption} ${product.sku}`;
             }
+
             return caption;
         }
         return 'Заголовок';
@@ -51,9 +54,10 @@ export default function ProductPage({product,categories, upsellProducts}) {
     /** Метод формирования Title */
     function getTitle() {
         if (product) {
-            if (shopIsThomasMuenz) {
+            if (!product.name.includes(product.brands[0].name)) {
                 return `${sku} ${product.brands[0].name} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
             }
+
             return `${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
         }
         return '';
@@ -61,9 +65,10 @@ export default function ProductPage({product,categories, upsellProducts}) {
 
     function getDescription() {
         if (product) {
-            if (shopIsThomasMuenz) {
-                return `${sku} ${product.brands[0].name} ${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Гарантия от магазина! Выгодная цена!`;
+            if (!product.name.includes(product.brands[0].name)) {
+                return `${product.name} ${product.brands[0].name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku}`;
             }
+
             return `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku}`;
         }
         return '';
