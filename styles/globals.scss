@@ -650,31 +650,66 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
 
                 @media (max-width: 600px) {
                   .product__gallery__image-container {
-                    height: 81vw;
-                    max-height: none;
+                    height: 75vw;
+                    max-height: 320px;
                     min-height: 200px;
-                    width: 100vw;
+                    width: 100%;
                     position: relative;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    margin-left: 50%;
-                    transform: translateX(-69%);
+                    margin: 0 auto;
+                    transform: none;
+                  }
+                  .product__gallery__images {
+                    width: 100vw!important;
+                    margin-left: calc(-50vw + 50%);
+                    margin-right: calc(-50vw + 50%);
                   }
                   .product__gallery__images .swiper-pagination,
                   .product__gallery__custom-pagination {
-                    position: static !important;
-                    margin-top: 10px;
+                    position: relative !important;
+                    margin-top: 20px;
+                    margin-bottom: 40px;
                     text-align: center;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 75%;
-                    margin-left: 0;
-                    margin-right: 0;
-                    left: unset;
-                    right: unset;
+                    width: 100%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    left: auto;
+                    right: auto;
                     transform: none;
+                    padding: 0 20px;
+                  }
+                  .product__gallery__images .swiper-button-next,
+                  .product__gallery__images .swiper-button-prev {
+                    display: none !important;
+                  }
+                }
+
+                // Дополнительные стили для iPhone 14+ и больших мобильных экранов
+                @media (min-width: 400px) and (max-width: 600px) {
+                  .product__gallery__image-container {
+                    height: 70vw;
+                    max-height: 350px;
+                  }
+                  .product__gallery__images .swiper-pagination,
+                  .product__gallery__custom-pagination {
+                    margin-bottom: 45px;
+                  }
+                }
+
+                // Стили для очень больших мобильных экранов (iPhone 14 Pro Max и подобные)
+                @media (min-width: 430px) and (max-width: 600px) {
+                  .product__gallery__image-container {
+                    height: 65vw;
+                    max-height: 380px;
+                  }
+                  .product__gallery__images .swiper-pagination,
+                  .product__gallery__custom-pagination {
+                    margin-bottom: 50px;
                   }
                 }
 
@@ -1284,7 +1319,7 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
       }
       &:hover{
         &:before{
-          background: url("data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20baseProfile%3D%22full%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xmlns%3Aev%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2Fxml-events%22%20xml%3Aspace%3D%22preserve%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2239px%22%20height%3D%2218px%22%20%20viewBox%3D%220%200%2039%2018%22%20preserveAspectRatio%3D%22none%22%20shape-rendering%3D%22geometricPrecision%22%3E%22%3Cpath%20fill%3D%22%23fd9844%22%20d%3D%22M39.000%2C10.000%20L3.464%2C10.000%20L9.990%2C16.527%20L8.526%2C17.990%20L0.009%2C9.474%20L0.483%2C9.000%20L0.009%2C8.527%20L8.526%2C0.010%20L9.990%2C1.474%20L3.464%2C8.000%20L39.000%2C8.000%20L39.000%2C10.000%20Z%22%2F%3E%3C%2Fsvg%3E") 50% no-repeat;
+          background: url("data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20baseProfile%3D%22full%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xmlns%3Aev%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2Fxml-events%22%20xml%3Aspace%3D%22preserve%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2239px%22%20height%3D%2218px%22%20%20viewBox%3D%220%200%2039%2018%22%20preserveAspectRatio%3D%22none%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cpath%20fill%3D%22%2322202a%22%20d%3D%22M39.000%2C10.000%20L3.464%2C10.000%20L9.990%2C16.527%20L8.526%2C17.990%20L0.009%2C9.474%20L0.483%2C9.000%20L0.009%2C8.527%20L8.526%2C0.010%20L9.990%2C1.474%20L3.464%2C8.000%20L39.000%2C8.000%20L39.000%2C10.000%20Z%22%2F%3E%3C%2Fsvg%3E") 50% no-repeat;
         }
       }
     }
@@ -2518,11 +2553,16 @@ a {
     max-width: 100% !important;
     margin: 0 0 45px!important;
   }
-  .site__header__top__wrap .header__top__left .folders__popup__btn {
-    width: 55px!important;
-    padding: 0!important;;
-    font-size: 0!important;;
-    margin: 0 0 0 -20px!important;;
+  // Дополнительные отступы для заголовка на мобильных
+  .product_top_wrapper .shop2-product .product_side_r .product_top_block {
+    margin-top: 50px !important;
+    margin-bottom: 35px !important;
+    .product_name h1 {
+      margin-bottom: 15px !important;
+    }
+  }
+  .product_top_wrapper .shop2-product .product_side_l {
+    margin-bottom: 60px !important;
   }
   .burger__block__wrapper.active .burger__block__wrap {
     left: 0;
@@ -2539,6 +2579,14 @@ a {
   .product_top_wrapper {
     padding: 50px 30px 20px 30px!important;
     margin: 0 -30px 30px!important;
+  }
+  // Дополнительные отступы для заголовка на мобильных
+  .product_top_wrapper .shop2-product .product_side_r .product_top_block {
+    margin-top: 25px !important;
+    margin-bottom: 35px !important;
+    .product_name h1 {
+      margin-bottom: 15px !important;
+    }
   }
   .shop_product_data {
     padding: 20px!important;
@@ -2809,6 +2857,22 @@ a {
   .product_image{
     width: 275px!important;
     height: 290px!important;
+  }
+  // Дополнительные стили для очень маленьких экранов
+  .product_top_wrapper .shop2-product .product_side_r .product_top_block {
+    margin-top: 30px !important;
+    margin-bottom: 40px !important;
+    .product_name h1 {
+      font-size: 20px !important;
+      line-height: 26px !important;
+      margin-bottom: 20px !important;
+    }
+    .vendor_option {
+      margin-bottom: 10px !important;
+    }
+  }
+  .product_top_wrapper .shop2-product .product_side_l {
+    margin-bottom: 50px !important;
   }
 }
 
@@ -3413,4 +3477,24 @@ a {
   max-width: 450px;
   margin: 0 auto;
   line-height: 1.5;
+}
+
+// Специальные стили для iPhone 14 и iPhone 14 Plus
+@media screen and (min-width: 390px) and (max-width: 430px) {
+  .product__gallery__image-container {
+    height: 60vw !important;
+    max-height: 300px !important;
+  }
+  .product__gallery__images .swiper-pagination,
+  .product__gallery__custom-pagination {
+    margin-top: 25px !important;
+    padding: 0 30px !important;
+  }
+  .product_top_wrapper .shop2-product .product_side_r .product_top_block {
+    margin-top: 35px !important;
+    .product_name h1 {
+      font-size: 22px !important;
+      line-height: 28px !important;
+    }
+  }
 }
