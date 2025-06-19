@@ -19,8 +19,6 @@ const Accordion = ({terms, onProductsUpdate}) => {
 
     /** Обработка фильрации товаров по нажатию на кнопку "Показать" */
     const filterSearchHandler = async () => {
-        setShowFilterContext(false);
-
         // Подготавливаем атрибуты из filterContext
         const preparedAttributes = {};
         const queryParams = { 
@@ -82,8 +80,13 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 onProductsUpdate(data);
             }
 
+            // Закрываем фильтр только после успешного выполнения запроса
+            setShowFilterContext(false);
+
         } catch (error) {
             console.error('Ошибка:', error);
+            // В случае ошибки тоже закрываем фильтр
+            setShowFilterContext(false);
         }
     };
 
