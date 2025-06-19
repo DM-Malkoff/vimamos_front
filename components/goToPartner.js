@@ -1,7 +1,7 @@
 import Router from "next/router";
 import {partnerLinks} from "../constants/config";
 
-const GoToPartner = ({url, shopName, inStock}) => {
+const GoToPartner = ({url, shopName, isProductCard}) => {
     function goToOuterTransition() {
         const partnerLink = partnerLinks.find(item => item.shopName === shopName);
         const link = partnerLink ? partnerLink.shopLink : null;
@@ -14,10 +14,10 @@ const GoToPartner = ({url, shopName, inStock}) => {
     return (
         <>
             <div className="shop_product_button" onClick={() => goToOuterTransition()}>
-                {inStock === false ?
-                    <span>Посмотреть в магазине {shopName}</span>
-                    :
+                {isProductCard ?
                     <span>Купить в магазине {shopName}</span>
+                    :
+                    <span>В корзину</span>
                 }
             </div>
         </>

@@ -93,10 +93,9 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                                     </div>
                                 </div>
                                 {isSimilar ? 
-                                    <div className="shop_product_button">
-                                    </div>
+                                    <div className="shop_product_button_view"></div>
                                     :
-                                    <GoToPartner url={shopLink} shopName={shopName}/>
+                                    <GoToPartner url={shopLink} shopName={shopName} />
                                 }
                             </>
                             :

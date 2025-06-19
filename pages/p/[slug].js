@@ -211,11 +211,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                             </div>
                                             <div className="product_buttons">
                                                 <div className="product_buttons_in">
-                                                    <GoToPartner
-                                                        url={shopLink}
-                                                        shopName={shopName}
-                                                        inStock={product.price > 0 ? true: false}
-                                                    />
+                                                    <GoToPartner url={shopLink} shopName={shopName} isProductCard={true} />
                                                 </div>
                                             </div>
                                         </div>

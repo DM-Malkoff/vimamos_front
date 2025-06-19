@@ -3831,7 +3831,7 @@ a {
 }
 
 // Стили для кнопки "Смотреть товар" в похожих товарах
-.shop2_product_item .shop_product_button {
+.shop2_product_item .shop_product_button_view {
   background: var(--main-bg-color);
   color: #fff !important;
   border: none;
@@ -3867,7 +3867,7 @@ a {
 }
 
 @media (max-width: 768px) {
-  .shop2_product_item .shop_product_button {
+  .shop2_product_item .shop_product_button_view {
     width: 40px;
     height: 38px;
     
