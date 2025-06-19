@@ -1,8 +1,7 @@
 import AccordionItems from "./accordionItems";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {useRouter} from "next/router";
 import {FilterDataContext, ShowFilterContext} from "../../context/context";
-import {siteUrl} from "../../constants/config";
 
 const Accordion = ({terms, onProductsUpdate}) => {
     const router = useRouter();
@@ -19,39 +18,23 @@ const Accordion = ({terms, onProductsUpdate}) => {
     
     /** Состояние загрузки */
     const [isLoading, setIsLoading] = useState(false);
-    
-    /** Логи для мобильной отладки */
-    const [debugLogs, setDebugLogs] = useState([]);
-    
-    const addLog = (message, data = null) => {
-        const timestamp = new Date().toLocaleTimeString();
-        const logEntry = `${timestamp}: ${message}${data ? ` ${JSON.stringify(data)}` : ''}`;
-        console.log(logEntry);
-        setDebugLogs(prev => [...prev.slice(-10), logEntry]); // Храним последние 10 логов
-    };
 
     /** Обработка фильрации товаров по нажатию на кнопку "Показать" */
     const filterSearchHandler = async () => {
         if (isLoading) {
-            addLog('⏳ Запрос уже выполняется, ждите...');
             return;
         }
 
         setIsLoading(true);
-        addLog('🔍 Начинаем фильтрацию...', {
-            filterContext,
-            isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-        });
 
         try {
             // Небольшая задержка для визуализации
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 300));
 
             // Подготавливаем атрибуты из filterContext
             const preparedAttributes = {};
             const queryParams = { 
                 id: router.query.id, // Сохраняем только ID категории
-                // slug: router.query.slug // И slug категории
             };
 
             if (filterContext && Object.entries(filterContext).length) {
@@ -85,15 +68,6 @@ const Accordion = ({terms, onProductsUpdate}) => {
             // Используем Next.js API route как прокси чтобы избежать CORS проблем
             const apiUrl = '/api/search-products';
 
-            addLog('📤 Отправляем запрос:', {
-                url: apiUrl,
-                method: 'POST',
-                body: requestBody,
-                queryParams,
-                hostname: typeof window !== 'undefined' ? window.location.hostname : 'unknown',
-                userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
-            });
-
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -102,28 +76,12 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 body: JSON.stringify(requestBody),
             });
 
-            addLog('📥 Получен ответ:', {
-                status: response.status,
-                ok: response.ok,
-                statusText: response.statusText,
-                headers: {
-                    contentType: response.headers.get('content-type'),
-                    corsHeaders: response.headers.get('access-control-allow-origin')
-                }
-            });
-
             if (!response.ok) {
                 const errorText = await response.text();
-                addLog('🚫 Ошибка в ответе:', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    errorText: errorText
-                });
                 throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
             }
 
             const data = await response.json();
-            addLog('✅ Данные получены:', { productsCount: data?.length || 'unknown' });
             
             // Обновляем URL с параметрами фильтрации
             await router.push({
@@ -131,20 +89,16 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 query: queryParams,
             }, undefined, { shallow: true });
 
-            addLog('🔄 URL обновлен');
-
             // Обновляем список товаров на странице
             if (onProductsUpdate) {
                 onProductsUpdate(data);
-                addLog('📦 Товары обновлены');
             }
 
             // Закрываем фильтр только после успешного выполнения запроса
             setShowFilterContext(false);
-            addLog('❌ Фильтр закрыт');
 
         } catch (error) {
-            addLog('💥 Ошибка при фильтрации:', error.message);
+            console.error('Ошибка при фильтрации:', error);
             // В случае ошибки тоже закрываем фильтр
             setShowFilterContext(false);
         } finally {
@@ -166,6 +120,47 @@ const Accordion = ({terms, onProductsUpdate}) => {
 
     return (
         <>
+            {/* Блюр оверлей для всего фильтра */}
+            {isLoading && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    backdropFilter: 'blur(4px)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    animation: 'fadeIn 0.3s ease-in-out'
+                }}>
+                    <div style={{
+                        background: 'white',
+                        padding: '20px 30px',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        color: '#2c262a'
+                    }}>
+                        <div style={{
+                            width: '20px',
+                            height: '20px',
+                            border: '2px solid #fd9844',
+                            borderTop: '2px solid transparent',
+                            borderRadius: '50%',
+                            animation: 'spin 1s linear infinite'
+                        }}></div>
+                        Применяем фильтр...
+                    </div>
+                </div>
+            )}
+
             {terms?.map((item, index) => (
                 <div key={`accordion-${item.id}`}>
                     <AccordionItems
@@ -181,43 +176,31 @@ const Accordion = ({terms, onProductsUpdate}) => {
             <div className="filter_buttons_wrap">
                 <div className="filter_buttons">
                     <span 
-                        className={`shop_btn shop2-filter-go ${isLoading ? 'loading' : ''}`}
+                        className="shop_btn shop2-filter-go"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            addLog('🖱️ Клик по кнопке "Показать"');
                             filterSearchHandler();
                         }}
                         style={{
-                            opacity: isLoading ? 0.6 : 1,
+                            opacity: isLoading ? 0.7 : 1,
                             pointerEvents: isLoading ? 'none' : 'auto',
-                            position: 'relative'
+                            cursor: isLoading ? 'not-allowed' : 'pointer'
                         }}
                     >
-                        {isLoading ? 'Загрузка...' : 'Показать'}
-                        {isLoading && (
-                            <span style={{
-                                position: 'absolute',
-                                right: '8px',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
-                                animation: 'spin 1s linear infinite'
-                            }}>
-                                ⏳
-                            </span>
-                        )}
+                        Показать
                     </span>
                     <span 
                         className="shop_btn reset" 
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            addLog('🖱️ Клик по кнопке "Очистить"');
                             onClearFilter();
                         }}
                         style={{
-                            opacity: isLoading ? 0.6 : 1,
-                            pointerEvents: isLoading ? 'none' : 'auto'
+                            opacity: isLoading ? 0.7 : 1,
+                            pointerEvents: isLoading ? 'none' : 'auto',
+                            cursor: isLoading ? 'not-allowed' : 'pointer'
                         }}
                     >
                         Очистить
@@ -225,52 +208,14 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 </div>
             </div>
 
-            {/* Мобильная консоль для отладки */}
-            {debugLogs.length > 0 && (
-                <div style={{
-                    position: 'fixed',
-                    top: '60px',
-                    left: '10px',
-                    right: '10px',
-                    background: 'rgba(0,0,0,0.9)',
-                    color: '#00ff00',
-                    padding: '10px',
-                    fontSize: '10px',
-                    fontFamily: 'monospace',
-                    zIndex: 9999,
-                    maxHeight: '200px',
-                    overflow: 'auto',
-                    borderRadius: '4px'
-                }}>
-                    <div style={{ marginBottom: '5px', color: '#ffff00' }}>
-                        📱 Мобильная консоль (последние 10 логов):
-                        <button 
-                            onClick={() => setDebugLogs([])}
-                            style={{
-                                float: 'right',
-                                background: 'red',
-                                color: 'white',
-                                border: 'none',
-                                padding: '2px 6px',
-                                fontSize: '10px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Очистить
-                        </button>
-                    </div>
-                    {debugLogs.map((log, index) => (
-                        <div key={index} style={{ marginBottom: '2px', wordBreak: 'break-all' }}>
-                            {log}
-                        </div>
-                    ))}
-                </div>
-            )}
-
             <style jsx>{`
                 @keyframes spin {
-                    0% { transform: translateY(-50%) rotate(0deg); }
-                    100% { transform: translateY(-50%) rotate(360deg); }
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes fadeIn {
+                    0% { opacity: 0; }
+                    100% { opacity: 1; }
                 }
             `}</style>
         </>
