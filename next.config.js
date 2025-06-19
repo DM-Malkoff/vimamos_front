@@ -7,7 +7,7 @@ const nextConfig = {
     domains: [hostName],
     remotePatterns: [
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: hostName,
         port: '',
         pathname: '/wp-content/uploads/**',

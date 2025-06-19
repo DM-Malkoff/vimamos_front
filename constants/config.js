@@ -1,5 +1,5 @@
 const siteName = 'Vimamos.ru'
-const protocol = 'http://';
+const protocol = 'https://';
 const hostName = 'cms.shoesgo.ru'
 const siteUrl = `${protocol}${hostName}`;
 
