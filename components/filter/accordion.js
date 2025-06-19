@@ -1,5 +1,5 @@
 import AccordionItems from "./accordionItems";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {FilterDataContext, ShowFilterContext} from "../../context/context";
 import {siteUrl} from "../../constants/config";
@@ -16,15 +16,37 @@ const Accordion = ({terms, onProductsUpdate}) => {
 
     /** Флаг сброса параметров фильтра */
     const [isReset, setIsReset] = useState(false);
+    
+    /** Состояние загрузки */
+    const [isLoading, setIsLoading] = useState(false);
+    
+    /** Логи для мобильной отладки */
+    const [debugLogs, setDebugLogs] = useState([]);
+    
+    const addLog = (message, data = null) => {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = `${timestamp}: ${message}${data ? ` ${JSON.stringify(data)}` : ''}`;
+        console.log(logEntry);
+        setDebugLogs(prev => [...prev.slice(-10), logEntry]); // Храним последние 10 логов
+    };
 
     /** Обработка фильрации товаров по нажатию на кнопку "Показать" */
     const filterSearchHandler = async () => {
-        console.log('🔍 Начинаем фильтрацию...', {
+        if (isLoading) {
+            addLog('⏳ Запрос уже выполняется, ждите...');
+            return;
+        }
+
+        setIsLoading(true);
+        addLog('🔍 Начинаем фильтрацию...', {
             filterContext,
-            isMobile: window.innerWidth <= 768
+            isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
         });
 
         try {
+            // Небольшая задержка для визуализации
+            await new Promise(resolve => setTimeout(resolve, 100));
+
             // Подготавливаем атрибуты из filterContext
             const preparedAttributes = {};
             const queryParams = { 
@@ -60,7 +82,7 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 attributes: preparedAttributes
             };
 
-            console.log('📤 Отправляем запрос:', {
+            addLog('📤 Отправляем запрос:', {
                 url: `${siteUrl}/wp-json/custom/v1/search-products`,
                 method: 'POST',
                 body: requestBody,
@@ -75,7 +97,7 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 body: JSON.stringify(requestBody),
             });
 
-            console.log('📥 Получен ответ:', {
+            addLog('📥 Получен ответ:', {
                 status: response.status,
                 ok: response.ok,
                 statusText: response.statusText
@@ -86,7 +108,7 @@ const Accordion = ({terms, onProductsUpdate}) => {
             }
 
             const data = await response.json();
-            console.log('✅ Данные получены:', data);
+            addLog('✅ Данные получены:', { productsCount: data?.length || 'unknown' });
             
             // Обновляем URL с параметрами фильтрации
             await router.push({
@@ -94,22 +116,24 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 query: queryParams,
             }, undefined, { shallow: true });
 
-            console.log('🔄 URL обновлен');
+            addLog('🔄 URL обновлен');
 
             // Обновляем список товаров на странице
             if (onProductsUpdate) {
                 onProductsUpdate(data);
-                console.log('📦 Товары обновлены');
+                addLog('📦 Товары обновлены');
             }
 
             // Закрываем фильтр только после успешного выполнения запроса
             setShowFilterContext(false);
-            console.log('❌ Фильтр закрыт');
+            addLog('❌ Фильтр закрыт');
 
         } catch (error) {
-            console.error('💥 Ошибка при фильтрации:', error);
+            addLog('💥 Ошибка при фильтрации:', error.message);
             // В случае ошибки тоже закрываем фильтр
             setShowFilterContext(false);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -142,41 +166,98 @@ const Accordion = ({terms, onProductsUpdate}) => {
             <div className="filter_buttons_wrap">
                 <div className="filter_buttons">
                     <span 
-                        className="shop_btn shop2-filter-go" 
+                        className={`shop_btn shop2-filter-go ${isLoading ? 'loading' : ''}`}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log('🖱️ Клик по кнопке "Показать"');
+                            addLog('🖱️ Клик по кнопке "Показать"');
                             filterSearchHandler();
                         }}
-                        onTouchEnd={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('👆 Touch по кнопке "Показать"');
-                            filterSearchHandler();
+                        style={{
+                            opacity: isLoading ? 0.6 : 1,
+                            pointerEvents: isLoading ? 'none' : 'auto',
+                            position: 'relative'
                         }}
                     >
-                        Показать
+                        {isLoading ? 'Загрузка...' : 'Показать'}
+                        {isLoading && (
+                            <span style={{
+                                position: 'absolute',
+                                right: '8px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                animation: 'spin 1s linear infinite'
+                            }}>
+                                ⏳
+                            </span>
+                        )}
                     </span>
                     <span 
                         className="shop_btn reset" 
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log('🖱️ Клик по кнопке "Очистить"');
+                            addLog('🖱️ Клик по кнопке "Очистить"');
                             onClearFilter();
                         }}
-                        onTouchEnd={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('👆 Touch по кнопке "Очистить"');
-                            onClearFilter();
+                        style={{
+                            opacity: isLoading ? 0.6 : 1,
+                            pointerEvents: isLoading ? 'none' : 'auto'
                         }}
                     >
                         Очистить
                     </span>
                 </div>
             </div>
+
+            {/* Мобильная консоль для отладки */}
+            {debugLogs.length > 0 && (
+                <div style={{
+                    position: 'fixed',
+                    top: '60px',
+                    left: '10px',
+                    right: '10px',
+                    background: 'rgba(0,0,0,0.9)',
+                    color: '#00ff00',
+                    padding: '10px',
+                    fontSize: '10px',
+                    fontFamily: 'monospace',
+                    zIndex: 9999,
+                    maxHeight: '200px',
+                    overflow: 'auto',
+                    borderRadius: '4px'
+                }}>
+                    <div style={{ marginBottom: '5px', color: '#ffff00' }}>
+                        📱 Мобильная консоль (последние 10 логов):
+                        <button 
+                            onClick={() => setDebugLogs([])}
+                            style={{
+                                float: 'right',
+                                background: 'red',
+                                color: 'white',
+                                border: 'none',
+                                padding: '2px 6px',
+                                fontSize: '10px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Очистить
+                        </button>
+                    </div>
+                    {debugLogs.map((log, index) => (
+                        <div key={index} style={{ marginBottom: '2px', wordBreak: 'break-all' }}>
+                            {log}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <style jsx>{`
+                @keyframes spin {
+                    0% { transform: translateY(-50%) rotate(0deg); }
+                    100% { transform: translateY(-50%) rotate(360deg); }
+                }
+            `}</style>
         </>
     );
 };
