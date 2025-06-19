@@ -45,7 +45,7 @@ const RelatedProductsSlider = ({relatedProducts}) => {
                         {relatedProducts.map((item) => {
                             return(
                                 <SwiperSlide key={item.id}>
-                                    <ProductCard productData={item}/>
+                                    <ProductCard productData={item} isSimilar={true}/>
                                 </SwiperSlide>
                             )
                         })}

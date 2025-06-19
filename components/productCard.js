@@ -3,7 +3,7 @@ import Image from "next/image";
 import GoToPartner from "./goToPartner";
 import {salePriceCoefficient} from "../constants/config";
 
-const ProductCard = ({productData, isFirst = false}) => {
+const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
     const customFields = productData.meta_data;
 
     const shopNameCustomField = customFields ? customFields.find(item => item.key === 'shop_name') : null;
@@ -92,7 +92,12 @@ const ProductCard = ({productData, isFirst = false}) => {
                                         <strong>{productData.sale_price}</strong> ₽
                                     </div>
                                 </div>
-                                <GoToPartner url={shopLink} shopName={shopName}/>
+                                {isSimilar ? 
+                                    <div className="shop_product_button">
+                                    </div>
+                                    :
+                                    <GoToPartner url={shopLink} shopName={shopName}/>
+                                }
                             </>
                             :
                             <span className="not_available">Возможно в наличии</span>

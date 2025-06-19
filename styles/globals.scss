@@ -3779,3 +3779,100 @@ a {
     }
   }
 }
+
+// Стили для привлекательной кнопки "Смотреть товар"
+.btn-attractive {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  font-size: 14px;
+  text-decoration: none;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    text-decoration: none;
+    color: white !important;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+  }
+  
+  svg {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-attractive {
+    padding: 10px 16px;
+    font-size: 13px;
+    max-width: 180px;
+  }
+}
+
+// Стили для кнопки "Смотреть товар" в похожих товарах
+.shop2_product_item .shop_product_button {
+  background: var(--main-bg-color);
+  color: #fff !important;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  width: 46px;
+  height: 44px;
+  box-sizing: border-box;
+  position: relative;
+  font-size: 0;
+  padding: 0;
+  margin: 0 auto;
+  
+  &:hover {
+    background: var(--main-bg-color-hover);
+  }
+  
+  &:before {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='3' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 50% 50% no-repeat;
+    background-size: 20px 20px;
+    position: absolute;
+    content: '';
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 3px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shop2_product_item .shop_product_button {
+    width: 40px;
+    height: 38px;
+    
+    &:before {
+      background-size: 18px 18px;
+    }
+  }
+}
