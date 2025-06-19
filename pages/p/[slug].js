@@ -138,7 +138,6 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                             <div className="shop2_product_options_wr">
                                                 <div className="shop2_product_options">
                                                     {(() => {
-                                                        console.log('product.attributes', product.attributes)
                                                         // Разделяем атрибуты: сначала все кроме pa_razmer, потом pa_razmer
                                                         const sizeAttribute = product.attributes.find(item => item.slug === 'pa_razmer');
                                                         const otherAttributes = product.attributes.filter(item => item.slug !== 'pa_razmer');
