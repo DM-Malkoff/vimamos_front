@@ -82,14 +82,19 @@ const Accordion = ({terms, onProductsUpdate}) => {
                 attributes: preparedAttributes
             };
 
+            // Используем Next.js API route как прокси чтобы избежать CORS проблем
+            const apiUrl = '/api/search-products';
+
             addLog('📤 Отправляем запрос:', {
-                url: `${siteUrl}/wp-json/custom/v1/search-products`,
+                url: apiUrl,
                 method: 'POST',
                 body: requestBody,
-                queryParams
+                queryParams,
+                hostname: typeof window !== 'undefined' ? window.location.hostname : 'unknown',
+                userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
             });
 
-            const response = await fetch(`${siteUrl}/wp-json/custom/v1/search-products`, {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,11 +105,21 @@ const Accordion = ({terms, onProductsUpdate}) => {
             addLog('📥 Получен ответ:', {
                 status: response.status,
                 ok: response.ok,
-                statusText: response.statusText
+                statusText: response.statusText,
+                headers: {
+                    contentType: response.headers.get('content-type'),
+                    corsHeaders: response.headers.get('access-control-allow-origin')
+                }
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка при запросе данных: ${response.status} ${response.statusText}`);
+                const errorText = await response.text();
+                addLog('🚫 Ошибка в ответе:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    errorText: errorText
+                });
+                throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
             }
 
             const data = await response.json();
