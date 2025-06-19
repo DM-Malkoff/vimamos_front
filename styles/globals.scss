@@ -2766,87 +2766,49 @@ a {
       margin: 0;
       width: auto;
       padding: 0;
-      // Делаем блок фильтра на всю высоту экрана для маленьких экранов
-      height: 100vh;
-      overflow: hidden;
+      position: relative; // Добавляем для правильного позиционирования кнопок
+      min-height: 100vh; // Гарантируем высоту экрана
       display: flex;
       flex-direction: column;
       
-      .filter_block_title {
-        // Фиксированный заголовок
-        flex-shrink: 0;
-        padding: 42px 30px 20px;
-        border-bottom: 1px solid #f0f0f0;
+      .shop2-filter {
+        flex: 1;
+        padding-bottom: 90px; // Место для кнопок
       }
       
-      .shop2-filter {
-        // Прокручиваемое содержимое
-        flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 0 20px 110px 20px; // Уменьшил боковые отступы
-        margin-right: 8px; // Отступ от скролла для маленьких экранов
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-        overscroll-behavior: contain;
-        will-change: scroll-position;
+      .filter_buttons_wrap {
+        // Фиксированные кнопки внизу относительно родительского контейнера
+        position: fixed !important; // Изменяем на fixed для надежности
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-top: 1px solid #f0f0f0 !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+        z-index: 1001 !important; // Высокий z-index для iPhone
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 70px !important;
         
-        // Стили для скролла
-        scrollbar-width: thin;
-        scrollbar-color: #ccc transparent;
-        
-        &::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        
-        &::-webkit-scrollbar-thumb {
-          background-color: #ccc;
-          border-radius: 3px;
-        }
-        
-        &::-webkit-scrollbar-thumb:hover {
-          background-color: #999;
-        }
-        
-        // Убираем дополнительные отступы
-        .table-filter-param {
-          padding-right: 0;
-          margin-right: 0;
-        }
-        
-        .filter_buttons_wrap {
-          // Фиксированные кнопки внизу относительно родительского контейнера
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: #fff;
-          padding: 15px 15px 25px; // Компактные отступы для маленьких экранов
-          margin: 0;
-          border-top: 1px solid #f0f0f0;
-          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-          z-index: 10;
+        .filter_buttons {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          gap: 12px !important;
+          max-width: 280px !important;
+          margin: 0 !important;
           
-          .filter_buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px; // Меньшее расстояние для маленьких экранов
-            max-width: 280px; // Ограничиваем ширину
-            margin: 0 auto; // Центрируем
-            
-            .shop2-filter-go,
-            .reset {
-              flex: 1;
-              max-width: 110px; // Меньшая максимальная ширина для маленьких экранов
-              text-align: center;
-              padding: 11px 12px 12px; // Еще более компактные размеры
-              font-size: 13px; // Меньший шрифт
-              border-radius: 5px; // Слегка меньший радиус
-            }
+          .shop2-filter-go,
+          .reset {
+            flex: 1 !important;
+            max-width: 110px !important;
+            text-align: center !important;
+            padding: 11px 12px 12px !important;
+            font-size: 13px !important;
+            border-radius: 5px !important;
           }
         }
       }
@@ -3741,11 +3703,19 @@ a {
 // Дополнительные стили для вертикального центрирования кнопок фильтра
 @media screen and (max-width: 1340px) {
   .mode_folder_filter .filter_block_wrap .shop2-filter .filter_buttons_wrap {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #fff !important;
+    border-top: 1px solid #f0f0f0 !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1001 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0 !important; // Убираем все padding для идеального центрирования
-    height: 80px !important; // Фиксированная высота панели
+    padding: 0 !important;
+    height: 80px !important;
     
     .filter_buttons {
       align-items: center !important;
@@ -3755,26 +3725,16 @@ a {
   
   // Дополнительный отступ снизу для прокручиваемого контента
   .mode_folder_filter .filter_block_wrap .shop2-filter {
-    padding-bottom: 130px !important;
+    padding-bottom: 100px !important;
   }
 }
 
 @media screen and (max-width: 639px) {
   .mode_folder_filter .filter_block_wrap .shop2-filter .filter_buttons_wrap {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important; // Убираем все padding для идеального центрирования
-    height: 70px !important; // Фиксированная высота панели для маленьких экранов
-    
-    .filter_buttons {
-      align-items: center !important;
-      margin: 0 !important;
-    }
+    height: 70px !important; // Меньшая высота для маленьких экранов
   }
   
-  // Дополнительный отступ снизу для прокручиваемого контента
   .mode_folder_filter .filter_block_wrap .shop2-filter {
-    padding-bottom: 20px !important;
+    padding-bottom: 90px !important;
   }
 }
