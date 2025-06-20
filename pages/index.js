@@ -14,8 +14,10 @@ function Home({productsLacoste, productsReebok, productsEcco, categories}) {
         <>
             <Head>
                 <title>Купить обувь в Москве в Интернет-магазине | Vimamos.ru</title>
-                <meta name="description" content="Каталог товаров обуви и аксессуаров известных брендов. Коллекции фирменной обуви. Высочайшее качество. Более 50000 моделей в каталоге - мужские, женские и детские. Заходите, выбирайте, покупайте!"/>
+                <meta name="description"
+                      content="Каталог товаров обуви и аксессуаров известных брендов. Коллекции фирменной обуви. Высочайшее качество. Более 50000 моделей в каталоге - мужские, женские и детские. Заходите, выбирайте, покупайте!"/>
                 <meta name="yandex-verification" content="e5de60cb974247ac"/>
+                <meta charSet="UTF-8"/>
 
                 <meta property="og:title" content="Купить обувь в Москве в Интернет-магазине | Vimamos.ru"/>
                 <meta property="og:image" content="/images/logo.png"/>
@@ -101,22 +103,44 @@ function Home({productsLacoste, productsReebok, productsEcco, categories}) {
 
 export default Home;
 
-export async function getServerSideProps() {
-    const {data: productsLacoste} = await getSliderProducts(377);
-    const {data: productsEcco} = await getSliderProducts(135);
-    const {data: productsReebok} = await getSliderProducts(704);
-    // const {data: productsRieker} = await getSliderProducts(854);
-    // const {data: productsSalamander} = await getSliderProducts(726);
-    const {data: categories} = await getCategories();
-    
-    return {
-        props: {
-            productsLacoste: productsLacoste ?? {},
-            productsEcco: productsEcco ?? {},
-            productsReebok: productsReebok ?? {},
-            // productsRieker: productsRieker ?? {},
-            // productsSalamander: productsSalamander ?? {},
-            categories: categories ?? {}
+export async function getStaticProps() {
+    try {
+        // Выполняем все запросы параллельно для ускорения
+        const [
+            { data: productsLacoste },
+            { data: productsEcco },
+            { data: productsReebok },
+            { data: categories }
+        ] = await Promise.all([
+            getSliderProducts(377),
+            getSliderProducts(135),
+            getSliderProducts(704),
+            getCategories()
+        ]);
+        
+        return {
+            props: {
+                productsLacoste: productsLacoste ?? {},
+                productsEcco: productsEcco ?? {},
+                productsReebok: productsReebok ?? {},
+                categories: categories ?? {}
+            },
+            // Revalidate каждые 10 минут (600 секунд)
+            revalidate: 600
+        }
+    } catch (error) {
+        console.error('Error fetching data for homepage:', error);
+        
+        // Возвращаем пустые данные в случае ошибки
+        return {
+            props: {
+                productsLacoste: {},
+                productsEcco: {},
+                productsReebok: {},
+                categories: {}
+            },
+            // При ошибке revalidate чаще - каждые 60 секунд
+            revalidate: 60
         }
     }
 }
