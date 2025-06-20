@@ -8,7 +8,6 @@ import MainSlider from "../components/mainSlider";
 import {getSliderProducts} from "../utils/sliderProducts";
 import MainBanner from "../components/mainBanner";
 import PopularCategories from "../components/popularCategories";
-import ImagePerformanceMonitor from "../components/imagePerformanceMonitor";
 
 function Home({productsLacoste, productsReebok, productsEcco, categories}) {
     return (
@@ -26,8 +25,6 @@ function Home({productsLacoste, productsReebok, productsEcco, categories}) {
                 <meta property="og:site_name" content={siteName}/>
                 <meta property="og:type" content="website"/>
             </Head>
-            {/* Показываем монитор производительности только в development режиме */}
-            <ImagePerformanceMonitor />
             <Header categories={categories}/>
             <div className="page-wrapper">
                 <main className='site__container'>

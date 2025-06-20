@@ -1,5 +1,6 @@
 import '../styles/globals.scss'
 import '../styles/mainSlider.css'
+import Head from 'next/head'
 
 import React, {useState} from "react";
 import {FilterDataContext, ShowFilterContext} from "../context/context";
@@ -18,6 +19,9 @@ function MyApp({ Component, pageProps }) {
   })
   return (
       <>
+          <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+          </Head>
           <div className='site__wrapper'>
             <FilterDataContext.Provider value={[filterDataContext, setFilterDataContext]}>
                 <ShowFilterContext.Provider value={[showFilterContext,setShowFilterContext]}>
