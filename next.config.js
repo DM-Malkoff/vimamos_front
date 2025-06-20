@@ -13,6 +13,15 @@ const nextConfig = {
         pathname: '/wp-content/uploads/**',
       },
     ],
+    // Настройки оптимизации изображений
+    formats: ['image/webp'], // Только WebP формат
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840], // Размеры для разных устройств
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], // Размеры для небольших изображений
+    minimumCacheTTL: 60 * 60 * 24 * 365, // Кеш изображений на 1 год
+    dangerouslyAllowSVG: true, // Разрешаем SVG (опционально)
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;", // Безопасность для SVG
+    // Настройки для внешних изображений
+    unoptimized: false, // Включаем оптимизацию для всех изображений
   },
   // Настройки кеширования
   async headers() {
@@ -44,6 +53,16 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable', // 1 год
+          },
+        ],
+      },
+      {
+        // Кеширование оптимизированных изображений Next.js
+        source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable', // 1 год для оптимизированных изображений
           },
         ],
       },

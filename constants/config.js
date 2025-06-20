@@ -8,6 +8,13 @@ const quantityProductsMainSlider = 10 // количество товаров в 
 
 const salePriceCoefficient = 1.3 // коэфициент наценки
 
+// Настройки изображений
+const imageQuality = {
+    high: 90,     // Для страниц товаров и важных изображений
+    normal: 75,   // Для обычных изображений в каталоге
+    low: 60       // Для превью и миниатюр
+}
+
 const partnerLinks = [
     {shopName: 'Lacoste', shopLink: 'https://dhwnh.com/g/f446ccbb457d8def2aa9d5f2d2f9d4/?erid=5jtCeReLm1S3Xx3LfcL1t9f&ulp='},
     {shopName: 'ECCO', shopLink: 'https://kdbov.com/g/avmsvi2rfc7d8def2aa92cb26b7aaa/?erid=25H8d7vbP8SRTvFaD2wbvp&ulp='},
@@ -95,11 +102,13 @@ const colors = [
 
 module.exports = {
     siteName,
+    protocol,
     hostName,
     siteUrl,
     quantityProducts,
     quantityProductsMainSlider,
     salePriceCoefficient,
+    imageQuality,
     partnerLinks,
     sortSettings,
     colors

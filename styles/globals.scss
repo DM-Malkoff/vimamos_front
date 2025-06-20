@@ -3282,11 +3282,10 @@ a {
   z-index: 10;
   pointer-events: none;
 }
-
 .custom-navigation .custom-nav-prev,
 .custom-navigation .custom-nav-next {
   position: absolute;
-  top: -22px;
+  top: -70px;
   width: 44px;
   height: 44px;
   border: none;
@@ -3303,13 +3302,16 @@ a {
   background-color: var(--main-bg-color);
   color: #fff;
 }
+.custom-navigation .disabled:hover{
+  background-color: #fff!important;
+}
 
 .custom-navigation .custom-nav-prev {
-  left: 8px;
+  left: 2px;
 }
 
 .custom-navigation .custom-nav-next {
-  right: 8px;
+  right: 2px;
 }
 
 .custom-navigation svg {

@@ -6,6 +6,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import React, { useState, useEffect } from "react";
 import dynamic from 'next/dynamic';
+import {imageQuality} from "../constants/config";
+import {shimmer, toBase64} from "../utils/imageUtils";
 
 const ProductImages = ({ images }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -80,6 +82,9 @@ const ProductImages = ({ images }) => {
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     style={{ objectFit: 'contain' }}
                                     priority={true}
+                                    placeholder="blur"
+                                    blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(600, 600))}`}
+                                    quality={imageQuality.high}
                                 />
                             </div>
                         </SwiperSlide>
@@ -96,6 +101,9 @@ const ProductImages = ({ images }) => {
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 style={{ objectFit: 'contain' }}
                                 priority={true}
+                                placeholder="blur"
+                                blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(600, 600))}`}
+                                quality={imageQuality.high}
                             />
                         </div>
                     </SwiperSlide>
@@ -119,6 +127,9 @@ const ProductImages = ({ images }) => {
                             sizes="100vw"
                             style={{ objectFit: 'contain' }}
                             priority={true}
+                            placeholder="blur"
+                            blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(800, 800))}`}
+                            quality={imageQuality.high}
                         />
                         <button onClick={closeModal} className="product-modal__close">&times;</button>
                     </div>

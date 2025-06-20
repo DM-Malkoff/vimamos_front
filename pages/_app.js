@@ -1,4 +1,5 @@
 import '../styles/globals.scss'
+import '../styles/mainSlider.css'
 
 import React, {useState} from "react";
 import {FilterDataContext, ShowFilterContext} from "../context/context";

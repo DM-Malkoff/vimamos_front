@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import GoToPartner from "./goToPartner";
-import {salePriceCoefficient} from "../constants/config";
+import {salePriceCoefficient, imageQuality} from "../constants/config";
+import {shimmer, toBase64} from "../utils/imageUtils";
 
 const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
     const customFields = productData.meta_data;
@@ -62,6 +63,9 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     style={{ objectFit: 'contain' }}
                                     priority={isFirst}
+                                    placeholder="blur"
+                                    blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(400, 400))}`}
+                                    quality={imageQuality.normal}
                                 />
                             </Link>
                         </div>
