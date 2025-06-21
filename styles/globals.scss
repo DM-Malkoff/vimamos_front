@@ -3331,6 +3331,9 @@ a {
     gap: 24px;
     margin: 0 auto;
     max-width: 1200px;
+    a{
+      text-decoration: none;
+    }
 }
 
 .category-card {

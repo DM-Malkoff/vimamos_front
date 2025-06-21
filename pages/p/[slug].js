@@ -151,6 +151,7 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                                         return attributesToShow.map((item, index) => {
                                                             // Если это атрибут размера, делаем его интерактивным
                                                             if (item.slug === 'pa_razmer') {
+                                                                item.options.sort();
                                                                 return (
                                                                     <div key={item.position || index}
                                                                          className="option_item odd type-select size-selector">
