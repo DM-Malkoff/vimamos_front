@@ -3,6 +3,7 @@ import Footer from './footer'
 import Filter from "../filter/filter";
 import BreadCrumbs from "../breadcrumbs";
 import Caption from "../caption";
+import CookieConsent from "../CookieConsent";
 import {useRouter} from "next/router";
 
 const CatalogLayout = ({children, caption}) => {
@@ -27,6 +28,7 @@ const CatalogLayout = ({children, caption}) => {
                 </div>
             </div>
             <Footer />
+            <CookieConsent />
         </div>
     )
 }

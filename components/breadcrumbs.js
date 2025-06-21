@@ -1,9 +1,10 @@
 import Link from "next/link";
 import {useRouter} from "next/router";
 
-export default function BreadCrumbs({path, parentCategoryName, parentCategoryUrl, namePage, isProduct}){
+export default function BreadCrumbs({parentCategoryName, parentCategoryUrl, namePage, isProduct}){
     const router = useRouter()
     return(
+        namePage ?
         <div className="site-path" itemScope itemType="https://schema.org/BreadcrumbList">
             <ul>
                 <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
@@ -32,5 +33,7 @@ export default function BreadCrumbs({path, parentCategoryName, parentCategoryUrl
                 </li>
             </ul>
         </div>
+        :
+        false
     )
 }

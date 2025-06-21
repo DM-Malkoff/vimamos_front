@@ -4,6 +4,7 @@ import BreadCrumbs from "../breadcrumbs";
 import Caption from "../caption";
 import {useRouter} from "next/router";
 import SearchBlock from "../searchBlock";
+import CookieConsent from "../CookieConsent";
 import React from "react";
 
 const CatalogLayout = ({categories,children, caption, lastNode}) => {
@@ -27,6 +28,7 @@ const CatalogLayout = ({categories,children, caption, lastNode}) => {
                 </div>
             </div>
             <Footer />
+            <CookieConsent />
         </div>
     )
 }

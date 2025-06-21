@@ -394,6 +394,17 @@
     background-clip: text;
 }
 
+.price-availability {
+    font-size: 14px;
+    font-weight: 600;
+    color: #27ae60;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+}
+
 /* Отсутствие товаров */
 .no-products {
     text-align: center;

@@ -82,16 +82,12 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                     </div>
 
                     <div className="product-bot">
-                        {productData.sale_price ?
+                        {(productData.sale_price && productData.regular_price) ? (
                             <>
                                 <div className="product-price">
-                                    {productData.regular_price > 0 ?
-                                        <div className="price-old question">
-                                            <span><strong>{productData.regular_price ? productData.regular_price : productData.sale_price*salePriceCoefficient.toFixed(0)}</strong> ₽</span>
-                                        </div>
-                                        :
-                                        false
-                                    }
+                                    <div className="price-old question">
+                                        <span><strong>{productData.regular_price}</strong> ₽</span>
+                                    </div>
                                     <div className="price-current">
                                         <strong>{productData.sale_price}</strong> ₽
                                     </div>
@@ -102,12 +98,22 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                                     <GoToPartner url={shopLink} shopName={shopName} />
                                 }
                             </>
-                            :
-                            productData.regular_price ?
-                                <span className="price-current"><strong>{productData.regular_price} ₽</strong></span>
-                                :
-                                <span className="not_available">Возможно в наличии</span>
-                        }
+                        ) : (productData.sale_price || productData.regular_price) ? (
+                            <>
+                                <div className="product-price">
+                                    <div className="price-current">
+                                        <strong>{productData.sale_price || productData.regular_price}</strong> ₽
+                                    </div>
+                                </div>
+                                {isSimilar ? 
+                                    <div className="shop_product_button_view"></div>
+                                    :
+                                    <GoToPartner url={shopLink} shopName={shopName} />
+                                }
+                            </>
+                        ) : (
+                            <span className="not_available">Возможно в наличии</span>
+                        )}
                     </div>
 
                 </div>

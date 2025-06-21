@@ -222,12 +222,24 @@ const MainSlider = ({
                                                     </Link>
                                                 </div>
                                                 <div className="product__price">
-                                                    <div className="price-old question">
-                                                        <span><strong>{product.regular_price}</strong> руб.</span>
-                                                    </div>
-                                                    <div className="price-current">
-                                                        <strong>{product.sale_price}</strong> руб.
-                                                    </div>
+                                                    {(product.sale_price && product.regular_price) ? (
+                                                        <>
+                                                            <div className="price-old question">
+                                                                <span><strong>{product.regular_price}</strong> руб.</span>
+                                                            </div>
+                                                            <div className="price-current">
+                                                                <strong>{product.sale_price}</strong> руб.
+                                                            </div>
+                                                        </>
+                                                    ) : (product.sale_price || product.regular_price) ? (
+                                                        <div className="price-current">
+                                                            <strong>{product.sale_price || product.regular_price}</strong> руб.
+                                                        </div>
+                                                    ) : (
+                                                        <div className="price-availability">
+                                                            Возможно в наличии
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </form>
