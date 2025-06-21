@@ -124,7 +124,7 @@ export async function getStaticProps() {
             { data: categories },
         ] = await Promise.all([
             getSliderProducts(377),
-            getSliderProducts(135),
+            getSliderProducts(467),
             getSliderProducts(704),
             getSliderProducts(134),
             getCategories()
