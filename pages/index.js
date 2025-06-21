@@ -9,7 +9,7 @@ import {getSliderProducts} from "../utils/sliderProducts";
 import MainBanner from "../components/mainBanner";
 import PopularCategories from "../components/popularCategories";
 
-function Home({productsLacoste, productsReebok, productsEcco, categories}) {
+function Home({productsLacoste, productsReebok, productsEcco, productsNike,  categories}) {
     return (
         <>
             <Head>
@@ -74,6 +74,14 @@ function Home({productsLacoste, productsReebok, productsEcco, categories}) {
                                             {id: 703, name: "Мужская обувь"}
                                         ]}
                                     />
+                                    <MainSlider
+                                        data={productsNike}
+                                        caption="Nike"
+                                        categories={[
+                                            {id: 710, name: "Женская обувь"},
+                                            {id: 709, name: "Мужская обувь"}
+                                        ]}
+                                    />
                                     {/*<MainSlider*/}
                                     {/*    data={productsRieker}*/}
                                     {/*    caption="Rieker"*/}
@@ -110,11 +118,13 @@ export async function getStaticProps() {
             { data: productsLacoste },
             { data: productsEcco },
             { data: productsReebok },
-            { data: categories }
+            { data: productsNike },
+            { data: categories },
         ] = await Promise.all([
             getSliderProducts(377),
             getSliderProducts(135),
             getSliderProducts(704),
+            getSliderProducts(134),
             getCategories()
         ]);
         
@@ -123,6 +133,7 @@ export async function getStaticProps() {
                 productsLacoste: productsLacoste ?? {},
                 productsEcco: productsEcco ?? {},
                 productsReebok: productsReebok ?? {},
+                productsNike: productsNike ?? {},
                 categories: categories ?? {}
             },
             // Revalidate каждые 10 минут (600 секунд)
@@ -137,6 +148,7 @@ export async function getStaticProps() {
                 productsLacoste: {},
                 productsEcco: {},
                 productsReebok: {},
+                productsNike: {},
                 categories: {}
             },
             // При ошибке revalidate чаще - каждые 60 секунд

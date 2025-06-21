@@ -103,7 +103,10 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                                 }
                             </>
                             :
-                            <span className="not_available">Возможно в наличии</span>
+                            productData.regular_price ?
+                                <span className="price-current"><strong>{productData.regular_price} ₽</strong></span>
+                                :
+                                <span className="not_available">Возможно в наличии</span>
                         }
                     </div>
 

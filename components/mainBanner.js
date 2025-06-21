@@ -24,7 +24,7 @@ const MainBanner = () => {
                     <div className="search-container">
                         <input
                             type="text"
-                            placeholder="Поиск обуви: бренд, модель, размер..."
+                            placeholder="Поиск обуви: введите запрос"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="search-input"
@@ -130,24 +130,41 @@ const MainBanner = () => {
                 }
 
                 .search-button {
-                    background: linear-gradient(135deg, #3498db, #2980b9);
+                    background: #f8f9fa;
                     border: none;
+                    outline: none;
                     padding: 18px 25px;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: all 0.3s ease;
-                    color: white;
+                    transition: all 0.2s ease;
+                    color: #2c3e50;
+                    border-radius: 0 50px 50px 0;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    min-width: 60px;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
                 }
 
                 .search-button:hover {
-                    background: linear-gradient(135deg, #2980b9, #21618c);
-                    transform: scale(1.05);
+                    background: #e9ecef;
+                    transform: translateY(-1px);
+                    outline: none;
+                    border: none;
                 }
 
                 .search-button:active {
-                    transform: scale(0.98);
+                    transform: translateY(0);
+                    outline: none;
+                    border: none;
+                }
+
+                .search-button:focus {
+                    outline: none;
+                    border: none;
                 }
 
                 .search-icon {
