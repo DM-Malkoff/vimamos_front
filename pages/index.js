@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Header from "../components/layouts/header";
 import Footer from "../components/layouts/footer";
+import CookieConsent from "../components/CookieConsent";
 import {getCategories} from "../utils/categories";
 import {siteName, siteUrl} from "../constants/config";
 import 'swiper/css';
@@ -105,6 +106,7 @@ function Home({productsLacoste, productsReebok, productsEcco, productsNike,  cat
                 </main>
             </div>
             <Footer/>
+            <CookieConsent />
         </>
     )
 }
