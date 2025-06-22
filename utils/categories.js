@@ -79,29 +79,71 @@ export const getCategories = async () => {
     try {
         // Проверяем кеш
         const now = Date.now();
+        console.log('Cache check:', {
+            hasCachedData: !!global.categoriesCache,
+            cacheLength: global.categoriesCache?.length || 0,
+            cacheAge: now - (global.categoriesCacheTimestamp || 0),
+            cacheTTL: CATEGORIES_CACHE_TTL,
+            isExpired: (now - (global.categoriesCacheTimestamp || 0)) >= CATEGORIES_CACHE_TTL
+        });
+        
         if (global.categoriesCache && (now - global.categoriesCacheTimestamp) < CATEGORIES_CACHE_TTL) {
             console.log(`Categories cache hit: ${global.categoriesCache.length} items`);
             return { data: global.categoriesCache };
         }
         
-        console.log('Fetching categories from API...');
+        console.log('Fetching ALL categories via pagination...');
         
-        // ЭКСТРЕННОЕ ИСПРАВЛЕНИЕ: загружаем только 50 категорий без пагинации
-        // чтобы восстановить работоспособность на продакшене
-        const response = await api.get('products/categories', { per_page: 50 });
-        const allCategories = response.data || [];
+        // Используем пагинацию с безопасным размером страниц
+        let allCategories = [];
+        let page = 1;
+        const perPage = 25; // Безопасный размер, который не вызывает 502
         
-        // Проверяем, что получили данные
-        if (!allCategories || allCategories.length === 0) {
-            throw new Error('No categories received from API');
+        while (true) {
+            try {
+                console.log(`Fetching categories page ${page} (${perPage} items)...`);
+                
+                const response = await api.get('products/categories', { 
+                    per_page: perPage,
+                    page: page 
+                });
+                
+                if (!response || !response.data || response.data.length === 0) {
+                    console.log(`No more categories on page ${page}, stopping`);
+                    break;
+                }
+                
+                allCategories = allCategories.concat(response.data);
+                console.log(`Page ${page}: loaded ${response.data.length} categories, total: ${allCategories.length}`);
+                
+                // Если получили меньше чем per_page, значит это последняя страница
+                if (response.data.length < perPage) {
+                    console.log('Last page reached (partial page)');
+                    break;
+                }
+                
+                page++;
+                
+                // Защита от бесконечного цикла
+                if (page > 10) {
+                    console.log('Too many pages, stopping to prevent infinite loop');
+                    break;
+                }
+                
+            } catch (error) {
+                console.error(`Error fetching page ${page}:`, error.message);
+                break;
+            }
         }
         
-        // Сохраняем в кеш
-        global.categoriesCache = allCategories;
-        global.categoriesCacheTimestamp = now;
-        console.log(`All categories fetched and cached: ${allCategories.length} items`);
+        const categories = allCategories;
+        console.log(`Total categories loaded: ${categories.length} items`);
         
-        return { data: allCategories };
+        // Сохраняем в кеш
+        global.categoriesCache = categories;
+        global.categoriesCacheTimestamp = now;
+        
+        return { data: categories };
     } catch (error) {
         console.error('Error fetching categories:', error.message || error);
         

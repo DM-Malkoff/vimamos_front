@@ -59,4 +59,6 @@ const cachedApi = {
     }
 };
 
-export default cachedApi;
+// ПРОДАКШЕН: используем прямой API без кеширования
+// кеширование остается только на уровне categories.js
+export default api;
