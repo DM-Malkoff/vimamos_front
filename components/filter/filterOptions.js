@@ -60,7 +60,7 @@ const FilterOptions = ({isReset, attributeGroup, attributeOption}) => {
                         }}
                     />
                 )}
-                {attributeOption.name.toLowerCase()}
+                {attributeGroup.slug === 'pa_brend' ? attributeOption.name : attributeOption.name.toLowerCase()}
             </div>
         </>
     );

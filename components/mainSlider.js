@@ -29,7 +29,7 @@ const MainSlider = ({
     const validData = Array.isArray(data) ? data : [];
 
     // Формируем имя файла логотипа из caption
-    const logoFileName = caption ? caption.toLowerCase().replace(/\s+/g, '_') + '_logo.png' : '';
+    const logoFileName = caption ? caption.toLowerCase().replace(/\s+/g, '_') + '-logo.svg' : '';
     const logoPath = `/shop-logos/${logoFileName}`;
 
     // Проверяем существование логотипа при монтировании компонента
@@ -76,13 +76,14 @@ const MainSlider = ({
                             <Image
                                 src={logoPath}
                                 alt={`${caption} logo`}
-                                width={0}
-                                height={26}
+                                width={200}
+                                height={0}
                                 sizes="100vw"
-                                style={{ 
+                                style={{
                                     width: 'auto',
-                                    height: '26px',
-                                    objectFit: 'contain' 
+                                    minHeight: '50px',
+                                    maxWidth: '100px',
+                                    objectFit: 'contain'
                                 }}
                                 className="brand-logo"
                             />
