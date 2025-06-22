@@ -19,7 +19,14 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     
-    // Обработка ошибки загрузки данных
+    // Эффект для обновления товаров при смене категории
+    useEffect(() => {
+        if (initialProducts) {
+            setProducts(initialProducts);
+        }
+    }, [currentCategoryId, initialProducts]);
+    
+    // Обработка ошибки загрузки данных (после всех хуков)
     if (error) {
         return (
             <div className="error-page">
@@ -71,11 +78,11 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
 
     /** Формеирование Title */
     function getPageTitle() {
-        if (currentCategory.acf && currentCategory.acf.custom_seo_title) {
+        if (currentCategory && currentCategory.acf && currentCategory.acf.custom_seo_title) {
             return currentCategory.acf.custom_seo_title;
         }
 
-        if (currentCategory.acf && currentCategory.acf.gender) {
+        if (currentCategory && currentCategory.acf && currentCategory.acf.gender) {
             return pageTitle = `${currentCategory.acf.gender} ${pageTitle[0].toLowerCase() + pageTitle.slice(1)}`;
         }
 
@@ -83,11 +90,11 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     }
 
     function getSeoDescription(){
-        if (currentCategory.acf && currentCategory.acf.custom_seo_description) {
+        if (currentCategory && currentCategory.acf && currentCategory.acf.custom_seo_description) {
             return currentCategory.acf.custom_seo_description;
         }
 
-        if (currentCategory.acf && currentCategory.acf.gender){
+        if (currentCategory && currentCategory.acf && currentCategory.acf.gender){
             return `${currentCategory.acf.gender} ${description[0].toLowerCase() + description.slice(1)}`;
         }
 
@@ -96,23 +103,16 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
 
     /** Формирование H1 */
     function getH1() {
-        if (currentCategory.acf && currentCategory.acf.custom_h1) {
+        if (currentCategory && currentCategory.acf && currentCategory.acf.custom_h1) {
             return currentCategory.acf.custom_h1;
         }
 
-        if (currentCategory.acf && currentCategory.acf.gender){
+        if (currentCategory && currentCategory.acf && currentCategory.acf.gender){
             return `${currentCategory.acf.gender} ${townCaption[0].toLowerCase() + townCaption.slice(1)}`
         }
 
         return townCaption;
     }
-
-    // Эффект для обновления товаров при смене категории
-    useEffect(() => {
-        if (initialProducts) {
-            setProducts(initialProducts);
-        }
-    }, [currentCategoryId, initialProducts]);
 
     /** Функция обновления списка товаров */
     const handleProductsUpdate = (newProducts) => {
