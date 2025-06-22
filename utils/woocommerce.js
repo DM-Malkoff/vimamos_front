@@ -14,7 +14,10 @@ const api = new WooCommerceRestApi({
 });
 
 // Кеш для WooCommerce запросов
-const wooCache = new Map();
+if (typeof global !== 'undefined' && !global.wooCache) {
+    global.wooCache = new Map();
+}
+const wooCache = typeof global !== 'undefined' ? global.wooCache : new Map();
 const WOO_CACHE_TTL = 15 * 60 * 1000; // 15 минут
 
 export const getProducts = async (categoryId, perPage = 10) => {

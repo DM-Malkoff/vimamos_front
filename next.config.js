@@ -70,11 +70,7 @@ const nextConfig = {
   },
   // Настройки для улучшения производительности сборки
   experimental: {
-    largePageDataBytes: 128 * 1000, // 128KB
-  },
-  // Настройки для улучшения производительности сборки
-  experimental: {
-    largePageDataBytes: 1024 * 1000, // 512KB (увеличено с 128KB)
+    largePageDataBytes: 2048 * 1000, // 2MB (увеличено для обработки больших каталогов)
   },
 }
 

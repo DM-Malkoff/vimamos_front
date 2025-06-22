@@ -15,10 +15,24 @@ import {quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
 
-const Slug = ({products: initialProducts, categories, currentCategoryId, attributes}) => {
+const Slug = ({products: initialProducts, categories, currentCategoryId, attributes, error}) => {
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
-    const currentCategory = categories.find(item => item.id == currentCategoryId);
+    
+    // Обработка ошибки загрузки данных
+    if (error) {
+        return (
+            <div className="error-page">
+                <h1>Ошибка загрузки данных</h1>
+                <p>Попробуйте обновить страницу или вернуться позже.</p>
+                <button onClick={() => router.reload()}>Обновить страницу</button>
+            </div>
+        );
+    }
+    
+    // Проверяем, что categories является массивом
+    const categoriesArray = Array.isArray(categories) ? categories : [];
+    const currentCategory = categoriesArray.find(item => item.id == currentCategoryId);
     const availableSlug = currentCategory?.slug || '';
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
@@ -175,32 +189,75 @@ export async function getServerSideProps(ctx) {
     try {
         const { slug, id } = ctx.query;
         
-        const {data: categories} = await getCategories();
-        const {data: products} = await getProductsData(ctx.query);
-        const attributes = await getAttributes(ctx.query.id ?? null);
+        // Логируем запрос для отладки
+        console.log('Catalog getServerSideProps:', { slug, id });
+        
+        // Выполняем запросы параллельно с индивидуальной обработкой ошибок
+        const [categoriesResult, productsResult, attributesResult] = await Promise.allSettled([
+            getCategories(),
+            getProductsData(ctx.query),
+            getAttributes(ctx.query.id ?? null)
+        ]);
+        
+        // Обрабатываем результаты
+        const categories = categoriesResult.status === 'fulfilled' ? 
+            (categoriesResult.value?.data || []) : [];
+        const products = productsResult.status === 'fulfilled' ? 
+            (productsResult.value?.data || []) : [];
+        const attributes = attributesResult.status === 'fulfilled' ? 
+            (attributesResult.value || []) : [];
+        
+        // Логируем ошибки
+        if (categoriesResult.status === 'rejected') {
+            console.error('Categories fetch failed:', categoriesResult.reason);
+        }
+        if (productsResult.status === 'rejected') {
+            console.error('Products fetch failed:', productsResult.reason);
+        }
+        if (attributesResult.status === 'rejected') {
+            console.error('Attributes fetch failed:', attributesResult.reason);
+        }
 
         // Находим текущую категорию по id
         const currentCategory = categories.find(item => item.id == id);
         
         // Проверяем совпадение slug
         if (!currentCategory || currentCategory.slug !== slug) {
+            console.log('Category not found or slug mismatch:', { 
+                currentCategory: currentCategory ? currentCategory.slug : 'not found', 
+                expectedSlug: slug 
+            });
             return {
                 notFound: true
             };
         }
 
+        console.log('Catalog data loaded successfully:', { 
+            categoriesCount: categories.length, 
+            productsCount: products.length,
+            attributesCount: attributes.length
+        });
+
         return {
             props: {
-                categories: categories ?? {},
-                products: products ?? {},
+                categories: categories,
+                products: products,
                 currentCategoryId: ctx.query.id ?? null,
-                attributes: attributes ?? [],
+                attributes: attributes,
             }
         };
     } catch (error) {
-        console.error('Error in getServerSideProps:', error);
+        console.error('Critical error in getServerSideProps:', error);
+        
+        // Возвращаем базовую страницу с ошибкой вместо 404
         return {
-            notFound: true
+            props: {
+                categories: [],
+                products: [],
+                currentCategoryId: ctx.query.id ?? null,
+                attributes: [],
+                error: 'Failed to load page data'
+            }
         };
     }
 };

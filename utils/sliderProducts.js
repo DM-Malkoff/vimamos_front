@@ -1,7 +1,10 @@
 import {quantityProductsMainSlider} from "../constants/config";
 
 // Простой кеш в памяти для серверной стороны
-const cache = new Map();
+if (typeof global !== 'undefined' && !global.sliderCache) {
+    global.sliderCache = new Map();
+}
+const cache = typeof global !== 'undefined' ? global.sliderCache : new Map();
 const CACHE_TTL = 10 * 60 * 1000; // 10 минут в миллисекундах
 
 export const getSliderProducts = async (categoryId) => {
