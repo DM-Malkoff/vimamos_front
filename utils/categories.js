@@ -1,48 +1,51 @@
 import api from "../api";
 
-// Кеш для категорий
-if (typeof global !== 'undefined' && !global.categoriesCache) {
-    global.categoriesCache = new Map();
-}
-const categoriesCache = typeof global !== 'undefined' ? global.categoriesCache : new Map();
+// Простой кеш для категорий
+let categoriesCache = null;
+let cacheTimestamp = 0;
 const CATEGORIES_CACHE_TTL = 30 * 60 * 1000; // 30 минут
 
 export const getCategories = async () => {
     try {
-        // Проверяем кеш только на серверной стороне
-        if (typeof window === 'undefined') {
-            const cached = categoriesCache.get('categories');
-            if (cached && Date.now() - cached.timestamp < CATEGORIES_CACHE_TTL) {
-                console.log('Categories cache hit');
-                return { data: cached.data };
-            }
+        // Проверяем кеш
+        const now = Date.now();
+        if (categoriesCache && (now - cacheTimestamp) < CATEGORIES_CACHE_TTL) {
+            console.log('Categories cache hit');
+            return { data: categoriesCache };
         }
         
+        console.log('Fetching categories from API...');
         const response = await api.get('products/categories/?per_page=100');
         
-        // Сохраняем в кеш на серверной стороне
-        if (typeof window === 'undefined') {
-            categoriesCache.set('categories', {
-                data: response.data,
-                timestamp: Date.now()
-            });
-            console.log('Categories fetched and cached');
+        // Проверяем, что получили данные
+        if (!response || !response.data) {
+            throw new Error('Invalid response from categories API');
         }
+        
+        // Сохраняем в кеш
+        categoriesCache = response.data;
+        cacheTimestamp = now;
+        console.log(`Categories fetched and cached: ${response.data.length} items`);
         
         return response;
     } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching categories:', error.message || error);
         
         // Возвращаем старые данные из кеша, если есть
-        if (typeof window === 'undefined') {
-            const cached = categoriesCache.get('categories');
-            if (cached) {
-                console.log('Returning stale categories cache due to error');
-                return { data: cached.data };
-            }
+        if (categoriesCache && categoriesCache.length > 0) {
+            console.log('Returning stale categories cache due to error');
+            return { data: categoriesCache };
         }
         
-        // Возвращаем пустой массив в случае полного сбоя
+        // В случае полного сбоя, возвращаем пустой массив
+        console.log('No cached categories available, returning empty array');
         return { data: [] };
     }
+};
+
+// Функция для очистки кеша категорий
+export const clearCategoriesCache = () => {
+    categoriesCache = null;
+    cacheTimestamp = 0;
+    console.log('Categories cache cleared');
 };

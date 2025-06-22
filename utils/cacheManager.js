@@ -1,12 +1,11 @@
+import { clearCategoriesCache } from './categories';
+
 // Менеджер кеша для всех утилит
 export class CacheManager {
     static clearAllCaches() {
         try {
             // Очищаем кеш категорий
-            if (global.categoriesCache) {
-                global.categoriesCache.clear();
-                console.log('Categories cache cleared');
-            }
+            clearCategoriesCache();
             
             // Очищаем кеш WooCommerce
             if (global.wooCache) {
