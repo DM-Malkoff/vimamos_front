@@ -1721,9 +1721,13 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
         }
       }
     }
-    .vendor_option {
+    .vendor_option a{
       font: 13px 'Montserrat', Arial, Helvetica, sans-serif;
       color: #a09fa0;
+      text-decoration: none!important;
+      &:hover{
+        text-decoration: none;
+      }
     }
   }
 }

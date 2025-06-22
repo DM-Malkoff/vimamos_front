@@ -41,7 +41,14 @@ const ProductCard = ({productData, showBrand, isFirst = false, isSimilar = false
                         </div>
                         {showBrand && (
                             <div className="vendor_option">
-                                {productData.brands[0].name}
+                                <Link href={
+                                    {
+                                        pathname: `/p/${productData.slug}`,
+                                        query: {
+                                            id: productData.id
+                                        }
+                                    }
+                                }>{productData.brands[0].name}</Link>
                             </div>
                         )}
                         {/*<div className="product-compare">*/}

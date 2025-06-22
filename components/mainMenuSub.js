@@ -69,9 +69,9 @@ const MainMenuSub = ({
 
             {subLevel.length ?
                 <ul className={`waSlideMenu-menu waSlideMenu-i_menu ${activeSubMenu ? 'waSlideMenu-menu-visible' : ''}`}>
-                    <li className="waSlideMenu-back">
+                    <noindex><li className="waSlideMenu-back">
                         <span onClick={onClickBack}>Назад</span>
-                    </li>
+                    </li></noindex>
                     <li className="parent-item">
                         <Link 
                             href={{
