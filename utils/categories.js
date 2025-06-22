@@ -84,8 +84,12 @@ export const getCategories = async () => {
             return { data: global.categoriesCache };
         }
         
-        console.log('Fetching all categories from API...');
-        const allCategories = await fetchAllCategories();
+        console.log('Fetching categories from API...');
+        
+        // ЭКСТРЕННОЕ ИСПРАВЛЕНИЕ: загружаем только 50 категорий без пагинации
+        // чтобы восстановить работоспособность на продакшене
+        const response = await api.get('products/categories', { per_page: 50 });
+        const allCategories = response.data || [];
         
         // Проверяем, что получили данные
         if (!allCategories || allCategories.length === 0) {
