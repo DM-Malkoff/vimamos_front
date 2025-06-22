@@ -1,10 +1,16 @@
 // Используем ту же конфигурацию, что работает в диагностике
 const WooCommerceRestApi = require('@woocommerce/woocommerce-rest-api').default;
 
-// Простой кеш для категорий
-let categoriesCache = null;
-let cacheTimestamp = 0;
+// Глобальный кеш для категорий
 const CATEGORIES_CACHE_TTL = 30 * 60 * 1000; // 30 минут
+
+// Инициализируем глобальные переменные
+if (!global.categoriesCache) {
+    global.categoriesCache = null;
+}
+if (!global.categoriesCacheTimestamp) {
+    global.categoriesCacheTimestamp = 0;
+}
 
 // Создаем API экземпляр напрямую
 const api = new WooCommerceRestApi({
@@ -73,9 +79,9 @@ export const getCategories = async () => {
     try {
         // Проверяем кеш
         const now = Date.now();
-        if (categoriesCache && (now - cacheTimestamp) < CATEGORIES_CACHE_TTL) {
-            console.log(`Categories cache hit: ${categoriesCache.length} items`);
-            return { data: categoriesCache };
+        if (global.categoriesCache && (now - global.categoriesCacheTimestamp) < CATEGORIES_CACHE_TTL) {
+            console.log(`Categories cache hit: ${global.categoriesCache.length} items`);
+            return { data: global.categoriesCache };
         }
         
         console.log('Fetching all categories from API...');
@@ -87,8 +93,8 @@ export const getCategories = async () => {
         }
         
         // Сохраняем в кеш
-        categoriesCache = allCategories;
-        cacheTimestamp = now;
+        global.categoriesCache = allCategories;
+        global.categoriesCacheTimestamp = now;
         console.log(`All categories fetched and cached: ${allCategories.length} items`);
         
         return { data: allCategories };
@@ -96,9 +102,9 @@ export const getCategories = async () => {
         console.error('Error fetching categories:', error.message || error);
         
         // Возвращаем старые данные из кеша, если есть
-        if (categoriesCache && categoriesCache.length > 0) {
-            console.log(`Returning stale categories cache due to error: ${categoriesCache.length} items`);
-            return { data: categoriesCache };
+        if (global.categoriesCache && global.categoriesCache.length > 0) {
+            console.log(`Returning stale categories cache due to error: ${global.categoriesCache.length} items`);
+            return { data: global.categoriesCache };
         }
         
         // В случае полного сбоя, возвращаем пустой массив
@@ -109,7 +115,7 @@ export const getCategories = async () => {
 
 // Функция для очистки кеша категорий
 export const clearCategoriesCache = () => {
-    categoriesCache = null;
-    cacheTimestamp = 0;
+    global.categoriesCache = null;
+    global.categoriesCacheTimestamp = 0;
     console.log('Categories cache cleared');
 };

@@ -59,6 +59,20 @@ export class CacheManager {
         }
     }
     
+    static softClearCategories() {
+        try {
+            // Мягкая очистка - помечаем кеш как устаревший, но не удаляем
+            if (global.categoriesCache && global.categoriesCacheTimestamp) {
+                global.categoriesCacheTimestamp = 0; // Помечаем как устаревший
+                console.log('Categories cache marked as stale (soft clear)');
+            }
+            return true;
+        } catch (error) {
+            console.error('Error soft clearing categories cache:', error);
+            return false;
+        }
+    }
+    
     static clearProductsOnly() {
         try {
             if (global.wooCache) {
@@ -123,7 +137,7 @@ export const clearCacheAPI = async (req, res) => {
     }
     
     try {
-        const { key, categoryId, type } = req.body;
+        const { key, categoryId, type, force } = req.body;
         
         let result;
         let message;
@@ -136,9 +150,15 @@ export const clearCacheAPI = async (req, res) => {
             result = CacheManager.clearCacheByKey(key);
             message = `Cache key ${key} cleared`;
         } else if (type === 'categories') {
-            // Очищаем только кеш категорий
-            result = CacheManager.clearCategoriesOnly();
-            message = 'Categories cache cleared';
+            if (force) {
+                // Принудительная очистка (может вызвать проблемы на продакшене)
+                result = CacheManager.clearCategoriesOnly();
+                message = 'Categories cache cleared (forced)';
+            } else {
+                // Мягкая очистка кеша категорий (безопасно для продакшена)
+                result = CacheManager.softClearCategories();
+                message = 'Categories cache marked as stale (will refresh on next request)';
+            }
         } else if (type === 'products') {
             // Очищаем только кеш товаров
             result = CacheManager.clearProductsOnly();
