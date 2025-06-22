@@ -8,7 +8,8 @@ const api = new WooCommerceRestApi( {
     axiosConfig: {
         httpsAgent: new (require('https').Agent)({
             rejectUnauthorized: false
-        })
+        }),
+        timeout: 15000
     }
 } );
 
