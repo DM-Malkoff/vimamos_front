@@ -4,7 +4,7 @@ import Router from "next/router";
 import GoToPartner from "./goToPartner";
 import ProductCard from "./productCard";
 
-const ProductList = ({products}) => {
+const ProductList = ({products, showBrand}) => {
     return (
         <>
             <div className="prod_list_wrap">
@@ -13,8 +13,8 @@ const ProductList = ({products}) => {
                         return (
                             <ProductCard 
                                 key={res.id} 
-                                productData={res} 
-                                relatedProducts={res.related_ids}
+                                productData={res}
+                                showBrand={showBrand}
                                 isFirst={index === 0}
                             />
                         )

@@ -16,6 +16,11 @@ import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
 
 const Slug = ({products: initialProducts, categories, currentCategoryId, attributes, error}) => {
+    /** Массив брендов которые надо отображать в категории их товаров */
+    const brandNameForShowInCategory = [
+        {brand: 'adidas', categoryId:  '740'},
+    ];
+
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     
@@ -43,6 +48,9 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     const availableSlug = currentCategory?.slug || '';
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
+
+    /** Флаг отображения бренда в категории товаров */
+    const showBrand = brandNameForShowInCategory.some(v => v.categoryId === currentCategoryId);
 
     /** Название текущей категории */
     let currentCategoryName = '';
@@ -159,7 +167,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                                     {!products?.length ?
                                         <p className="products_error">Не найдено товаров по заданным параметрам,
                                             попробуйте изменить условия поиска.</p> :
-                                        <ProductList products={products}/>
+                                        <ProductList products={products} showBrand={showBrand} />
                                     }
                                     {(products?.length >= quantityProducts || router.query.page) ?
                                         <Pagination

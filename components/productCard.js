@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import GoToPartner from "./goToPartner";
-import {salePriceCoefficient, imageQuality} from "../constants/config";
+import {imageQuality} from "../constants/config";
 import {shimmer, toBase64} from "../utils/imageUtils";
 
-const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
+const ProductCard = ({productData, showBrand, isFirst = false, isSimilar = false}) => {
     const customFields = productData.meta_data;
 
     const shopNameCustomField = customFields ? customFields.find(item => item.key === 'shop_name') : null;
@@ -39,16 +39,21 @@ const ProductCard = ({productData, isFirst = false, isSimilar = false}) => {
                                 {productData.name}
                             </Link>
                         </div>
-                        <div className="product-compare">
-                            <label>
-                                <input type="checkbox"/>
-                                Добавить к сравнению
-                            </label>
-                        </div>
+                        {showBrand && (
+                            <div className="vendor_option">
+                                {productData.brands[0].name}
+                            </div>
+                        )}
+                        {/*<div className="product-compare">*/}
+                        {/*    <label>*/}
+                        {/*        <input type="checkbox"/>*/}
+                        {/*        Добавить к сравнению*/}
+                        {/*    </label>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="product_image_wr">
                         <div className="product_image">
-                            <Link href={
+                        <Link href={
                                 {
                                     pathname: `/p/${productData.slug}`,
                                     query: {
