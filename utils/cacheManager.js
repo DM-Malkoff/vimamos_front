@@ -48,6 +48,55 @@ export class CacheManager {
         }
     }
     
+    static clearCategoriesOnly() {
+        try {
+            clearCategoriesCache();
+            console.log('Categories cache cleared');
+            return true;
+        } catch (error) {
+            console.error('Error clearing categories cache:', error);
+            return false;
+        }
+    }
+    
+    static clearProductsOnly() {
+        try {
+            if (global.wooCache) {
+                // Очищаем только товары (ключи, содержащие 'products')
+                const keys = Array.from(global.wooCache.keys());
+                keys.forEach(key => {
+                    if (key.includes('products')) {
+                        global.wooCache.delete(key);
+                    }
+                });
+                console.log('Products cache cleared');
+            }
+            return true;
+        } catch (error) {
+            console.error('Error clearing products cache:', error);
+            return false;
+        }
+    }
+    
+    static clearCategoryCache(categoryId) {
+        try {
+            if (global.wooCache) {
+                // Очищаем кеш товаров для конкретной категории
+                const keys = Array.from(global.wooCache.keys());
+                keys.forEach(key => {
+                    if (key.includes(`category=${categoryId}`) || key.includes(`category%3D${categoryId}`)) {
+                        global.wooCache.delete(key);
+                        console.log(`Cleared cache for category ${categoryId}: ${key}`);
+                    }
+                });
+            }
+            return true;
+        } catch (error) {
+            console.error(`Error clearing cache for category ${categoryId}:`, error);
+            return false;
+        }
+    }
+    
     static getCacheStats() {
         const stats = {};
         
@@ -74,19 +123,35 @@ export const clearCacheAPI = async (req, res) => {
     }
     
     try {
-        const { key } = req.body;
+        const { key, categoryId, type } = req.body;
         
         let result;
-        if (key) {
+        let message;
+        
+        if (categoryId) {
+            // Очищаем кеш конкретной категории
+            result = CacheManager.clearCategoryCache(categoryId);
+            message = `Cache for category ${categoryId} cleared`;
+        } else if (key) {
             result = CacheManager.clearCacheByKey(key);
+            message = `Cache key ${key} cleared`;
+        } else if (type === 'categories') {
+            // Очищаем только кеш категорий
+            result = CacheManager.clearCategoriesOnly();
+            message = 'Categories cache cleared';
+        } else if (type === 'products') {
+            // Очищаем только кеш товаров
+            result = CacheManager.clearProductsOnly();
+            message = 'Products cache cleared';
         } else {
             result = CacheManager.clearAllCaches();
+            message = 'All caches cleared';
         }
         
         if (result) {
             res.status(200).json({ 
                 success: true, 
-                message: key ? `Cache key ${key} cleared` : 'All caches cleared',
+                message: message,
                 cacheStats: CacheManager.getCacheStats()
             });
         } else {
