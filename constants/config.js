@@ -1,4 +1,7 @@
 const siteName = 'Vimamos.ru'
+const siteHost = 'vimamos.ru'
+const frontendProtocol = 'https://';
+const frontendUrl = `${frontendProtocol}${siteHost}`;
 const protocol = 'https://';
 const hostName = 'cms.shoesgo.ru'
 const siteUrl = `${protocol}${hostName}`;
@@ -102,6 +105,9 @@ const colors = [
 
 module.exports = {
     siteName,
+    siteHost,
+    frontendProtocol,
+    frontendUrl,
     protocol,
     hostName,
     siteUrl,
