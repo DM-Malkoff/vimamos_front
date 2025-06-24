@@ -1545,6 +1545,8 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
   background: #1b1a22;
   flex: none;
   .site__footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
     padding: 42px 50px 35px;
     margin: 0 auto;
     max-width: 1320px;
@@ -1555,6 +1557,9 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
     .footer__bottom__left {
       display: inline-block;
       vertical-align: middle;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
     }
   }
 }
@@ -3898,7 +3903,6 @@ a {
   padding: 20px 0;
   flex-wrap: wrap;
   gap: 15px;
-  height: 100px;
 }
 
 .footer__bottom__left {
@@ -3928,6 +3932,16 @@ a {
     flex-direction: column;
     text-align: center;
     gap: 10px;
+  }
+  
+  .footer__bottom__left {
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    max-width: 100%;
   }
 }
 
