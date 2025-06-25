@@ -61,7 +61,10 @@ export default function ProductPage({product,categories, upsellProducts}) {
                 return `${sku} ${product.brands[0].name} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
             }
 
-            return `${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
+            if (!product.name.includes(sku)) {
+                return `${sku} ${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
+            }
+            return `${product.name} купить в Интернет-магазине с доставкой недорого | Vimamos.ru`;
         }
         return '';
     }
