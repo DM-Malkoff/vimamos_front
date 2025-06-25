@@ -19,10 +19,11 @@ const imageQuality = {
 }
 
 const partnerLinks = [
-    {shopName: 'Lacoste', shopLink: 'https://dhwnh.com/g/f446ccbb457d8def2aa9d5f2d2f9d4/?erid=5jtCeReLm1S3Xx3LfcL1t9f&ulp='},
-    {shopName: 'ECCO', shopLink: 'https://kdbov.com/g/avmsvi2rfc7d8def2aa92cb26b7aaa/?erid=25H8d7vbP8SRTvFaD2wbvp&ulp='},
-    {shopName: 'Thomas Munz', shopLink: 'https://tplto.com/go/5f0d10f7e21a426bd1c3e4242aaa9b3e365b64d1eb0a0b0b/?dpl='},
-    {shopName: 'Brandshop', shopLink: 'https://tplto.com/go/5f0d10f72f1f426baed7e4242aaa9b3e365b64d1eb0a0b0b/?dpl='},
+    // {shopName: 'Lacoste', shopLink: 'https://dhwnh.com/g/f446ccbb457d8def2aa9d5f2d2f9d4/?erid=5jtCeReLm1S3Xx3LfcL1t9f&ulp='}, // Admitad
+    {shopName: 'Lacoste', shopLink: 'https://tplto.com/go/5f0d10f7181e426b1fa6e4242aaa9b3e365b64d1eb0a0b0b/?dpl='}, // Advertise
+    {shopName: 'ECCO', shopLink: 'https://kdbov.com/g/avmsvi2rfc7d8def2aa92cb26b7aaa/?erid=25H8d7vbP8SRTvFaD2wbvp&ulp='}, // Admitad
+    {shopName: 'Thomas Munz', shopLink: 'https://tplto.com/go/5f0d10f7e21a426bd1c3e4242aaa9b3e365b64d1eb0a0b0b/?dpl='}, // Advertise
+    {shopName: 'Brandshop', shopLink: 'https://tplto.com/go/5f0d10f72f1f426baed7e4242aaa9b3e365b64d1eb0a0b0b/?dpl='}, // Advertise
 ]
 
 const sortSettings = [
