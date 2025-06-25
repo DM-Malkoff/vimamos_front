@@ -1,3 +1,5 @@
 User-agent: *
 Disallow: /gotoshop
 Disallow: /search/
+
+Sitemap: https://vimamos.ru/sitemap.xml
