@@ -28,7 +28,7 @@ const AccordionItems = ({item, index, isReset, onPress, isLast}) => {
         if (filterOptions.min_price !== undefined || filterOptions.max_price !== undefined) {
             setFilterContext(filterOptions);
         }
-    }, [filterOptions]);
+    }, [filterOptions, setFilterContext]);
 
     function handlerMinPrice(event) {
         const value = event.target.value;

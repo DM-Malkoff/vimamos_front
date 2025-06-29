@@ -62,6 +62,7 @@ const MainMenu = ({showMenu, categories, handler}) => {
         if (showMenu) {
             handler(); // Закрываем меню при переходе
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.asPath]);
 
     return (
