@@ -24,6 +24,7 @@ const partnerLinks = [
     {shopName: 'ECCO', shopLink: 'https://kdbov.com/g/avmsvi2rfc7d8def2aa92cb26b7aaa/?erid=25H8d7vbP8SRTvFaD2wbvp&ulp='}, // Admitad
     {shopName: 'Thomas Munz', shopLink: 'https://tplto.com/go/5f0d10f7e21a426bd1c3e4242aaa9b3e365b64d1eb0a0b0b/?dpl='}, // Advertise
     {shopName: 'Brandshop', shopLink: 'https://tplto.com/go/5f0d10f72f1f426baed7e4242aaa9b3e365b64d1eb0a0b0b/?dpl='}, // Advertise
+    {shopName: 'Rieker', shopLink: 'https://tplto.com/go/5f0d10f7b12a426b5a2be4242aaa9b3e365b64d1eb0a0b0b/?dpl='} // Advertise
 ]
 
 const sortSettings = [
