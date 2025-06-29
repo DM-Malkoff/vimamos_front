@@ -23,7 +23,7 @@ const Sort = () => {
         })
     }, [])
     useEffect(()=>{
-        setSortTitle(sortTypes.find(item => item.sortType === router.query.order)?.sortText||'Сортировать по')
+        setSortTitle(sortTypes.find(item => item.sortType === router.query.order)?.sortText||'Сначала дешевле')
         if (router.query.order){
             setSelectedSortType(router.query.order)
         } else {

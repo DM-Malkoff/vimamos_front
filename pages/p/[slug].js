@@ -14,7 +14,7 @@ import {siteName, siteUrl} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
 import { useState } from "react";
 
-export default function ProductPage({product,categories, upsellProducts}) {
+export default function ProductPage({product,categories}) {
     const pathLocation = useRouter().pathname;
     const customFields = product.meta_data;
     const [selectedSize, setSelectedSize] = useState(null);
@@ -72,10 +72,10 @@ export default function ProductPage({product,categories, upsellProducts}) {
     function getDescription() {
         if (product) {
             if (!product.name.includes(product.brands[0].name)) {
-                return `${product.name} ${product.brands[0].name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku}`;
+                return `${product.name} ${product.brands[0].name} купить в Интернет-магазине с доставкой по России всего за ${product.sale_price ?? product.regular_price} руб. Артикул ${sku}`;
             }
 
-            return `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.price} руб. Артикул ${sku}`;
+            return `${product.name} купить в Интернет-магазине с доставкой по России всего за ${product.sale_price ?? product.regular_price} руб. Артикул ${sku}`;
         }
         return '';
     }
@@ -192,17 +192,17 @@ export default function ProductPage({product,categories, upsellProducts}) {
                                             </div>
                                             <div className="product-price" itemProp="offers" itemScope
                                                  itemType="http://schema.org/Offer">
-                                                {+product.regular_price ?
+                                                {(+product.sale_price && +product.regular_price) ?
                                                     <div className="price-old question">
-                                                        <span><strong>{product.regular_price}</strong> руб.</span>
+                                                        <span><strong>{product.sale_price || product.regular_price}</strong> руб.</span>
                                                     </div>
                                                     :
                                                     false
                                                 }
-                                                {+product.price ?
+                                                {(+product.sale_price || +product.regular_price) ?
                                                     <div className="price-current">
-                                                        <strong>{+product.price}</strong> руб.
-                                                        <meta itemProp="price" content={+product.price}/>
+                                                        <strong>{product.sale_price || product.regular_price}</strong> руб.
+                                                        <meta itemProp="price" content={product.sale_price || product.regular_price}/>
                                                         <meta itemProp="priceCurrency" content="RUB"/>
                                                     </div>
                                                     :

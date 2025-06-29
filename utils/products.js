@@ -13,7 +13,7 @@ export const getProductsData = async (queries) => {
         params.append(paramKey, value);
     });
 
-    const apiUrl = `${baseUrl}&${params.toString()}`;
+    const apiUrl = `${baseUrl}&${params.toString()}&orderby=price&order=asc`;
     
     return await api.get(apiUrl);
 };

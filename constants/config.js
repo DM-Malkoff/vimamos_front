@@ -28,8 +28,8 @@ const partnerLinks = [
 ]
 
 const sortSettings = [
-    {sortName: 'price', sortType: 'desc', sortText: 'Сначала дорогие'},
-    {sortName: 'price', sortType: 'asc', sortText: 'Сначала дешевые'},
+    {sortName: 'price', sortType: 'desc', sortText: 'Сначала дороже'},
+    {sortName: 'price', sortType: 'asc', sortText: 'Сначала дешевле'},
     {sortName: '', sortType: 'clear', sortText: 'Не сортировать'}
 ]
 
