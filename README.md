@@ -1,5 +1,56 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Sitemap и YML Каталог
+
+### Доступные эндпоинты:
+
+1. **Основной sitemap** - `https://vimamos.ru/sitemap.xml`
+   - Sitemap index, ссылающийся на отдельные файлы
+
+2. **Sitemap категорий** - `https://vimamos.ru/sitemap-categories.xml`
+   - Все категории товаров
+   - Обновляется еженедельно
+
+3. **Sitemap товаров** - `https://vimamos.ru/sitemap-products.xml`
+   - Все товары
+   - Обновляется ежедневно
+
+4. **YML каталог для Яндекс.Маркета** - `https://vimamos.ru/yml-catalog.xml`
+   - Полный каталог товаров в формате YML для Яндекс.Маркета
+   - Включает категории с иерархией (parentId), товары, цены и параметры
+   - Детальная информация о товарах (описания, изображения, атрибуты)
+   - Автоматическое извлечение брендов и атрибутов
+   - Обновляется каждый час
+
+### Конфигурация
+
+Все настройки находятся в `constants/config.js`:
+- `frontendUrl` - URL фронтенда (https://vimamos.ru)
+- `siteUrl` - URL бэкенда (https://cms.shoesgo.ru)
+- `siteName` - Название сайта
+
+### Источник данных
+
+Все данные получаются с бэкенда через единый эндпоинт:
+- **Все файлы**: `https://cms.shoesgo.ru/wp-json/custom/v1/sitemap`
+
+Ответ должен содержать:
+```json
+{
+  "categories": [...],
+  "products": [...]
+}
+```
+
+### Особенности YML каталога:
+
+- ✅ Поддержка иерархии категорий (parentId)
+- ✅ Умная обработка товарных атрибутов
+- ✅ Автоматическое извлечение брендов
+- ✅ Правильное экранирование XML
+- ✅ Фильтрация тестовых категорий ("Misc")
+- ✅ Резервные источники данных (WooCommerce API)
+
 ## Getting Started
 
 First, run the development server:

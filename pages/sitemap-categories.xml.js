@@ -39,8 +39,18 @@ export async function getServerSideProps({ res }) {
         
         console.log(`Found ${backendData.categories.length} categories from backend`);
         
-        // Извлекаем URL из categories
-        const backendUrls = backendData.categories.map(category => category.url);
+        // Фильтруем и извлекаем URL из categories (исключаем "Misc" и некорректные)
+        const filteredCategories = backendData.categories
+            .filter(category => {
+                // Исключаем категории "Misc" и без имени или URL
+                return category.name && 
+                       category.name.toLowerCase() !== 'misc' && 
+                       category.url; // Убираем записи без URL
+            });
+        
+        console.log(`Filtered to ${filteredCategories.length} valid categories (excluded Misc)`);
+        
+        const backendUrls = filteredCategories.map(category => category.url);
         console.log('Sample backend URLs:', backendUrls.slice(0, 3));
         
         // Заменяем домен с cms.shoesgo.ru на vimamos.ru
