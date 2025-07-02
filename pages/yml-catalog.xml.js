@@ -14,34 +14,22 @@ function generateYmlCatalog(categories, products) {
         .filter(category => {
             // Исключаем категории с именем "Misc" или "misc"
             if (category.name && category.name.toLowerCase() === 'misc') {
-                console.log('Excluding Misc category:', category);
+                console.log('Excluding Misc category:', category.name);
                 return false;
             }
-            // Исключаем категории без имени или URL
-            if (!category.name || !category.url) {
-                console.log('Excluding category without name or URL:', category);
+            // Проверяем только наличие имени (в новом формате нет поля url)
+            if (!category.name) {
+                console.log('Excluding category without name:', category);
                 return false;
             }
             return true;
         })
         .map((category, index) => {
-            // Генерируем ID если его нет
+            // В новом формате ID уже есть как число, просто конвертируем в строку
             if (!category.id || category.id === 'undefined') {
-                // Сначала пытаемся извлечь числовой ID из URL
-                if (category.url) {
-                    const urlMatch = category.url.match(/[?&]id=(\d+)/);
-                    if (urlMatch) {
-                        category.id = urlMatch[1];
-                    } else {
-                        // Если нет числового ID, используем чистый slug из URL
-                        const urlParts = category.url.split('/').filter(Boolean);
-                        const slug = urlParts[urlParts.length - 1] || `category-${index}`;
-                        // Убираем параметры запроса и оставляем только буквы, цифры и дефисы
-                        category.id = slug.split('?')[0].replace(/[^a-zA-Z0-9-]/g, '').substring(0, 50) || `cat-${index + 1}`;
-                    }
-                } else {
-                    category.id = `cat-${index + 1}`;
-                }
+                category.id = `cat-${index + 1}`;
+            } else {
+                category.id = String(category.id);
             }
             return category;
         });
@@ -62,53 +50,72 @@ function generateYmlCatalog(categories, products) {
         )
         .map(category => category.id);
     
+    // Логируем структуру товаров
+    console.log('Products before processing:', products.length);
+    if (products.length > 0) {
+        console.log('Sample product structure:', JSON.stringify(products[0], null, 2));
+        if (products[0].sku) {
+            console.log('Product has SKU field:', products[0].sku);
+        }
+    }
+    
     // Генерируем товары
-    const offersXml = products.map(product => {
-        const price = product.sale_price || product.regular_price || 0;
-        
-        // Получаем categoryId
-        let categoryId = '';
-        if (product.categories && product.categories.length > 0) {
-            // Ищем первую валидную категорию (не Misc)
-            const validCategory = product.categories.find(cat => 
-                cat.id && 
-                cat.id !== 'undefined' && 
-                (!cat.name || cat.name.toLowerCase() !== 'misc')
-            );
-            categoryId = validCategory ? validCategory.id : '';
+    const offersXml = products.map((product, index) => {
+        // Логируем первые несколько товаров (сокращенно)
+        if (index < 3) {
+            const identifier = product.sku ? `SKU: ${product.sku}` : `ID: ${product.id}`;
+            console.log(`Processing product ${index}: ${product.name} (${identifier})`);
         }
         
-        // Если categoryId пустой, но у товара есть category_id, используем его
-        if (!categoryId && product.category_id) {
-            categoryId = product.category_id;
+        // Проверяем обязательные поля товара
+        if ((!product.sku && !product.id) || !product.name) {
+            console.log(`Product ${index} missing required fields (sku/id or name), skipping...`);
+            return '';
         }
         
-        // URL изображения остается на бэкенд домене (cms.shoesgo.ru)
-        const imageUrl = product.images && product.images[0] ? product.images[0].src : '';
+        // Исключаем товары с категорией "Misc" в атрибутах
+        if (product.attributes && typeof product.attributes === 'object' && product.attributes['Категория'] === 'Misc') {
+            if (index < 10) console.log(`Product ${index} has Misc category, skipping...`);
+            return '';
+        }
         
-        // Формируем правильный URL товара в формате /p/slug?id=ID
+        // Используем готовые данные с бэкенда
+        const price = product.price || 0;
+        const categoryId = product.categoryId || '';
+        const imageUrl = product.picture || '';
+        
+        // URL товара - заменяем домен с бэкенда на фронтенд
         let productUrl = '';
-        if (product.permalink) {
-            // Извлекаем slug из permalink
-            const urlParts = product.permalink.split('/').filter(Boolean);
-            const slug = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2]; // последняя или предпоследняя часть
-            productUrl = `${frontendUrl}/p/${slug}?id=${product.id}`;
+        if (product.url) {
+            productUrl = product.url.replace('https://cms.shoesgo.ru', frontendUrl);
+            if (index < 3) console.log(`Product ${index} URL:`, productUrl);
+        } else {
+            // Если нет готового URL, генерируем
+            const slug = product.name
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9а-яё\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .substring(0, 50);
+            const productId = product.sku || product.id;
+            productUrl = `${frontendUrl}/p/${slug}?id=${productId}`;
         }
         
         // Параметры товара
         const paramsXml = generateProductParams(product, filteredCategories);
         
-        return `<offer id="${product.id}" available="${product.stock_status === 'instock' ? 'true' : 'false'}">
+        return `<offer id="${product.sku || product.id}" available="${product.available || 'true'}">
         <url>${productUrl}</url>
         <price>${price}</price>
-        <currencyId>RUR</currencyId>
+        <currencyId>${product.currencyId || 'RUR'}</currencyId>
         <categoryId>${categoryId}</categoryId>
         ${imageUrl ? `<picture>${imageUrl}</picture>` : ''}
         <name>${escapeXml(product.name)}</name>
-        ${product.short_description ? `<description><![CDATA[${product.short_description}]]></description>` : ''}
+        ${product.description ? `<description><![CDATA[${product.description}]]></description>` : ''}
         ${paramsXml}
     </offer>`;
-    }).join('\n    ');
+    })
+    .filter(offer => offer.trim() !== '') // Убираем пустые предложения
+    .join('\n    ');
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <yml_catalog date="${currentDate}">
@@ -136,66 +143,21 @@ function generateYmlCatalog(categories, products) {
 function generateProductParams(product, filteredCategories = []) {
     let params = [];
     
-    // Основные параметры - используем только валидные категории
-    if (product.categories && product.categories.length > 0) {
-        const validCategory = product.categories.find(cat => 
-            cat.id && 
-            cat.id !== 'undefined' && 
-            cat.name && 
-            cat.name.toLowerCase() !== 'misc'
-        );
-        if (validCategory) {
-            params.push(`<param name="Категория">${escapeXml(validCategory.name)}</param>`);
-        }
-    }
-    
-    if (product.attributes) {
-        product.attributes.forEach(attr => {
-            if (attr.name && attr.options && attr.options.length > 0) {
-                params.push(`<param name="${escapeXml(attr.name)}">${escapeXml(attr.options.join(', '))}</param>`);
+    // Обрабатываем атрибуты из объекта (новый формат с бэкенда)
+    if (product.attributes && typeof product.attributes === 'object') {
+        Object.keys(product.attributes).forEach(key => {
+            const value = product.attributes[key];
+            // Исключаем параметры "Категория" со значением "Misc" и параметр "Цена"
+            if (value && key !== 'Цена' && !(key === 'Категория' && value === 'Misc')) {
+                params.push(`<param name="${escapeXml(key)}">${escapeXml(String(value))}</param>`);
             }
         });
-    }
-    
-    // Бренд из мета-данных или атрибутов
-    if (product.meta_data) {
-        const brand = product.meta_data.find(meta => meta.key === '_brand' || meta.key === 'brand');
-        if (brand && brand.value) {
-            params.push(`<param name="Бренд">${escapeXml(brand.value)}</param>`);
-        }
-    }
-    
-    // Цена как параметр
-    const price = product.sale_price || product.regular_price || 0;
-    if (price > 0) {
-        params.push(`<param name="Цена">${price} ₽</param>`);
     }
     
     return params.join('\n        ');
 }
 
-function extractCategoriesFromProducts(products) {
-    const categoriesMap = new Map();
-    
-    products.forEach(product => {
-        if (product.categories && Array.isArray(product.categories)) {
-            product.categories.forEach(category => {
-                if (category.name && category.name.toLowerCase() !== 'misc') {
-                    const key = category.id || category.name;
-                    if (!categoriesMap.has(key)) {
-                        categoriesMap.set(key, {
-                            id: category.id || key.replace(/[^a-zA-Z0-9-]/g, '').substring(0, 50),
-                            name: category.name,
-                            url: category.url || `#category-${key}`
-                        });
-                    }
-                }
-            });
-        }
-    });
-    
-    return Array.from(categoriesMap.values());
-}
+
 
 function escapeXml(text) {
     if (!text) return '';
@@ -258,88 +220,26 @@ export async function getServerSideProps({ res }) {
     }
     
     try {
-        // Получаем данные с бэкенда
-        console.log(`Requesting data from: ${siteUrl}/wp-json/custom/v1/sitemap`);
-        const response = await axios.get(`${siteUrl}/wp-json/custom/v1/sitemap`);
-        const backendData = response.data;
+        // Получаем готовые данные с нового эндпоинта
+        console.log(`Requesting YML data from: ${siteUrl}/wp-json/custom/v1/yml`);
+        const response = await axios.get(`${siteUrl}/wp-json/custom/v1/yml`);
+        const ymlData = response.data;
         
         console.log('Backend response status:', response.status);
-        console.log('Backend data keys:', Object.keys(backendData));
+        console.log('Backend data keys:', Object.keys(ymlData));
         
-        if (!backendData || !backendData.categories) {
-            console.error('Invalid backend response: no categories found', backendData);
-            throw new Error('Invalid backend response');
+        if (!ymlData || !ymlData.categories || !ymlData.products) {
+            console.error('Invalid YML response: missing categories or products', ymlData);
+            throw new Error('Invalid YML response');
         }
         
-        console.log('Sample categories from backend:', backendData.categories.slice(0, 3));
-        
-        // Получаем детальную информацию о товарах
-        let detailedProducts = [];
-        if (backendData.products && Array.isArray(backendData.products)) {
-            console.log(`Found ${backendData.products.length} products from sitemap`);
-            
-            // Проверяем, содержат ли данные из sitemap уже детальную информацию о товарах
-            if (typeof backendData.products[0] === 'object' && backendData.products[0].id) {
-                // Данные уже детальные, используем их все
-                detailedProducts = backendData.products;
-                console.log(`Using detailed products from sitemap data: ${detailedProducts.length} products`);
-            } else {
-                // Данные - это URL-ы, пробуем получить детальную информацию через WooCommerce API
-                try {
-                    // Получаем все товары через пагинацию
-                    let allProducts = [];
-                    let page = 1;
-                    let hasMore = true;
-                    
-                    while (hasMore && page <= 50) { // Максимум 50 страниц (5000 товаров)
-                        const productsResponse = await axios.get(`${siteUrl}/wp-json/wc/v3/products`, {
-                            params: {
-                                per_page: 100,
-                                page: page,
-                                status: 'publish'
-                            },
-                            auth: {
-                                username: process.env.WC_CONSUMER_KEY || '',
-                                password: process.env.WC_CONSUMER_SECRET || ''
-                            }
-                        });
-                        
-                        if (productsResponse.data.length === 0) {
-                            hasMore = false;
-                        } else {
-                            allProducts = allProducts.concat(productsResponse.data);
-                            page++;
-                        }
-                    }
-                    
-                    detailedProducts = allProducts;
-                    console.log(`Got ${detailedProducts.length} detailed products from WC API`);
-                } catch (apiError) {
-                    console.log('WooCommerce API not available, creating basic product structure from URLs');
-                    // Создаем базовую структуру из URL-ов
-                    detailedProducts = backendData.products.map((productUrl, index) => ({
-                        id: index + 1,
-                        name: productUrl.split('/').filter(Boolean).pop().replace(/-/g, ' '),
-                        permalink: productUrl,
-                        stock_status: 'instock',
-                        regular_price: 0,
-                        categories: backendData.categories.slice(0, 1)
-                    }));
-                    console.log(`Created ${detailedProducts.length} basic product structures`);
-                }
-            }
-        }
-        
-        // Создаем дополнительные категории на основе товаров
-        const productCategories = extractCategoriesFromProducts(detailedProducts);
-        console.log(`Extracted ${productCategories.length} categories from products`);
-        console.log('Sample product categories:', productCategories.slice(0, 3));
-        
-        const allCategories = [...backendData.categories, ...productCategories];
-        console.log(`Total categories: ${allCategories.length}`);
+        console.log(`Found ${ymlData.categories.length} categories from YML endpoint`);
+        console.log(`Found ${ymlData.products.length} products from YML endpoint`);
+        console.log('Sample categories:', ymlData.categories.slice(0, 3));
+        console.log('Sample products:', ymlData.products.slice(0, 2));
         
         // Генерируем YML каталог
-        const ymlCatalog = generateYmlCatalog(allCategories, detailedProducts);
+        const ymlCatalog = generateYmlCatalog(ymlData.categories, ymlData.products);
         
         // Сохраняем в файловый кэш
         saveCacheFile(ymlCatalog);
