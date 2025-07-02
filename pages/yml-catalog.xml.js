@@ -81,8 +81,17 @@ function generateYmlCatalog(categories, products) {
             categoryId = product.category_id;
         }
         
-        const imageUrl = product.images && product.images[0] ? product.images[0].src.replace(siteUrl, frontendUrl) : '';
-        const productUrl = product.permalink ? product.permalink.replace(siteUrl, frontendUrl) : '';
+        // URL изображения остается на бэкенд домене (cms.shoesgo.ru)
+        const imageUrl = product.images && product.images[0] ? product.images[0].src : '';
+        
+        // Формируем правильный URL товара в формате /p/slug?id=ID
+        let productUrl = '';
+        if (product.permalink) {
+            // Извлекаем slug из permalink
+            const urlParts = product.permalink.split('/').filter(Boolean);
+            const slug = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2]; // последняя или предпоследняя часть
+            productUrl = `${frontendUrl}/p/${slug}?id=${product.id}`;
+        }
         
         // Параметры товара
         const paramsXml = generateProductParams(product, filteredCategories);
@@ -223,39 +232,54 @@ export async function getServerSideProps({ res }) {
         if (backendData.products && Array.isArray(backendData.products)) {
             console.log(`Found ${backendData.products.length} products from sitemap`);
             
-            // Для YML нужна детальная информация о товарах
-            // Попробуем получить её через WooCommerce API или отдельный эндпоинт
-            try {
-                const productsResponse = await axios.get(`${siteUrl}/wp-json/wc/v3/products`, {
-                    params: {
-                        per_page: 100, // Ограничим для начала
-                        status: 'publish'
-                    },
-                    auth: {
-                        username: process.env.WC_CONSUMER_KEY || '',
-                        password: process.env.WC_CONSUMER_SECRET || ''
+            // Проверяем, содержат ли данные из sitemap уже детальную информацию о товарах
+            if (typeof backendData.products[0] === 'object' && backendData.products[0].id) {
+                // Данные уже детальные, используем их все
+                detailedProducts = backendData.products;
+                console.log(`Using detailed products from sitemap data: ${detailedProducts.length} products`);
+            } else {
+                // Данные - это URL-ы, пробуем получить детальную информацию через WooCommerce API
+                try {
+                    // Получаем все товары через пагинацию
+                    let allProducts = [];
+                    let page = 1;
+                    let hasMore = true;
+                    
+                    while (hasMore && page <= 50) { // Максимум 50 страниц (5000 товаров)
+                        const productsResponse = await axios.get(`${siteUrl}/wp-json/wc/v3/products`, {
+                            params: {
+                                per_page: 100,
+                                page: page,
+                                status: 'publish'
+                            },
+                            auth: {
+                                username: process.env.WC_CONSUMER_KEY || '',
+                                password: process.env.WC_CONSUMER_SECRET || ''
+                            }
+                        });
+                        
+                        if (productsResponse.data.length === 0) {
+                            hasMore = false;
+                        } else {
+                            allProducts = allProducts.concat(productsResponse.data);
+                            page++;
+                        }
                     }
-                });
-                detailedProducts = productsResponse.data;
-                console.log(`Got ${detailedProducts.length} detailed products`);
-            } catch (apiError) {
-                console.log('WooCommerce API not available, using sitemap products');
-                // Используем данные из sitemap, если WC API недоступен
-                // Если WC API недоступен, возможно данные о товарах уже детальные в sitemap
-                if (typeof backendData.products[0] === 'object' && backendData.products[0].id) {
-                    // Данные уже детальные
-                    detailedProducts = backendData.products;
-                    console.log('Using detailed products from sitemap data');
-                } else {
-                    // Данные - это URL-ы, создаем базовую структуру
-                    detailedProducts = backendData.products.map(productUrl => ({
-                        id: Math.random().toString(36).substring(7), // Генерируем временный ID
+                    
+                    detailedProducts = allProducts;
+                    console.log(`Got ${detailedProducts.length} detailed products from WC API`);
+                } catch (apiError) {
+                    console.log('WooCommerce API not available, creating basic product structure from URLs');
+                    // Создаем базовую структуру из URL-ов
+                    detailedProducts = backendData.products.map((productUrl, index) => ({
+                        id: index + 1,
                         name: productUrl.split('/').filter(Boolean).pop().replace(/-/g, ' '),
                         permalink: productUrl,
                         stock_status: 'instock',
                         regular_price: 0,
-                        categories: backendData.categories.slice(0, 1) // Присваиваем первую категорию
+                        categories: backendData.categories.slice(0, 1)
                     }));
+                    console.log(`Created ${detailedProducts.length} basic product structures`);
                 }
             }
         }
