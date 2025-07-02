@@ -31,3 +31,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# YML catalog cache
+/public/yml-catalog-cache.xml

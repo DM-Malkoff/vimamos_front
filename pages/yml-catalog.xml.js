@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { frontendUrl, siteUrl, siteName } from '../constants/config';
+import fs from 'fs';
+import path from 'path';
 
 function generateYmlCatalog(categories, products) {
     const currentDate = new Date().toISOString();
@@ -209,8 +211,52 @@ function YmlCatalog() {
     // getServerSideProps will do the heavy lifting
 }
 
+// Путь к файлу кэша
+const CACHE_FILE_PATH = path.join(process.cwd(), 'public', 'yml-catalog-cache.xml');
+const CACHE_TTL = 60 * 60 * 1000; // 1 час в миллисекундах
+
+function checkCacheFile() {
+    try {
+        const stats = fs.statSync(CACHE_FILE_PATH);
+        const age = Date.now() - stats.mtime.getTime();
+        
+        if (age < CACHE_TTL) {
+            console.log(`Cache file is fresh (${Math.round(age / 1000 / 60)} minutes old)`);
+            return fs.readFileSync(CACHE_FILE_PATH, 'utf8');
+        } else {
+            console.log(`Cache file is stale (${Math.round(age / 1000 / 60)} minutes old), regenerating...`);
+            return null;
+        }
+    } catch (error) {
+        console.log('No cache file found, generating fresh data...');
+        return null;
+    }
+}
+
+function saveCacheFile(content) {
+    try {
+        fs.writeFileSync(CACHE_FILE_PATH, content, 'utf8');
+        console.log('YML catalog cached to file');
+    } catch (error) {
+        console.error('Error saving cache file:', error);
+    }
+}
+
 export async function getServerSideProps({ res }) {
     console.log('=== YML Catalog generation started ===');
+    
+    // Проверяем кэш
+    const cachedContent = checkCacheFile();
+    if (cachedContent) {
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        res.write(cachedContent);
+        res.end();
+        
+        console.log('YML Catalog served from cache');
+        return { props: {} };
+    }
+    
     try {
         // Получаем данные с бэкенда
         console.log(`Requesting data from: ${siteUrl}/wp-json/custom/v1/sitemap`);
@@ -295,6 +341,9 @@ export async function getServerSideProps({ res }) {
         // Генерируем YML каталог
         const ymlCatalog = generateYmlCatalog(allCategories, detailedProducts);
         
+        // Сохраняем в файловый кэш
+        saveCacheFile(ymlCatalog);
+        
         res.setHeader('Content-Type', 'application/xml; charset=utf-8');
         res.setHeader('Cache-Control', 'public, max-age=3600'); // Кэшируем на час
         res.write(ymlCatalog);
@@ -308,6 +357,21 @@ export async function getServerSideProps({ res }) {
     } catch (error) {
         console.error('Error generating YML catalog:', error.message);
         console.error('Full error:', error);
+        
+        // Попробуем вернуть устаревший кэш в случае ошибки
+        try {
+            const staleCache = fs.readFileSync(CACHE_FILE_PATH, 'utf8');
+            console.log('Serving stale cache due to error');
+            
+            res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+            res.setHeader('Cache-Control', 'public, max-age=300'); // Кэшируем устаревшие данные на 5 минут
+            res.write(staleCache);
+            res.end();
+            
+            return { props: {} };
+        } catch (cacheError) {
+            console.log('No stale cache available, returning minimal catalog');
+        }
         
         // В случае ошибки возвращаем минимальный каталог
         const errorCatalog = `<?xml version="1.0" encoding="UTF-8"?>
