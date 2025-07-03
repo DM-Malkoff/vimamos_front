@@ -16,6 +16,7 @@ import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
 
 const Slug = ({products: initialProducts, categories, currentCategoryId, attributes, error}) => {
+    // console.log('initialProducts', initialProducts)
     /** Массив брендов которые надо отображать в категории их товаров */
     const brandNameForShowInCategory = [
         {brand: 'adidas', categoryId:  '740'},
@@ -49,8 +50,8 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
 
-    /** Флаг отображения бренда в категории товаров */
-    const showBrand = brandNameForShowInCategory.some(v => v.categoryId === currentCategoryId);
+    /** Флаг отображения бренда в категории товаров в блоке товара */
+    const showBrand = currentCategory.acf.show_brand_in_product_card_category;
 
     /** Название текущей категории */
     let currentCategoryName = '';
