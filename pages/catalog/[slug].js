@@ -16,12 +16,6 @@ import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
 
 const Slug = ({products: initialProducts, categories, currentCategoryId, attributes, error}) => {
-    // console.log('initialProducts', initialProducts)
-    /** Массив брендов которые надо отображать в категории их товаров */
-    const brandNameForShowInCategory = [
-        {brand: 'adidas', categoryId:  '740'},
-    ];
-
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
     
