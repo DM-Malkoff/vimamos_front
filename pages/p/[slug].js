@@ -192,9 +192,9 @@ export default function ProductPage({product,categories}) {
                                             </div>
                                             <div className="product-price" itemProp="offers" itemScope
                                                  itemType="http://schema.org/Offer">
-                                                {(+product.sale_price && +product.regular_price) ?
+                                                {(product.sale_price && product.regular_price) ?
                                                     <div className="price-old question">
-                                                        <span><strong>{product.sale_price || product.regular_price}</strong> руб.</span>
+                                                        <span><strong>{product.regular_price}</strong> руб.</span>
                                                     </div>
                                                     :
                                                     false

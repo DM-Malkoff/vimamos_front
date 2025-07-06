@@ -19,7 +19,13 @@ const Tabs = ({items}) => {
                     )
                 })}
             </ul>
-            {items[active] && <TabContent {...items[active]} tabIndex={active}/>}
+            {/* Рендерим все вкладки для SEO, но показываем только активную */}
+            {items.map((item, index) => (
+                item.content && 
+                <div key={index} className={`tab-content-wrapper ${index === active ? 'active' : 'hidden'}`}>
+                    <TabContent {...item} tabIndex={index}/>
+                </div>
+            ))}
         </div>
     );
 };

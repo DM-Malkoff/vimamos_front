@@ -1009,6 +1009,15 @@ button, html input[type="button"], input[type="reset"], input[type="submit"] {
                 box-shadow: none;
               }
             }
+            /* Стили для скрытия/отображения содержимого вкладок для SEO */
+            .tab-content-wrapper {
+              &.hidden {
+                display: none;
+              }
+              &.active {
+                display: block;
+              }
+            }
           }
           .shop_product_desc{
             .desc-area {

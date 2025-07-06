@@ -126,7 +126,7 @@ export async function getStaticProps() {
             getSliderProducts(377),
             getSliderProducts(467),
             getSliderProducts(704),
-            getSliderProducts(134),
+            getSliderProducts(710),
             getCategories()
         ]);
         
