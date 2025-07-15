@@ -39,7 +39,7 @@ const ProductCard = ({productData, showBrand, isFirst = false, isSimilar = false
                                 {productData.name}
                             </Link>
                         </div>
-                        {showBrand && (
+                        {showBrand && productData.brands && (
                             <div className="vendor_option">
                                 <Link href={
                                     {
