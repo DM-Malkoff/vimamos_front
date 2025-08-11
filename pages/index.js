@@ -3,7 +3,7 @@ import Header from "../components/layouts/header";
 import Footer from "../components/layouts/footer";
 import CookieConsent from "../components/CookieConsent";
 import {getCategories} from "../utils/categories";
-import {siteName, siteUrl} from "../constants/config";
+import {frontendUrl, siteName, siteUrl} from "../constants/config";
 import 'swiper/css';
 import MainSlider from "../components/mainSlider";
 import {getSliderProducts} from "../utils/sliderProducts";
@@ -19,12 +19,12 @@ function Home({productsLacoste, productsReebok, productsEcco, productsNike,  cat
                       content="Каталог товаров обуви и аксессуаров известных брендов. Коллекции фирменной обуви. Высочайшее качество. Более 50000 моделей в каталоге - мужские, женские и детские. Заходите, выбирайте, покупайте!"/>
                 <meta name="yandex-verification" content="e5de60cb974247ac"/>
                 <meta charSet="UTF-8"/>
-
                 <meta property="og:title" content="Купить обувь в Москве в Интернет-магазине | Vimamos.ru"/>
                 <meta property="og:image" content="/images/logo.png"/>
                 <meta property="og:url" content={siteUrl}/>
                 <meta property="og:site_name" content={siteName}/>
                 <meta property="og:type" content="website"/>
+                <link rel="canonical" href={frontendUrl} />
             </Head>
             <Header categories={categories}/>
             <div className="page-wrapper">

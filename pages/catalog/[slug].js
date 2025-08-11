@@ -11,7 +11,7 @@ import Footer from "../../components/layouts/footer";
 import Sort from "../../components/sort";
 import Pagination from "../../components/pagination";
 import Towns from "../../utils/towns";
-import {quantityProducts, siteName, siteUrl} from "../../constants/config";
+import {frontendUrl, quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
 
@@ -74,10 +74,11 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
 
     /** Формируем метатег description страницы */
     let description = `${currentCategoryName} - большой ассортимент в нашем каталоге. Доставка в ${Towns[currentPageNum] || ''}. Онлайн оформление заказа. Гарантия от магазина и выгодные цены.`
-    
-    if (Towns[currentPageNum]) {
-        townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
-    }
+
+    // Пока убрал для теста индексации без города
+    // if (Towns[currentPageNum]) {
+    //     townCaption = `${currentCategoryName} в ${Towns[currentPageNum]}`;
+    // }
 
     /** Формеирование Title */
     function getPageTitle() {
@@ -92,6 +93,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         return pageTitle;
     }
 
+    /** Формирование дескрипшена */
     function getSeoDescription(){
         if (currentCategory && currentCategory.acf && currentCategory.acf.custom_seo_description) {
             return currentCategory.acf.custom_seo_description;
@@ -117,6 +119,13 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         return townCaption;
     }
 
+    /** Получение канонического URL */
+    function getCanonicalUrl() {
+        const { id } = router.query;
+        const mainPath = router.asPath.split('?')[0];
+        return frontendUrl+mainPath+`?id=${id}`;
+    }
+
     /** Функция обновления списка товаров */
     const handleProductsUpdate = (newProducts) => {
         setProducts(newProducts);
@@ -126,7 +135,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
         <>
             <Head>
                 <title>{getPageTitle()}</title>
-                <meta name="description" content={getSeoDescription()} />
+                <meta name="description" content={getSeoDescription()}/>
                 {Towns[currentPageNum] ? <meta name="robots" content="all"/> : <meta name="robots" content="none"/>}
                 {
                     router.query.orderby ||
@@ -143,9 +152,10 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
 
                 <meta property="og:title" content={pageTitle}/>
                 <meta property="og:image" content="/images/logo.jpg"/>
-                <meta property="og:url" content={siteUrl + router.asPath}/>
+                <meta property="og:url" content={frontendUrl + router.asPath}/>
                 <meta property="og:site_name" content={siteName}/>
                 <meta property="og:type" content="website"/>
+                <link rel="canonical" href={getCanonicalUrl()}/>
             </Head>
             <Header categories={categories}/>
             <div className='site__container'>

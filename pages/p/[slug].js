@@ -10,7 +10,7 @@ import Link from "next/link";
 import Tabs from "../../components/tabs";
 import RelatedProductsSlider from "../../components/relatedProductsSlider";
 import ProductImages from "../../components/productImages";
-import {siteName, siteUrl} from "../../constants/config";
+import {frontendUrl, siteName, siteUrl} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
 import { useState } from "react";
 
@@ -84,14 +84,16 @@ export default function ProductPage({product,categories}) {
         <>
             <Head>
                 <title>{getTitle()}</title>
-                <meta name="description" content={getDescription()} />
-                <meta property="og:title" content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
+                <meta name="description" content={getDescription()}/>
+                <meta property="og:title"
+                      content={`${sku} ${product.name} купить в Интернет-магазине с доставкой недорого`}/>
                 {product?.images.map(item =>
                     <meta key={item.id} property="og:image" content={item.src}/>
                 )}
-                <meta property="og:url" content={siteUrl + useRouter().asPath}/>
+                <meta property="og:url" content={frontendUrl + useRouter().asPath}/>
                 <meta property="og:site_name" content={siteName}/>
                 <meta property="og:type" content="website"/>
+                <link rel="canonical" href={frontendUrl + useRouter().asPath}/>
             </Head>
             <Header categories={categories}/>
             <div className='site__container product'>
