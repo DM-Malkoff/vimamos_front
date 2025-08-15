@@ -14,6 +14,7 @@ import Towns from "../../utils/towns";
 import {frontendUrl, quantityProducts, siteName, siteUrl} from "../../constants/config";
 import {getAttributes} from "../../utils/attributes";
 import {useState, useEffect} from "react";
+import {getParentCategories} from "../../utils/parentCategories";
 
 const Slug = ({products: initialProducts, categories, currentCategoryId, attributes, error}) => {
     const router = useRouter();
@@ -39,20 +40,21 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
     
     // Проверяем, что categories является массивом
     const categoriesArray = Array.isArray(categories) ? categories : [];
-    const currentCategory = categoriesArray.find(item => item.id == currentCategoryId);
+    const currentCategory = categoriesArray.find(item => item.id === +currentCategoryId);
+    const parentCategories  = getParentCategories(categories, currentCategory, false).reverse();
     const availableSlug = currentCategory?.slug || '';
     const currentPage = router.query.page;
     const currentSlug = router.query.slug;
 
     /** Флаг отображения бренда в категории товаров в блоке товара */
-    const showBrand = currentCategory.acf.show_brand_in_product_card_category;
+    const showBrand = currentCategory?.acf.show_brand_in_product_card_category;
 
     /** Название текущей категории */
     let currentCategoryName = '';
 
     if (currentCategory) {
         if (currentCategory.name) {
-            const brandName = currentCategory.acf?.cat_brand;
+            const brandName = currentCategory?.acf?.cat_brand;
 
             if (brandName) {
                 currentCategoryName = currentCategory.name.includes(brandName)
@@ -162,7 +164,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                 <div className='site__main__wrap folder'>
                     <main role="main" className="site__main folder">
                         <div className="site__main__in">
-                            <BreadCrumbs namePage={currentCategory?.name || ''}/>
+                            <BreadCrumbs parentCategories={parentCategories} namePage={currentCategory?.name || ''}/>
                             <Caption caption={getH1()}/>
                             <div className="mode_folder_wrapper">
                                 <Filter attributes={attributes} onProductsUpdate={handleProductsUpdate}/>
@@ -185,7 +187,7 @@ const Slug = ({products: initialProducts, categories, currentCategoryId, attribu
                                 </div>
                             </div>
                             {!router.query.page && (
-                                <div dangerouslySetInnerHTML={{__html: currentCategory.acf?.cat_description}}/>
+                                <div dangerouslySetInnerHTML={{__html: currentCategory?.acf?.cat_description}}/>
                             )}
                         </div>
                     </main>

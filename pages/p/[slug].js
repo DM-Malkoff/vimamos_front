@@ -10,26 +10,23 @@ import Link from "next/link";
 import Tabs from "../../components/tabs";
 import RelatedProductsSlider from "../../components/relatedProductsSlider";
 import ProductImages from "../../components/productImages";
-import {frontendUrl, siteName, siteUrl} from "../../constants/config";
+import {frontendUrl, siteName} from "../../constants/config";
 import {getCategories} from "../../utils/categories";
-import { useState } from "react";
+import {useState} from "react";
+import {getParentCategories} from "../../utils/parentCategories";
 
-export default function ProductPage({product,categories}) {
+export default function ProductPage({product, similar_products, categories, parentCategories}) {
     const pathLocation = useRouter().pathname;
     const customFields = product.meta_data;
     const [selectedSize, setSelectedSize] = useState(null);
-    
-    // const description = customFields.find(item => item.key === "wc_description");
+
     const sku = product.sku;
     const shopName = customFields.find(item => item.key === 'shop_name')?.value;
     const shopLink = customFields.find(item => item.key === 'wc_partner_url')?.value;
     const tabsItems = [
         {title: 'Характеристики', content: product.attributes},
         {title: 'Описание', content: product.description}
-    ]
-
-    /** Провека на магазин Thomas Munz для кастомизации заголовков и метатегов */
-    let shopIsThomasMuenz = shopName === 'Thomas Munz';
+    ];
 
     function mathDiscount(salePrice, regularPrice) {
         let percent = (regularPrice - salePrice) * 100 / regularPrice
@@ -104,9 +101,7 @@ export default function ProductPage({product,categories}) {
                                 isProduct={true}
                                 path={pathLocation}
                                 namePage={product.name}
-                                parentCategoryName={product.categories[0].name !== 'Misc' && product.categories[0].name}
-                                parentCategoryUrl={`${product.categories[0].slug}` + '?id=' + `${product.categories[0].id}`}
-
+                                parentCategories={parentCategories}
                             />
                             <div className="product_top_wrapper" itemScope itemType="http://schema.org/Product">
                                 <form method="post" className="shop2-product">
@@ -251,7 +246,7 @@ export default function ProductPage({product,categories}) {
                                 <h2 className="shop_collection_header">
                                     Рекомендуемые товары
                                 </h2>
-                                <RelatedProductsSlider relatedProducts={product.similar_products}/>
+                                <RelatedProductsSlider relatedProducts={similar_products}/>
                             </div>
                         </div>
                     </main>
@@ -269,6 +264,13 @@ export async function getServerSideProps(ctx) {
         // Получаем данные товара по id
         const {data: product} = await getProductData(id);
         const {data: categories} = await getCategories();
+
+        const similar_products = product.similar_products;
+
+        const currentCategory = product.categories?.[0];
+        const parentCategories = currentCategory
+            ? getParentCategories(categories, currentCategory, true).reverse()
+            : [];
         
         // Проверяем совпадение slug
         if (!product || product.slug !== slug) {
@@ -280,7 +282,9 @@ export async function getServerSideProps(ctx) {
         return {
             props: {
                 product: product ?? {},
-                categories: categories ?? {}
+                categories: categories ?? {},
+                parentCategories: parentCategories ?? [],
+                similar_products: similar_products ?? []
             }
         };
     } catch (error) {

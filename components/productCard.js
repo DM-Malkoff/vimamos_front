@@ -28,27 +28,15 @@ const ProductCard = ({productData, showBrand, isFirst = false, isSimilar = false
                 <div className="thumbs__top__wrap">
                     <div className="product_top">
                         <div className="product_name">
-                            <Link href={
-                                {
-                                    pathname: `/p/${productData.slug}`,
-                                    query: {
-                                        id: productData.id
-                                    }
-                                }
-                            }>
+                            <Link href={`/p/${productData.slug}?id=${productData.id}`}>
                                 {productData.name}
                             </Link>
                         </div>
                         {showBrand && productData.brands && (
                             <div className="vendor_option">
-                                <Link href={
-                                    {
-                                        pathname: `/p/${productData.slug}`,
-                                        query: {
-                                            id: productData.id
-                                        }
-                                    }
-                                }>{productData.brands[0].name}</Link>
+                                <Link href={`/p/${productData.slug}?id=${productData.id}`}>
+                                    {productData.brands[0].name}
+                                </Link>
                             </div>
                         )}
                         {/*<div className="product-compare">*/}
@@ -60,14 +48,7 @@ const ProductCard = ({productData, showBrand, isFirst = false, isSimilar = false
                     </div>
                     <div className="product_image_wr">
                         <div className="product_image">
-                        <Link href={
-                                {
-                                    pathname: `/p/${productData.slug}`,
-                                    query: {
-                                        id: productData.id
-                                    }
-                                }
-                            }>
+                            <Link href={`/p/${productData.slug}?id=${productData.id}`}>
                                 <Image
                                     src={productData.images?.length ? productData.images[0].src : '/images/no_image.png'}
                                     alt={productData.name}
