@@ -54,7 +54,7 @@ export const getCategories = async () => {
             try {
                 console.log(`Fetching categories page ${page} (${perPage} items)...`);
                 
-                const response = await api.get('products/categories', { 
+                const response = await api.get('products/categories', {
                     per_page: perPage,
                     page: page 
                 });
@@ -87,7 +87,7 @@ export const getCategories = async () => {
             }
         }
         
-        const categories = allCategories;
+        const categories = allCategories.filter(cat => cat.name !== 'Misc');
         console.log(`Total categories loaded: ${categories.length} items`);
         
         // Сохраняем в кеш

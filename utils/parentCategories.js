@@ -13,7 +13,7 @@ export const getParentCategories = (categories, currentCategory, isProductCard) 
         if (!current || !current.parent) return acc; // Остановка, если нет родителя
 
         const parent = categories.find(item => item.id === current.parent);
-        
+
         if (!parent) return acc; // Родитель не найден
 
         // Проверка на цикл (предотвращает бесконечную рекурсию)
