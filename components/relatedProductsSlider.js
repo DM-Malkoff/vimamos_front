@@ -19,7 +19,7 @@ const RelatedProductsSlider = ({relatedProducts}) => {
                         modules={[Pagination]}
                         spaceBetween={50}
                         slidesPerView={5}
-                        loop={true}
+                        loop={false}
                         breakpoints={{
                             "280": {
                                 slidesPerView: 1
